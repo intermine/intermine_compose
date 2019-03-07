@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine-compose prototype spec",
+    "version": "0.1.0",
+    "title": "InterMine-compose prototype spec - working draft",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://www.intermine.org"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "paths": {
+     "/build/trigger": {
+      "post": {
+        "summary": "Begin build of specified mine",
+        "responses": {
+          "200": {
+            "description": "build triggered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuild"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuild"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/build/status": {
+      "get": {
+        "summary": "Retrieve build status of a given mine",
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuildStatus"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuildStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [{
+      "url": "https://wizard.intermine.org/v1"
+    },
+    {
+      "url": "http://wizard.intermine.org/v1"
+    }
+  ],
+  "components": {
+    "schemas": {
+       "User": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "alice@mylab.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "DataBuild": {
+        "type": "object",
+        "required": [
+          "mineConfigId"
+        ],
+        "properties": {
+          "mineConfigId": {
+            "type": "integer"
+          }
+        }
+      },
+      "DataBuildStatus": {
+        "type": "object",
+        "required": [
+          "buildStatus"
+        ],
+        "properties": {
+          "buildStatus": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "running",
+              "errored",
+              "not_yet_started"
+            ]
+          },
+          "errorDetails": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
