@@ -14,6 +14,100 @@
     }
   },
   "paths": {
+        "/isatools": {
+      "post": {
+        "summary": "Start new mine build config entry + upload ISA files",
+        "description": "Combination of the /mine/config and /file/properties/detect endpoints, intended for programmatic access from an ISA web application.",
+        "operationId": "setMineConfigAndDetectFile",
+        "requestBody": {
+          "description": "Config to set for Mine & file(s) to upload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [{
+                    "$ref": "#/components/schemas/MineDescriptor"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "files": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DataFile"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "mineName": "MyFirstISAMine",
+                    "privacy": "unlisted",
+                    "licence": "CC0",
+                    "files": [{
+                        "name": "metabolightsmetafile.isa",
+                        "fileContents": "string",
+                        "fileFormat": "isa",
+                        "organism": {
+                          "name": "Homo sapiens",
+                          "taxonID": "9606"
+                        }
+                      },
+                      {
+                        "name": "metabolightsdatafile.tsv",
+                        "fileContents": "string",
+                        "fileFormat": "tsv",
+                        "organism": {
+                          "name": "Homo sapiens",
+                          "taxonID": "9606"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "allOf": [{
+                    "$ref": "#/components/schemas/MineDescriptor"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "files": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DataFile"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New mineconfig instance created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/mine/nameAvailability": {
       "post": {
         "summary": "Check if a given minename is taken",
@@ -105,6 +199,86 @@
   ],
   "components": {
     "schemas": {
+      "MineDescriptor": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "mineName": {
+            "type": "string",
+            "example": "MyFirstMine"
+          },
+          "privacy": {
+            "type": "string",
+            "enum": [
+              "unlisted",
+              "public"
+            ],
+            "example": "unlisted"
+          },
+          "licence": {
+            "type": "string",
+            "example": "CC0"
+          }
+        },
+        "xml": {
+          "name": "MineConfig"
+        }
+      },
+      "DataFile": {
+        "type": "object",
+        "required": [
+          "name",
+          "fileContents",
+          "fileFormat",
+          "organism"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "humanfile.gff"
+          },
+          "fileContents": {
+            "type": "string",
+            "format": "base64"
+          },
+          "fileFormat": {
+            "type": "string",
+            "enum": [
+              "fasta",
+              "gff",
+              "tab",
+              "csv"
+            ],
+            "example": "fasta"
+          },
+          "organism": {
+            "allOf": [{
+              "$ref": "#/components/schemas/Organism"
+            }]
+          }
+        },
+        "xml": {
+          "name": "DataFile"
+        }
+      },
+      "Organism": {
+        "type": "object",
+        "required": [
+          "taxonID"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Homo sapiens"
+          },
+          "taxonID": {
+            "type": "integer",
+            "example": "9606"
+          }
+        }
+      },
       "MineName": {
         "type": "object",
         "required": [
