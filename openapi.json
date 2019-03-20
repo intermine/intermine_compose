@@ -102,6 +102,52 @@
         }
       }
     },
+    "/user/profile": {
+      "get": {
+        "summary": "Retrieve the profile for the authenticated user",
+        "operationId": "getUserProfile",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update the user profile",
+        "operationId": "updateUserProfile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile successfully updated"
+          }
+        }
+      }
+    },
     "/mines": {
       "get": {
         "summary": "Get a list of mines (if any) for this authorised user",
