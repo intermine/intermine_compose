@@ -112,12 +112,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/GetUser"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/GetUser"
                 }
               }
             }
@@ -331,7 +331,7 @@
         }
       }
     },
-     "/build/trigger": {
+    "/build/trigger": {
       "post": {
         "summary": "Begin build of specified mine",
         "responses": {
@@ -624,6 +624,30 @@
           "password": {
             "type": "string",
             "format": "password"
+          }
+        }
+      },
+      "GetUser": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "alice@mylab.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alice"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Smith"
+          },
+          "organisation": {
+            "type": "string",
+            "example": "University of Cambridge"
           }
         }
       },
