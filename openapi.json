@@ -112,12 +112,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUser"
+                  "$ref": "#/components/schemas/UserProfile"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUser"
+                  "$ref": "#/components/schemas/UserProfile"
                 }
               }
             }
@@ -627,7 +627,7 @@
           }
         }
       },
-      "GetUser": {
+      "UserProfile": {
         "type": "object",
         "required": [
           "email"
