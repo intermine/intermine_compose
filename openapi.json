@@ -148,6 +148,102 @@
         }
       }
     },
+    "/data/upload": {
+      "post": {
+        "summary": "Upload a data file",
+        "operationId": "dataUpload",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "string",
+                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded succesfully"
+          }
+        }
+      }
+    },
+    "/data/files": {
+      "get": {
+        "summary": "Get a list data files uploaded by this user",
+        "operationId": "getFiles",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/file/{fileId}": {
+      "get": {
+        "summary": "Get a data file uploaded by this user",
+        "operationId": "getFile",
+        "parameters": [{
+          "name": "fileId",
+          "in": "path",
+          "description": "ID of file to get",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a data file uploaded by this user",
+        "operationId": "delete",
+        "parameters": [{
+          "name": "fileId",
+          "in": "path",
+          "description": "ID of file to delet",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "File succesfully deleted",
+          }
+        }
+      }
+    },
     "/mines": {
       "get": {
         "summary": "Get a list of mines (if any) for this authorised user",
@@ -188,7 +284,6 @@
           "required": true,
           "schema": {
             "type": "string",
-            "format": "uuid",
             "example": "123e4567-e89b-12d3-a456-556642440000"
           }
         }],
@@ -426,7 +521,6 @@
           },
           "fileContents": {
             "type": "string",
-            "format": "base64"
           },
           "fileFormat": {
             "type": "string",
