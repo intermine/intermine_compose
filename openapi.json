@@ -14,6 +14,94 @@
     }
   },
   "paths": {
+    "/user/register": {
+      "post": {
+        "summary": "Register a user",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully registered a new user"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Login a user",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCredentials"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCredentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "summary": "Log out",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "Successfully logged out"
+          }
+        }
+      }
+    },
+    "/user/forgotPassword": {
+      "post": {
+        "summary": "Send user a link to a page to reset their password ",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "alice@mylab.org"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "string",
+                "example": "alice@mylab.org"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Emailed link succesfully"
+          }
+        }
+      }
+    },
     "/mines": {
       "get": {
         "summary": "Get a list of mines (if any) for this authorised user",
@@ -221,7 +309,7 @@
         },
         "responses": {
           "200": {
-            "description": "New mineconfig instance created",
+            "description": "New mine instance created",
             "content": {
               "application/json": {
                 "schema": {
@@ -253,7 +341,7 @@
       "MineDescriptor": {
         "type": "object",
         "required": [
-          "id"
+          "mineId"
         ],
         "properties": {
           "mineName": {
@@ -371,10 +459,39 @@
           }
         }
       },
-       "User": {
+      "User": {
         "type": "object",
         "required": [
           "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "alice@mylab.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alice"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Smith"
+          },
+          "organisation": {
+            "type": "string",
+            "example": "University of Cambridge"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "UserCredentials": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
         ],
         "properties": {
           "email": {
@@ -390,11 +507,12 @@
       "DataBuild": {
         "type": "object",
         "required": [
-          "mineConfigId"
+          "mineId"
         ],
         "properties": {
-          "mineConfigId": {
-            "type": "integer"
+          "mineId": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
           }
         }
       },
