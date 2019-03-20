@@ -112,12 +112,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -359,7 +359,7 @@
         }
       }
     },
-    "/build/trigger": {
+     "/build/trigger": {
       "post": {
         "summary": "Begin build of specified mine",
         "responses": {
@@ -602,7 +602,8 @@
         "type": "object",
         "required": [
           "mineName",
-          "minelocation"
+          "minelocation",
+          "mineStatus"
         ],
         "properties": {
           "mineName": {
@@ -612,6 +613,22 @@
           "minelocation": {
             "type": "string",
             "example": "http://localhost:8080/biotestmine"
+          },
+          "mineStatus": {
+            "type": "string",
+            "enum": [
+              "in progress",
+              "running"
+            ],
+            "example": "in progress"
+          },
+          "privacy": {
+            "type": "string",
+            "enum": [
+              "unlisted",
+              "public"
+            ],
+            "example": "unlisted"
           }
         }
       },
@@ -652,30 +669,6 @@
           "password": {
             "type": "string",
             "format": "password"
-          }
-        }
-      },
-      "UserProfile": {
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "alice@mylab.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Alice"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Smith"
-          },
-          "organisation": {
-            "type": "string",
-            "example": "University of Cambridge"
           }
         }
       },
