@@ -148,33 +148,6 @@
         }
       }
     },
-    "/data/upload": {
-      "post": {
-        "summary": "Upload a data file",
-        "operationId": "dataUpload",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string",
-                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "type": "string",
-                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "File uploaded succesfully"
-          }
-        }
-      }
-    },
     "/data/files": {
       "get": {
         "summary": "Get a list data files uploaded by this user",
@@ -204,6 +177,33 @@
         }
       }
     },
+    "/data/file": {
+      "post": {
+        "summary": "Upload a data file",
+        "operationId": "fileUpload",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "string",
+                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded succesfully"
+          }
+        }
+      }
+    },
     "/data/file/{fileId}": {
       "get": {
         "summary": "Get a data file uploaded by this user",
@@ -226,7 +226,7 @@
       },
       "delete": {
         "summary": "Delete a data file uploaded by this user",
-        "operationId": "delete",
+        "operationId": "deleteFile",
         "parameters": [{
           "name": "fileId",
           "in": "path",
