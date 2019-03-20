@@ -160,7 +160,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/DataFileProperties"
                   }
                 }
               },
@@ -168,7 +168,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/DataFileProperties"
                   }
                 }
               }
@@ -199,7 +199,21 @@
         },
         "responses": {
           "200": {
-            "description": "File uploaded succesfully"
+            "description": "File uploaded succesfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
+                }
+              }
+            }
           }
         }
       }
@@ -221,6 +235,20 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                }
+              }
+            }
           }
         }
       },
@@ -641,6 +669,23 @@
           "password": {
             "type": "string",
             "format": "password"
+          }
+        }
+      },
+      "DataFileProperties": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "fileName"
+        ],
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          },
+          "fileName": {
+            "type": "string",
+            "example": "my.gff"
           }
         }
       },
