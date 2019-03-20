@@ -14,7 +14,114 @@
     }
   },
   "paths": {
-        "/isatools": {
+    "/mines": {
+      "get": {
+        "summary": "Get a list of mines (if any) for this authorised user",
+        "operationId": "getMines",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mine"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Mine"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mine/nameAvailability": {
+      "post": {
+        "summary": "Check if a given minename is taken",
+        "operationId": "checkNameAvailability",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MineName"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/MineName"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameAvailability"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameAvailability"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/build/trigger": {
+      "post": {
+        "summary": "Begin build of specified mine",
+        "responses": {
+          "200": {
+            "description": "build triggered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuild"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuild"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/build/status": {
+      "get": {
+        "summary": "Retrieve build status of a given mine",
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuildStatus"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataBuildStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/isatools": {
       "post": {
         "summary": "Start new mine build config entry + upload ISA files",
         "description": "Combination of the /mine/config and /file/properties/detect endpoints, intended for programmatic access from an ISA web application.",
@@ -101,87 +208,6 @@
                 "schema": {
                   "type": "string",
                   "example": "123e4567-e89b-12d3-a456-556642440000"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/mine/nameAvailability": {
-      "post": {
-        "summary": "Check if a given minename is taken",
-        "operationId": "checkNameAvailability",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MineName"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/MineName"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NameAvailability"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NameAvailability"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-     "/build/trigger": {
-      "post": {
-        "summary": "Begin build of specified mine",
-        "responses": {
-          "200": {
-            "description": "build triggered successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuild"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuild"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/build/status": {
-      "get": {
-        "summary": "Retrieve build status of a given mine",
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuildStatus"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuildStatus"
                 }
               }
             }
@@ -288,6 +314,23 @@
           "mineName": {
             "type": "string",
             "example": "biotestmine"
+          }
+        }
+      },
+      "Mine": {
+        "type": "object",
+        "required": [
+          "mineName",
+          "minelocation"
+        ],
+        "properties": {
+          "mineName": {
+            "type": "string",
+            "example": "biotestmine"
+          },
+          "minelocation": {
+            "type": "string",
+            "example": "http://localhost:8080/biotestmine"
           }
         }
       },
