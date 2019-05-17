@@ -220,7 +220,7 @@
         }],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Success"
           }
         }
       },
@@ -239,7 +239,7 @@
         }],
         "responses": {
           "200": {
-            "description": "File succesfully deleted",
+            "description": "File succesfully deleted"
           }
         }
       }
@@ -289,7 +289,7 @@
         }],
         "responses": {
           "200": {
-            "description": "Mine successfully deleted",
+            "description": "Mine successfully deleted"
           }
         }
       }
@@ -397,31 +397,31 @@
                           "$ref": "#/components/schemas/DataFile"
                         }
                       }
+                    },
+                    "example": {
+                      "mineName": "MyFirstISAMine",
+                      "privacy": "unlisted",
+                      "licence": "CC0",
+                      "files": [{
+                          "name": "metabolightsmetafile.isa",
+                          "fileContents": "string",
+                          "fileFormat": "isa",
+                          "organism": {
+                            "name": "Homo sapiens",
+                            "taxonID": "9606"
+                          }
+                        },
+                        {
+                          "name": "metabolightsdatafile.tsv",
+                          "fileContents": "string",
+                          "fileFormat": "tsv",
+                          "organism": {
+                            "name": "Homo sapiens",
+                            "taxonID": "9606"
+                          }
+                        }
+                      ]
                     }
-                  },
-                  "example": {
-                    "mineName": "MyFirstISAMine",
-                    "privacy": "unlisted",
-                    "licence": "CC0",
-                    "files": [{
-                        "name": "metabolightsmetafile.isa",
-                        "fileContents": "string",
-                        "fileFormat": "isa",
-                        "organism": {
-                          "name": "Homo sapiens",
-                          "taxonID": "9606"
-                        }
-                      },
-                      {
-                        "name": "metabolightsdatafile.tsv",
-                        "fileContents": "string",
-                        "fileFormat": "tsv",
-                        "organism": {
-                          "name": "Homo sapiens",
-                          "taxonID": "9606"
-                        }
-                      }
-                    ]
                   }
                 ]
               }
@@ -444,7 +444,6 @@
                   }
                 ]
               }
-
             }
           }
         },
@@ -520,7 +519,7 @@
             "example": "humanfile.gff"
           },
           "fileContents": {
-            "type": "string",
+            "type": "string"
           },
           "fileFormat": {
             "type": "string",
