@@ -112,12 +112,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -148,10 +148,39 @@
         }
       }
     },
-    "/data/upload": {
+    "/data/files": {
+      "get": {
+        "summary": "Get a list data files uploaded by this user",
+        "operationId": "getFiles",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataFileProperties"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataFileProperties"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/file": {
       "post": {
         "summary": "Upload a data file",
-        "operationId": "dataUpload",
+        "operationId": "fileUpload",
         "requestBody": {
           "content": {
             "application/json": {
@@ -170,33 +199,18 @@
         },
         "responses": {
           "200": {
-            "description": "File uploaded succesfully"
-          }
-        }
-      }
-    },
-    "/data/files": {
-      "get": {
-        "summary": "Get a list data files uploaded by this user",
-        "operationId": "getFiles",
-        "responses": {
-          "200": {
-            "description": "Success",
+            "description": "File uploaded succesfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-556642440000"
                 }
               }
             }
@@ -220,13 +234,27 @@
         }],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
         "summary": "Delete a data file uploaded by this user",
-        "operationId": "delete",
+        "operationId": "deleteFile",
         "parameters": [{
           "name": "fileId",
           "in": "path",
@@ -331,7 +359,7 @@
         }
       }
     },
-    "/build/trigger": {
+     "/build/trigger": {
       "post": {
         "summary": "Begin build of specified mine",
         "responses": {
@@ -573,7 +601,8 @@
         "type": "object",
         "required": [
           "mineName",
-          "minelocation"
+          "minelocation",
+          "mineStatus"
         ],
         "properties": {
           "mineName": {
@@ -583,6 +612,22 @@
           "minelocation": {
             "type": "string",
             "example": "http://localhost:8080/biotestmine"
+          },
+          "mineStatus": {
+            "type": "string",
+            "enum": [
+              "in progress",
+              "running"
+            ],
+            "example": "in progress"
+          },
+          "privacy": {
+            "type": "string",
+            "enum": [
+              "unlisted",
+              "public"
+            ],
+            "example": "unlisted"
           }
         }
       },
@@ -626,30 +671,6 @@
           }
         }
       },
-      "UserProfile": {
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "alice@mylab.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Alice"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Smith"
-          },
-          "organisation": {
-            "type": "string",
-            "example": "University of Cambridge"
-          }
-        }
-      },
       "UserCredentials": {
         "type": "object",
         "required": [
@@ -664,6 +685,23 @@
           "password": {
             "type": "string",
             "format": "password"
+          }
+        }
+      },
+      "DataFileProperties": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "fileName"
+        ],
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          },
+          "fileName": {
+            "type": "string",
+            "example": "my.gff"
           }
         }
       },
