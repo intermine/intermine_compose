@@ -359,7 +359,65 @@
         }
       }
     },
-     "/build/trigger": {
+    "/mine/state/{mineId}": {
+      "post": {
+        "summary": "Sets a mine state",
+        "operationId": "setMineState",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MineState"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/MineState"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "retrieves a mine state",
+        "operationId": "getMineState",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/build/trigger": {
       "post": {
         "summary": "Begin build of specified mine",
         "responses": {
@@ -640,6 +698,18 @@
           "isAvailable": {
             "type": "boolean",
             "example": "true"
+          }
+        }
+      },
+      "MineState": {
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "properties": {
+          "state": {
+            "type": "string",
+            "example": "running"
           }
         }
       },
