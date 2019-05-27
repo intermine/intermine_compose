@@ -363,6 +363,16 @@
       "post": {
         "summary": "Sets a mine state",
         "operationId": "setMineState",
+        "parameters": [{
+          "name": "mineId",
+          "in": "path",
+          "description": "ID of mine to destroy",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -398,6 +408,16 @@
       "get": {
         "summary": "retrieves a mine state",
         "operationId": "getMineState",
+        "parameters": [{
+          "name": "mineId",
+          "in": "path",
+          "description": "ID of mine to destroy",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
         "responses": {
           "200": {
             "description": "Success",
