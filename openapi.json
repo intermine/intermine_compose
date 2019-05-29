@@ -112,12 +112,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/SlimUser"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/SlimUser"
                 }
               }
             }
@@ -131,12 +131,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/SlimUser"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/SlimUser"
               }
             }
           }
@@ -590,6 +590,10 @@
           "mineId"
         ],
         "properties": {
+          "mineId": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          },
           "mineName": {
             "type": "string",
             "example": "MyFirstMine"
@@ -775,6 +779,30 @@
           "password": {
             "type": "string",
             "format": "password"
+          }
+        }
+      },
+      "SlimUser": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "alice@mylab.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alice"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Smith"
+          },
+          "organisation": {
+            "type": "string",
+            "example": "University of Cambridge"
           }
         }
       },
