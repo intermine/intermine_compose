@@ -359,7 +359,85 @@
         }
       }
     },
-     "/build/trigger": {
+    "/mine/state/{mineId}": {
+      "post": {
+        "summary": "Sets a mine state",
+        "operationId": "setMineState",
+        "parameters": [{
+          "name": "mineId",
+          "in": "path",
+          "description": "ID of mine to destroy",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MineState"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/MineState"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "retrieves a mine state",
+        "operationId": "getMineState",
+        "parameters": [{
+          "name": "mineId",
+          "in": "path",
+          "description": "ID of mine to destroy",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-556642440000"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineState"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/build/trigger": {
       "post": {
         "summary": "Begin build of specified mine",
         "responses": {
@@ -640,6 +718,18 @@
           "isAvailable": {
             "type": "boolean",
             "example": "true"
+          }
+        }
+      },
+      "MineState": {
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "properties": {
+          "state": {
+            "type": "string",
+            "example": "running"
           }
         }
       },
