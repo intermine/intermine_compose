@@ -1,860 +1,1408 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "description": "InterMine-compose prototype spec",
-    "version": "0.1.0",
-    "title": "InterMine-compose prototype spec - working draft",
-    "contact": {
-      "email": "info@intermine.org",
-      "url": "http://www.intermine.org"
-    },
-    "license": {
-      "name": "LGPL 2.1",
-      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
-    }
-  },
-  "paths": {
-    "/user/register": {
-      "post": {
-        "summary": "Register a user",
-        "operationId": "registerUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
+    "openapi": "3.0.0",
+    "info": {
+        "description": "InterMine-compose prototype spec",
+        "version": "0.1.0",
+        "title": "InterMine-compose prototype spec - working draft",
+        "contact": {
+            "email": "info@intermine.org",
+            "url": "http://www.intermine.org"
         },
-        "responses": {
-          "200": {
-            "description": "Successfully registered a new user"
-          }
+        "license": {
+            "name": "LGPL 2.1",
+            "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
         }
-      }
     },
-    "/user/login": {
-      "post": {
-        "summary": "Login a user",
-        "operationId": "login",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCredentials"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCredentials"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully logged in"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "summary": "Log out",
-        "operationId": "logout",
-        "responses": {
-          "200": {
-            "description": "Successfully logged out"
-          }
-        }
-      }
-    },
-    "/user/forgotPassword": {
-      "post": {
-        "summary": "Send user a link to a page to reset their password ",
-        "operationId": "forgotPassword",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string",
-                "example": "alice@mylab.org"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "type": "string",
-                "example": "alice@mylab.org"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Emailed link succesfully"
-          }
-        }
-      }
-    },
-    "/user/profile": {
-      "get": {
-        "summary": "Retrieve the profile for the authenticated user",
-        "operationId": "getUserProfile",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SlimUser"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/SlimUser"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Update the user profile",
-        "operationId": "updateUserProfile",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SlimUser"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/SlimUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Profile successfully updated"
-          }
-        }
-      }
-    },
-    "/data/files": {
-      "get": {
-        "summary": "Get a list data files uploaded by this user",
-        "operationId": "getFiles",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DataFileProperties"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DataFileProperties"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/data/file": {
-      "post": {
-        "summary": "Upload a data file",
-        "operationId": "fileUpload",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string",
-                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "type": "string",
-                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "File uploaded succesfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "123e4567-e89b-12d3-a456-556642440000"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "example": "123e4567-e89b-12d3-a456-556642440000"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/data/file/{fileId}": {
-      "get": {
-        "summary": "Get a data file uploaded by this user",
-        "operationId": "getFile",
-        "parameters": [{
-          "name": "fileId",
-          "in": "path",
-          "description": "ID of file to get",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "example": "gene\tscore\ttissue\neve\t2.3\tliver"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a data file uploaded by this user",
-        "operationId": "deleteFile",
-        "parameters": [{
-          "name": "fileId",
-          "in": "path",
-          "description": "ID of file to delet",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "File succesfully deleted"
-          }
-        }
-      }
-    },
-    "/mines": {
-      "get": {
-        "summary": "Get a list of mines (if any) for this authorised user",
-        "operationId": "getMines",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Mine"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Mine"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/mine/{mineId}": {
-      "delete": {
-        "summary": "Destroy mine",
-        "operationId": "deleteMine",
-        "parameters": [{
-          "name": "mineId",
-          "in": "path",
-          "description": "ID of mine to destroy",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Mine successfully deleted"
-          }
-        }
-      }
-    },
-    "/mine/nameAvailability": {
-      "post": {
-        "summary": "Check if a given minename is taken",
-        "operationId": "checkNameAvailability",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MineName"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/MineName"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NameAvailability"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NameAvailability"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/mine/state/{mineId}": {
-      "post": {
-        "summary": "Sets a mine state",
-        "operationId": "setMineState",
-        "parameters": [{
-          "name": "mineId",
-          "in": "path",
-          "description": "ID of mine to destroy",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MineState"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/MineState"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MineState"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/MineState"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "summary": "retrieves a mine state",
-        "operationId": "getMineState",
-        "parameters": [{
-          "name": "mineId",
-          "in": "path",
-          "description": "ID of mine to destroy",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MineState"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/MineState"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/build/trigger": {
-      "post": {
-        "summary": "Begin build of specified mine",
-        "responses": {
-          "200": {
-            "description": "build triggered successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuild"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuild"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/build/status": {
-      "get": {
-        "summary": "Retrieve build status of a given mine",
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuildStatus"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataBuildStatus"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/isatools": {
-      "post": {
-        "summary": "Start new mine build config entry + upload ISA files",
-        "description": "Combination of the /mine/config and /file/properties/detect endpoints, intended for programmatic access from an ISA web application.",
-        "operationId": "setMineConfigAndDetectFile",
-        "requestBody": {
-          "description": "Config to set for Mine & file(s) to upload",
-          "content": {
-            "application/json": {
-              "schema": {
-                "allOf": [{
-                    "$ref": "#/components/schemas/MineDescriptor"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "files": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/DataFile"
-                        }
-                      }
-                    },
-                    "example": {
-                      "mineName": "MyFirstISAMine",
-                      "privacy": "unlisted",
-                      "licence": "CC0",
-                      "files": [{
-                          "name": "metabolightsmetafile.isa",
-                          "fileContents": "string",
-                          "fileFormat": "isa",
-                          "organism": {
-                            "name": "Homo sapiens",
-                            "taxonID": "9606"
-                          }
+    "paths": {
+        "/user/register": {
+            "post": {
+                "summary": "Register a user",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
                         },
-                        {
-                          "name": "metabolightsdatafile.tsv",
-                          "fileContents": "string",
-                          "fileFormat": "tsv",
-                          "organism": {
-                            "name": "Homo sapiens",
-                            "taxonID": "9606"
-                          }
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
                         }
-                      ]
                     }
-                  }
-                ]
-              }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully registered a new user"
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "summary": "Login a user",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCredentials"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCredentials"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "get": {
+                "summary": "Log out",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out"
+                    }
+                }
+            }
+        },
+        "/user/forgotPassword": {
+            "post": {
+                "summary": "Send user a link to a page to reset their password ",
+                "operationId": "forgotPassword",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string",
+                                "example": "alice@mylab.org"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "type": "string",
+                                "example": "alice@mylab.org"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Emailed link succesfully"
+                    }
+                }
+            }
+        },
+        "/user/profile": {
+            "get": {
+                "summary": "Retrieve the profile for the authenticated user",
+                "operationId": "getUserProfile",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SlimUser"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SlimUser"
+                                }
+                            }
+                        }
+                    }
+                }
             },
-            "application/xml": {
-              "schema": {
-                "allOf": [{
-                    "$ref": "#/components/schemas/MineDescriptor"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "files": {
+            "post": {
+                "summary": "Update the user profile",
+                "operationId": "updateUserProfile",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SlimUser"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SlimUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile successfully updated"
+                    }
+                }
+            }
+        },
+        "/data/files": {
+            "get": {
+                "summary": "Get a list data files uploaded by this user",
+                "operationId": "getFiles",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataFileProperties"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataFileProperties"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/data/file": {
+            "post": {
+                "summary": "Upload a data file",
+                "operationId": "fileUpload",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string",
+                                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "type": "string",
+                                "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File uploaded succesfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/data/file/{fileId}": {
+            "get": {
+                "summary": "Get a data file uploaded by this user",
+                "operationId": "getFile",
+                "parameters": [
+                    {
+                        "name": "fileId",
+                        "in": "path",
+                        "description": "ID of file to get",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "gene\tscore\ttissue\neve\t2.3\tliver"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a data file uploaded by this user",
+                "operationId": "deleteFile",
+                "parameters": [
+                    {
+                        "name": "fileId",
+                        "in": "path",
+                        "description": "ID of file to delet",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File succesfully deleted"
+                    }
+                }
+            }
+        },
+        "/mines": {
+            "get": {
+                "summary": "Get a list of mines (if any) for this authorised user",
+                "operationId": "getMines",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Mine"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Mine"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/{mineId}": {
+            "delete": {
+                "summary": "Destroy mine",
+                "operationId": "deleteMine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to destroy",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mine successfully deleted"
+                    }
+                }
+            }
+        },
+        "/mine/nameAvailability": {
+            "post": {
+                "summary": "Check if a given minename is taken",
+                "operationId": "checkNameAvailability",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineName"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineName"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NameAvailability"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NameAvailability"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/state/{mineId}": {
+            "post": {
+                "summary": "Sets a mine state",
+                "operationId": "setMineState",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to destroy",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineState"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineState"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineState"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "retrieves a mine state",
+                "operationId": "getMineState",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to destroy",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineState"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineState"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/build/trigger": {
+            "post": {
+                "summary": "Begin build of specified mine",
+                "responses": {
+                    "200": {
+                        "description": "build triggered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataBuild"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataBuild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/build/status": {
+            "get": {
+                "summary": "Retrieve build status of a given mine",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataBuildStatus"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataBuildStatus"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/isatools": {
+            "post": {
+                "summary": "Start new mine build config entry + upload ISA files",
+                "description": "Combination of the /mine/config and /file/properties/detect endpoints, intended for programmatic access from an ISA web application.",
+                "operationId": "setMineConfigAndDetectFile",
+                "requestBody": {
+                    "description": "Config to set for Mine & file(s) to upload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/MineDescriptor"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "files": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/DataFile"
+                                                }
+                                            }
+                                        },
+                                        "example": {
+                                            "mineName": "MyFirstISAMine",
+                                            "privacy": "unlisted",
+                                            "licence": "CC0",
+                                            "files": [
+                                                {
+                                                    "name": "metabolightsmetafile.isa",
+                                                    "fileContents": "string",
+                                                    "fileFormat": "isa",
+                                                    "organism": {
+                                                        "name": "Homo sapiens",
+                                                        "taxonID": "9606"
+                                                    }
+                                                },
+                                                {
+                                                    "name": "metabolightsdatafile.tsv",
+                                                    "fileContents": "string",
+                                                    "fileFormat": "tsv",
+                                                    "organism": {
+                                                        "name": "Homo sapiens",
+                                                        "taxonID": "9606"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/MineDescriptor"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "files": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/DataFile"
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "New mine instance created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/config/new/": {
+            "get": {
+                "summary": "Get mine ID",
+                "description": "return a new mine ID to use in all subsequent requests",
+                "operationId": "getNewMine",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/config/delete/{mineId}": {
+            "delete": {
+                "summary": "Delete config associated with mine instance",
+                "operationId": "deleteConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine config to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mine config succesfully deleted"
+                    }
+                }
+            }
+        },
+        "/file/properties/detect": {
+            "post": {
+                "summary": "Return information about this file",
+                "description": "",
+                "operationId": "detectFileProperties",
+                "responses": {
+                    "200": {
+                        "description": "successfully detected file type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataFileProperties"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataFileProperties"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFile"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFile"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFile"
+                            }
+                        }
+                    },
+                    "description": "File that needs to be identified.",
+                    "required": true
+                }
+            }
+        },
+        "/file/properties/save/{mineId}": {
+            "post": {
+                "summary": "Save file properties to a given InterMine pre-build config",
+                "description": "Following on from `detectFileProperties`, we need to save a set of metadata associated with a file. This can be run multiple times, as the user may upload an unknown number of files.",
+                "operationId": "saveFileProperties",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully saved provided DataFileProperties details"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFilePropertiesResponse"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFilePropertiesResponse"
+                            }
+                        }
+                    },
+                    "description": "File that needs to be identified.",
+                    "required": true
+                }
+            }
+        },
+        "/mine/dataTools/{mineId}": {
+            "get": {
+                "summary": "Retrieve set tools to be used for the given mine",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mineconfig to fetch tools for",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Set tools to be used for the given mine",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mineconfig to set tools for",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ]
+            }
+        },
+        "/supplementaryDataSources/{mineId}": {
+            "get": {
+                "summary": "Get list of possible supplementary data sources for this mine config",
+                "description": "Returns a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "getSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "set list of desired supplementary data sources",
+                "description": "Saves a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "setSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/descriptors/{mineId}": {
+            "post": {
+                "summary": "Set mine descriptors",
+                "description": "Set the properties associated with this mine, e.g. name",
+                "operationId": "setMineDescriptors",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Descriptors to set for Mine",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineDescriptor"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineDescriptor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Descriptors successfully added to mine."
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get mine descriptors",
+                "description": "return descriptors (if any) for a given mine id.",
+                "operationId": "getMineDescriptors",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineDescriptor"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineDescriptor"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/config/{mineId}": {
+            "get": {
+                "summary": "Get mine config",
+                "description": "return configured details (if any) for a given mine id.",
+                "operationId": "getMineConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineConfig"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "https://wizard.intermine.org/v1"
+        },
+        {
+            "url": "http://wizard.intermine.org/v1"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "MineDescriptor": {
+                "type": "object",
+                "required": [
+                    "mineName",
+                    "privacy",
+                    "licence"
+                ],
+                "properties": {
+                    "mineName": {
+                        "type": "string",
+                        "example": "MyFirstMine"
+                    },
+                    "privacy": {
+                        "type": "string",
+                        "enum": [
+                            "unlisted",
+                            "public"
+                        ],
+                        "example": "unlisted"
+                    },
+                    "licence": {
+                        "type": "string",
+                        "example": "CC0"
+                    }
+                },
+                "xml": {
+                    "name": "MineDescriptor"
+                }
+            },
+            "DataFile": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "fileLocation",
+                    "fileFormat",
+                    "organism"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "humanfile.gff"
+                    },
+                    "fileLocation": {
+                        "type": "string",
+                        "example": "/data/myGFF"
+                    },
+                    "fileFormat": {
+                        "type": "string",
+                        "enum": [
+                            "fasta",
+                            "gff",
+                            "tab",
+                            "csv"
+                        ],
+                        "example": "fasta"
+                    },
+                    "organism": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Organism"
+                            }
+                        ]
+                    }
+                },
+                "xml": {
+                    "name": "DataFile"
+                }
+            },
+            "DataFileProperties": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "fileFormat",
+                    "rowCount",
+                    "organism",
+                    "fileLocation",
+                    "mineID"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "humanfile.gff"
+                    },
+                    "fileFormat": {
+                        "type": "string",
+                        "example": "gff"
+                    },
+                    "rowCount": {
+                        "type": "integer",
+                        "example": 22395
+                    },
+                    "filePreview": {
+                        "type": "object",
+                        "properties": {
+                            "headerRow": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": [
+                                        "seqID",
+                                        "source",
+                                        "type",
+                                        "start",
+                                        "end",
+                                        "score",
+                                        "strand",
+                                        "phase"
+                                    ]
+                                }
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "example": [
+                                            "NC_000001.11",
+                                            "RefSeq",
+                                            "region  1",
+                                            "248956422",
+                                            ".",
+                                            "+",
+                                            ".",
+                                            "ID=id0;Dbxref=taxon:9606;Name=1;chromosome=1;gbkey=Src;genome=chromosome;mol_type=genomic DNA"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "questions": {
                         "type": "array",
                         "items": {
-                          "$ref": "#/components/schemas/DataFile"
+                            "$ref": "#/components/schemas/DataFilePropertiesQuestion"
                         }
-                      }
+                    },
+                    "fileLocation": {
+                        "type": "string",
+                        "example": "/data/myGFF"
+                    },
+                    "mineID": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                  }
+                },
+                "xml": {
+                    "name": "DataFileProperties"
+                }
+            },
+            "Organism": {
+                "type": "object",
+                "required": [
+                    "taxonID"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Homo sapiens"
+                    },
+                    "taxonID": {
+                        "type": "integer",
+                        "example": "9606"
+                    }
+                }
+            },
+            "DataFilePropertiesQuestion": {
+                "type": "object",
+                "required": [
+                    "fileLocation",
+                    "mineID",
+                    "question"
+                ],
+                "properties": {
+                    "fileLocation": {
+                        "type": "string",
+                        "example": "/data/myGFF"
+                    },
+                    "mineId": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                    },
+                    "question": {
+                        "type": "object",
+                        "properties": {
+                            "questionType": {
+                                "type": "string",
+                                "example": "nucleotideOrProtein"
+                            },
+                            "questionWording": {
+                                "type": "string",
+                                "description": "Human-readable question aimed at a wizard user.",
+                                "example": "Does this file contain nucleotides or proteins?"
+                            },
+                            "possibleAnswers": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/DataFilePropertiesAnswerOption"
+                                }
+                            }
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "DataFilePropertiesQuestion"
+                }
+            },
+            "DataFilePropertiesAnswerOption": {
+                "type": "object",
+                "required": [
+                    "fileLocation",
+                    "mineID"
+                ],
+                "properties": {
+                    "fileLocation": {
+                        "type": "string",
+                        "example": "/data/myGFF"
+                    },
+                    "mineId": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                    },
+                    "options": {
+                        "type": "array",
+                        "description": "Array of possible answers the user can choose from.",
+                        "example": [
+                            {
+                                "answerID": "nucleotides",
+                                "answerWording": "Nucleotides"
+                            },
+                            {
+                                "answerID": "proteins",
+                                "answerWording": "Proteins"
+                            }
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "answerID": {
+                                    "type": "string",
+                                    "example": "nucleotide"
+                                },
+                                "answerWording": {
+                                    "type": "string",
+                                    "example": "Nucleotide"
+                                }
+                            }
+                        }
+                    },
+                    "defaultAnswer": {
+                        "type": "string",
+                        "example": "answerID of one of the questions above"
+                    }
+                },
+                "xml": {
+                    "name": "DataFilePropertiesAnswerOption"
+                }
+            },
+            "DataFilePropertiesResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "fileLocation",
+                        "mineID"
+                    ],
+                    "properties": {
+                        "answers": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "answerID": {
+                                        "type": "string",
+                                        "example": "GeneID"
+                                    },
+                                    "answerChosen": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "primaryIdentifier"
+                                    }
+                                }
+                            }
+                        },
+                        "fileLocation": {
+                            "type": "string",
+                            "example": "/data/myGFF"
+                        },
+                        "mineID": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    "xml": {
+                        "name": "DataFilePropertiesResponse"
+                    }
+                }
+            },
+            "SupplementaryDataSource": {
+                "type": "object",
+                "required": [
+                    "label",
+                    "description",
+                    "url"
+                ],
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "example": "NCBI Taxon ID information"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Will populate empty fields for Organism, e.g. name (Based on NCBI taxon ID)"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://intermine.readthedocs.io/en/latest/database/data-sources/library/organism/"
+                    }
+                },
+                "xml": {
+                    "name": "SupplementaryDataSources"
+                }
+            },
+            "SupplementaryDataSourcesResponse": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "example": [
+                    "GOAnnotations",
+                    "PubMed"
                 ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "New mine instance created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "123e4567-e89b-12d3-a456-556642440000"
+            },
+            "DataTool": {
+                "type": "object",
+                "required": [
+                    "toolId",
+                    "toolName",
+                    "toolDescription",
+                    "toolPreview",
+                    "requiredClasses"
+                ],
+                "properties": {
+                    "toolId": {
+                        "type": "string"
+                    },
+                    "toolName": {
+                        "type": "string",
+                        "example": "ProtVista"
+                    },
+                    "toolDescription": {
+                        "type": "string",
+                        "example": "Protein feature browser"
+                    },
+                    "toolPreview": {
+                        "type": "string",
+                        "example": "http://toolregistry.intermine.org/protvista.png"
+                    },
+                    "requiredClasses": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "Gene",
+                            "Gene.homologues.homologue"
+                        ]
+                    }
                 }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "example": "123e4567-e89b-12d3-a456-556642440000"
+            },
+            "MineConfig": {
+                "type": "object",
+                "properties": {
+                    "mineDescriptor": {
+                        "$ref": "#/components/schemas/MineDescriptor"
+                    },
+                    "dataTools": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DataTool"
+                        }
+                    },
+                    "dataFiles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DataFile"
+                        }
+                    },
+                    "projectXML": {
+                        "type": "string"
+                    },
+                    "globalAdditions": {
+                        "type": "string"
+                    }
                 }
-              }
             }
-          }
         }
-      }
     }
-  },
-  "servers": [{
-      "url": "https://wizard.intermine.org/v1"
-    },
-    {
-      "url": "http://wizard.intermine.org/v1"
-    }
-  ],
-  "components": {
-    "schemas": {
-      "MineDescriptor": {
-        "type": "object",
-        "required": [
-          "mineId"
-        ],
-        "properties": {
-          "mineId": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          },
-          "mineName": {
-            "type": "string",
-            "example": "MyFirstMine"
-          },
-          "privacy": {
-            "type": "string",
-            "enum": [
-              "unlisted",
-              "public"
-            ],
-            "example": "unlisted"
-          },
-          "licence": {
-            "type": "string",
-            "example": "CC0"
-          }
-        },
-        "xml": {
-          "name": "MineConfig"
-        }
-      },
-      "DataFile": {
-        "type": "object",
-        "required": [
-          "name",
-          "fileContents",
-          "fileFormat",
-          "organism"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "humanfile.gff"
-          },
-          "fileContents": {
-            "type": "string"
-          },
-          "fileFormat": {
-            "type": "string",
-            "enum": [
-              "fasta",
-              "gff",
-              "tab",
-              "csv"
-            ],
-            "example": "fasta"
-          },
-          "organism": {
-            "allOf": [{
-              "$ref": "#/components/schemas/Organism"
-            }]
-          }
-        },
-        "xml": {
-          "name": "DataFile"
-        }
-      },
-      "Organism": {
-        "type": "object",
-        "required": [
-          "taxonID"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Homo sapiens"
-          },
-          "taxonID": {
-            "type": "integer",
-            "example": "9606"
-          }
-        }
-      },
-      "MineName": {
-        "type": "object",
-        "required": [
-          "mineName"
-        ],
-        "properties": {
-          "mineName": {
-            "type": "string",
-            "example": "biotestmine"
-          }
-        }
-      },
-      "Mine": {
-        "type": "object",
-        "required": [
-          "mineName",
-          "minelocation",
-          "mineStatus"
-        ],
-        "properties": {
-          "mineName": {
-            "type": "string",
-            "example": "biotestmine"
-          },
-          "minelocation": {
-            "type": "string",
-            "example": "http://localhost:8080/biotestmine"
-          },
-          "mineStatus": {
-            "type": "string",
-            "enum": [
-              "in progress",
-              "running"
-            ],
-            "example": "in progress"
-          },
-          "privacy": {
-            "type": "string",
-            "enum": [
-              "unlisted",
-              "public"
-            ],
-            "example": "unlisted"
-          }
-        }
-      },
-      "NameAvailability": {
-        "type": "object",
-        "required": [
-          "isAvailable"
-        ],
-        "properties": {
-          "isAvailable": {
-            "type": "boolean",
-            "example": "true"
-          }
-        }
-      },
-      "MineState": {
-        "type": "object",
-        "required": [
-          "state"
-        ],
-        "properties": {
-          "state": {
-            "type": "string",
-            "example": "running"
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "alice@mylab.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Alice"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Smith"
-          },
-          "organisation": {
-            "type": "string",
-            "example": "University of Cambridge"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
-          }
-        }
-      },
-      "UserCredentials": {
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "alice@mylab.com"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
-          }
-        }
-      },
-      "SlimUser": {
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "alice@mylab.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Alice"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Smith"
-          },
-          "organisation": {
-            "type": "string",
-            "example": "University of Cambridge"
-          }
-        }
-      },
-      "DataFileProperties": {
-        "type": "object",
-        "required": [
-          "fileId",
-          "fileName"
-        ],
-        "properties": {
-          "fileId": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          },
-          "fileName": {
-            "type": "string",
-            "example": "my.gff"
-          }
-        }
-      },
-      "DataBuild": {
-        "type": "object",
-        "required": [
-          "mineId"
-        ],
-        "properties": {
-          "mineId": {
-            "type": "string",
-            "example": "123e4567-e89b-12d3-a456-556642440000"
-          }
-        }
-      },
-      "DataBuildStatus": {
-        "type": "object",
-        "required": [
-          "buildStatus"
-        ],
-        "properties": {
-          "buildStatus": {
-            "type": "string",
-            "enum": [
-              "complete",
-              "running",
-              "errored",
-              "not_yet_started"
-            ]
-          },
-          "errorDetails": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  }
 }
