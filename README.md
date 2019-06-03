@@ -6,7 +6,7 @@ Repo to handle docker orchestration in the cloud
 ### Step 0 (optional but recommended)
 #### Create a python virtual environment
 ```bash
-conda create -n intermine_compose python3.6 && conda activate intermine_compose
+conda create -n intermine_compose python=3.6 && conda activate intermine_compose
 ```
 ### Step 1
 #### Install connexion python package
