@@ -1238,7 +1238,7 @@
                     "rowCount",
                     "organism",
                     "fileLocation",
-                    "mineID"
+                    "mineId"
                 ],
                 "properties": {
                     "name": {
@@ -1303,9 +1303,16 @@
                         "type": "string",
                         "example": "/data/myGFF"
                     },
-                    "mineID": {
+                    "mineId": {
                         "type": "string",
                         "example": "123e4567-e89b-12d3-a456-556642440000"
+                    },
+                    "organism": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Organism"
+                            }
+                        ]
                     }
                 },
                 "xml": {
@@ -1348,7 +1355,7 @@
                 "type": "object",
                 "required": [
                     "fileLocation",
-                    "mineID",
+                    "mineId",
                     "question"
                 ],
                 "properties": {
@@ -1396,7 +1403,7 @@
                         "type": "string",
                         "example": "/data/myGFF"
                     },
-                    "mineId": {
+                    "mineID": {
                         "type": "string",
                         "example": "123e4567-e89b-12d3-a456-556642440000"
                     },
@@ -1466,7 +1473,7 @@
                             "type": "string",
                             "example": "/data/myGFF"
                         },
-                        "mineID": {
+                        "mineId": {
                             "type": "string",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
                         }
