@@ -617,6 +617,19 @@
                 "summary": "Get mine ID",
                 "description": "return a new mine ID to use in all subsequent requests",
                 "operationId": "getNewMine",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -655,6 +668,17 @@
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
                         }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
                     }
                 ],
                 "responses": {
@@ -669,6 +693,19 @@
                 "summary": "Return information about this file",
                 "description": "",
                 "operationId": "detectFileProperties",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "successfully detected file type",
@@ -720,6 +757,17 @@
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
                         }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
                     }
                 ],
                 "responses": {
@@ -748,6 +796,30 @@
         "/mine/dataTools/{mineId}": {
             "get": {
                 "summary": "Retrieve set tools to be used for the given mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine config to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -770,23 +842,34 @@
                             }
                         }
                     }
-                },
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mineconfig to fetch tools for",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    }
-                ]
+                }
             },
             "post": {
                 "summary": "Set tools to be used for the given mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine config to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -809,20 +892,7 @@
                             }
                         }
                     }
-                },
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mineconfig to set tools for",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    }
-                ]
+                }
             }
         },
         "/supplementaryDataSources/{mineId}": {
@@ -834,12 +904,23 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine config to delete",
                         "required": true,
                         "schema": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
                         }
                     }
                 ],
@@ -875,12 +956,23 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine config to delete",
                         "required": true,
                         "schema": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
                         }
                     }
                 ],
@@ -912,12 +1004,23 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine config to delete",
                         "required": true,
                         "schema": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
                         }
                     }
                 ],
@@ -951,12 +1054,23 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine config to delete",
                         "required": true,
                         "schema": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
                         }
                     }
                 ],
@@ -988,12 +1102,23 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine config to delete",
                         "required": true,
                         "schema": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
                         }
                     }
                 ],
