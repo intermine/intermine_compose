@@ -177,7 +177,7 @@
                 }
             }
         },
-        "/data/file": {
+        "/data/file/upload": {
             "post": {
                 "summary": "Upload a data file",
                 "operationId": "fileUpload",
@@ -216,6 +216,32 @@
                         }
                     }
                 }
+            }
+        },
+        "/data/file/upload/remote":{
+            "post": {
+                "summary": "Upload data file using a remote link",
+                "operationId": "fileUploadRemote",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileUploadRemote"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileUploadRemote"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File successfully uploaded"
+                    }
+                }
+
             }
         },
         "/data/file/{fileId}": {
@@ -1227,6 +1253,18 @@
                     "organisation": {
                         "type": "string",
                         "example": "University of Cambridge"
+                    }
+                }
+            },
+            "FileUploadRemote": {
+                "type": "object",
+                "required": [
+                    "remoteURL"
+                ],
+                "properties": {
+                    "remoteURL":{
+                        "type": "string",
+                        "example": "https://drive.google.com/share/fileID"
                     }
                 }
             },
