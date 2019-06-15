@@ -1,0 +1,7 @@
+[flake8]
+exclude = .git,__pycache__,docs,build,dist,.vscode
+;ignore =
+;min-version = 3.4.0
+;max-complexity = 12
+;per-file-ignores =
+;    tests/* : D100,D101
