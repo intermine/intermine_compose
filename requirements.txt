@@ -1,0 +1,15 @@
+Flask
+pytest
+pytest-cov
+flake8
+celery
+kubernetes
+flask-login
+flask-marshmallow
+psycopg2
+Flask-SQLAlchemy
+WTForms
+Flask-WTF
+Flask-Mail
+Flask-Caching
+Flask-Limiter
