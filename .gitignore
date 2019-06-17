@@ -117,4 +117,9 @@ dmypy.json
 
 # vscode user settings
 .vscode/*
+
+# docker-compose data
 data/*
+
+# gunicorn pid file
+compose.pid
