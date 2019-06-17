@@ -25,6 +25,8 @@ services:
     environment:
       - FLASK_DEBUG=${FLASK_DEBUG:-TRUE}
       - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI:-postgres://postgres:postgres@postgres:5432/composedb}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis}
     depends_on: 
       - postgres
       - redis
