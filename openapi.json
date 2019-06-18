@@ -1140,6 +1140,439 @@
                     }
                 }
             }
+        },
+        "/mine/config": {
+            "get": {
+                "summary": "Get mine config",
+                "description": "return configured details (if any) for a given mine id.",
+                "operationId": "getMineConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineConfig"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete config associated with mine instance",
+                "operationId": "deleteConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mine config successfully deleted"
+                    }
+                }
+            }
+        },
+        "/file/properties/save": {
+            "post": {
+                "summary": "Save file properties to a given InterMine pre-build config",
+                "description": "Following on from `detectFileProperties`, we need to save a set of metadata associated with a file. This can be run multiple times, as the user may upload an unknown number of files.",
+                "operationId": "saveFileProperties",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully saved provided DataFileProperties details"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFilePropertiesResponse"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DataFilePropertiesResponse"
+                            }
+                        }
+                    },
+                    "description": "File that needs to be identified.",
+                    "required": true
+                }
+            }
+        },
+        "/mine/dataTools": {
+            "get": {
+                "summary": "Retrieve set tools to be used for the given mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Set tools to be used for the given mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/supplementaryDataSources": {
+            "get": {
+                "summary": "Get list of possible supplementary data sources for this mine config",
+                "description": "Returns a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "getSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "set list of desired supplementary data sources",
+                "description": "Saves a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "setSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/descriptors": {
+            "post": {
+                "summary": "Set mine descriptors",
+                "description": "Set the properties associated with this mine, e.g. name",
+                "operationId": "setMineDescriptors",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Descriptors to set for Mine",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineDescriptor"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MineDescriptor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Descriptors successfully added to mine."
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get mine descriptors",
+                "description": "return descriptors (if any) for a given mine id.",
+                "operationId": "getMineDescriptors",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineDescriptor"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineDescriptor"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "servers": [
