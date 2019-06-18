@@ -1353,58 +1353,40 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/DataTool"
-                                    }
+                        "description": "success"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "format": "string",
+                                    "example": "bluegenesToolProtvista"
                                 }
-                            },
-                            "application/xml": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/DataTool"
-                                    }
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "format": "string",
+                                    "example": "bluegenesToolProtvista"
                                 }
                             }
                         }
-                    }
+                    },
+                    "description": "Tool to be used with mine",
+                    "required": true
                 }
             }
         },
         "/supplementaryDataSources": {
             "get": {
-                "summary": "Get list of possible supplementary data sources for this mine config",
+                "summary": "Get list of possible supplementary data sources",
                 "description": "Returns a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
                 "operationId": "getSupplementaryDataSources",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "query",
-                        "description": "ID of mine config to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1423,52 +1405,6 @@
                                     "items": {
                                         "$ref": "#/components/schemas/SupplementaryDataSource"
                                     }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "summary": "set list of desired supplementary data sources",
-                "description": "Saves a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
-                "operationId": "setSupplementaryDataSources",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "query",
-                        "description": "ID of mine config to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
-                                }
-                            },
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/SupplementaryDataSourcesResponse"
                                 }
                             }
                         }
@@ -1571,6 +1507,146 @@
                             }
                         }
                     }
+                }
+            }
+        },
+        "/dataTools": {
+            "get": {
+                "summary": "Retrieve all available tools",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DataTool"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/supplementaryDataSources": {
+            "get": {
+                "summary": "Get list of supplementary data sources set for this mine config",
+                "description": "Returns a list of external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "getMineSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "set list of desired supplementary data sources",
+                "description": "Saves a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "setSupplementaryDataSources",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "format": "string",
+                                    "example": "uniprot"
+                                }
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "format": "string",
+                                    "example": "uniprot"
+                                }
+                            }
+                        }
+                    },
+                    "description": "Supplementary sources to be used with mine",
+                    "required": true
                 }
             }
         }
@@ -2124,11 +2200,12 @@
                 ],
                 "properties": {
                     "toolId": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "ProtVista"
                     },
                     "toolName": {
                         "type": "string",
-                        "example": "ProtVista"
+                        "example": "Protein Features"
                     },
                     "toolDescription": {
                         "type": "string",
@@ -2160,6 +2237,12 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/DataTool"
+                        }
+                    },
+                    "supplementaryDataSources": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SupplementaryDataSource"
                         }
                     },
                     "dataFiles": {
