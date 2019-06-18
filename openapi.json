@@ -800,7 +800,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -850,7 +850,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -904,7 +904,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -956,7 +956,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1004,7 +1004,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1054,7 +1054,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1102,7 +1102,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine config to delete",
+                        "description": "ID of mine config to retrieve",
                         "required": true,
                         "schema": {
                             "type": "string",
