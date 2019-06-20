@@ -653,41 +653,6 @@
                 }
             }
         },
-        "/mine/config/delete/{mineId}": {
-            "delete": {
-                "summary": "Delete config associated with mine instance",
-                "operationId": "deleteConfig",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine config to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Mine config successfully deleted"
-                    }
-                }
-            }
-        },
         "/file/properties/detect": {
             "post": {
                 "summary": "Return information about this file",
