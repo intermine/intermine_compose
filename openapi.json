@@ -177,10 +177,23 @@
                 }
             }
         },
-        "/data/file/upload": {
+        "/data/file/upload/{mineId}": {
             "post": {
                 "summary": "Upload a data file",
                 "operationId": "fileUpload",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -218,10 +231,23 @@
                 }
             }
         },
-        "/data/file/upload/remote": {
+        "/data/file/upload/remote/{mineId}": {
             "post": {
                 "summary": "Upload data file using a remote link",
                 "operationId": "fileUploadRemote",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -472,9 +498,22 @@
                 }
             }
         },
-        "/build/trigger": {
+        "/build/trigger/{mineId}": {
             "post": {
                 "summary": "Begin build of specified mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "build triggered successfully",
@@ -494,9 +533,22 @@
                 }
             }
         },
-        "/build/status": {
+        "/build/status/{mineId}": {
             "get": {
                 "summary": "Retrieve build status of a given mine",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "path",
+                        "description": "ID of mine to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -1947,9 +1999,14 @@
             "DataBuildStatus": {
                 "type": "object",
                 "required": [
+                    "mineId",
                     "buildStatus"
                 ],
                 "properties": {
+                    "mineId": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                    },
                     "buildStatus": {
                         "type": "string",
                         "enum": [
