@@ -533,37 +533,17 @@
                                     {
                                         "type": "object",
                                         "properties": {
-                                            "files": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "#/components/schemas/DataFile"
-                                                }
+                                            "dataFile": {
+                                                "$ref": "#/components/schemas/FileUploadRemote"
                                             }
                                         },
                                         "example": {
                                             "mineName": "MyFirstISAMine",
                                             "privacy": "unlisted",
                                             "licence": "CC0",
-                                            "files": [
-                                                {
-                                                    "name": "metabolightsmetafile.isa",
-                                                    "fileContents": "string",
-                                                    "fileFormat": "isa",
-                                                    "organism": {
-                                                        "name": "Homo sapiens",
-                                                        "taxonID": "9606"
-                                                    }
-                                                },
-                                                {
-                                                    "name": "metabolightsdatafile.tsv",
-                                                    "fileContents": "string",
-                                                    "fileFormat": "tsv",
-                                                    "organism": {
-                                                        "name": "Homo sapiens",
-                                                        "taxonID": "9606"
-                                                    }
-                                                }
-                                            ]
+                                            "dataFile":{
+                                                "remoteURL" : "https://deive.google.com"
+                                            }
                                         }
                                     }
                                 ]
