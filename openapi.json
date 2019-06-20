@@ -593,8 +593,8 @@
                                             "mineName": "MyFirstISAMine",
                                             "privacy": "unlisted",
                                             "licence": "CC0",
-                                            "dataFile":{
-                                                "remoteURL" : "https://deive.google.com"
+                                            "dataFile": {
+                                                "remoteURL": "https://deive.google.com"
                                             }
                                         }
                                     }
@@ -688,7 +688,7 @@
         "/file/properties/detect": {
             "post": {
                 "summary": "Return information about this file",
-                "description": "",
+                "description": "Reads in data file, validates and returns file attributes, plus questions (if needed) for the user.",
                 "operationId": "detectFileProperties",
                 "parameters": [
                     {
@@ -700,6 +700,17 @@
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3103a884-ff0b-4e77-9c4f-1354a5b928d5"
                         }
                     }
                 ],
@@ -845,6 +856,17 @@
                             "type": "string",
                             "format": "uuid",
                             "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    },
+                    {
+                        "name": "fileId",
+                        "in": "query",
+                        "description": "ID of file to save",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "0bca2cef-2541-49ec-84d9-0acb434a8c3c"
                         }
                     }
                 ],
@@ -1246,6 +1268,279 @@
                     "required": true
                 }
             }
+        },
+        "/mine/user-config/new/": {
+            "get": {
+                "summary": "Get mine ID",
+                "description": "return a new mine ID to use in all subsequent requests",
+                "operationId": "getNewMine",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "123e4567-e89b-12d3-a456-556642440000"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/user-config": {
+            "get": {
+                "summary": "Get user specified config for this mine",
+                "description": "return configured details (if any) for a given mine id.",
+                "operationId": "getMineUserConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineUserConfig"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineUserConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete config associated with mine instance",
+                "operationId": "deleteConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mine config successfully deleted"
+                    }
+                }
+            }
+        },
+        "/mine/build-config": {
+            "get": {
+                "summary": "return config needed to build a mine",
+                "description": "return config needed to build a mine",
+                "operationId": "getMineBuildConfig",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineBuildConfig"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MineBuildConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mine/file-properties": {
+            "get": {
+                "summary": "Get config related to this file",
+                "description": "return configured details (if any) for a given file",
+                "operationId": "getMineFileProperties",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine config to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    },
+                    {
+                        "name": "fileId",
+                        "in": "query",
+                        "description": "ID of file",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "37c4a7bf-0faf-4400-85e0-ba7fea19330e"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataFileProperties"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataFileProperties"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete config associated with file",
+                "operationId": "deleteMineFileProperties",
+                "parameters": [
+                    {
+                        "name": "mineId",
+                        "in": "query",
+                        "description": "ID of mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-556642440000"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID of user who owns this mine",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
+                        }
+                    },
+                    {
+                        "name": "fileId",
+                        "in": "query",
+                        "description": "ID of file",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "0b658372-f679-4951-a2c9-02f1dc0d6994"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File config successfully deleted"
+                    }
+                }
+            }
         }
     },
     "servers": [
@@ -1260,6 +1555,7 @@
         "schemas": {
             "MineDescriptor": {
                 "type": "object",
+                "description": "Metadata about the file",
                 "required": [
                     "mineName",
                     "privacy",
@@ -1289,6 +1585,7 @@
             },
             "DataFile": {
                 "type": "object",
+                "description": "Represents the data file",
                 "required": [
                     "name",
                     "fileId",
@@ -1496,88 +1793,37 @@
             },
             "DataFileProperties": {
                 "type": "object",
+                "description": "All of the config input by the user via the wizard",
                 "required": [
-                    "name",
-                    "fileFormat",
-                    "rowCount",
-                    "organism",
-                    "fileId",
-                    "mineId"
+                    "dataFile"
                 ],
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "humanfile.gff"
+                    "dataFile": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/DataFile"
+                            }
+                        ]
                     },
-                    "fileFormat": {
-                        "type": "string",
-                        "example": "gff"
-                    },
-                    "rowCount": {
-                        "type": "integer",
-                        "example": 22395
+                    "descriptors": {
+                        "type": "array",
+                        "description": "Information about the file, e.g. entity count, sequence type",
+                        "items": {
+                            "$ref": "#/components/schemas/DataFileDescriptor"
+                        }
                     },
                     "filePreview": {
-                        "type": "object",
-                        "properties": {
-                            "headerRow": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string",
-                                    "example": [
-                                        "seqID",
-                                        "source",
-                                        "type",
-                                        "start",
-                                        "end",
-                                        "score",
-                                        "strand",
-                                        "phase"
-                                    ]
-                                }
-                            },
-                            "rows": {
-                                "type": "array",
-                                "items": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string",
-                                        "example": [
-                                            "NC_000001.11",
-                                            "RefSeq",
-                                            "region  1",
-                                            "248956422",
-                                            ".",
-                                            "+",
-                                            ".",
-                                            "ID=id0;Dbxref=taxon:9606;Name=1;chromosome=1;gbkey=Src;genome=chromosome;mol_type=genomic DNA"
-                                        ]
-                                    }
-                                }
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/DataFilePreview"
                             }
-                        }
+                        ]
                     },
                     "questions": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/DataFilePropertiesQuestion"
                         }
-                    },
-                    "fileId": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
-                    },
-                    "mineId": {
-                        "type": "string",
-                        "example": "123e4567-e89b-12d3-a456-556642440000"
-                    },
-                    "organism": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Organism"
-                            }
-                        ]
                     }
                 },
                 "xml": {
@@ -1624,38 +1870,29 @@
             "DataFilePropertiesQuestion": {
                 "type": "object",
                 "required": [
-                    "fileId",
-                    "mineId",
-                    "question"
+                    "questionId",
+                    "questionHeader",
+                    "possibleAnswers"
                 ],
                 "properties": {
-                    "fileId": {
+                    "questionId": {
                         "type": "string",
-                        "format": "uuid",
-                        "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
+                        "example": "nucleotideOrProtein"
                     },
-                    "mineId": {
+                    "questionHeader": {
                         "type": "string",
-                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                        "description": "A header in bold above question for readability",
+                        "example": "Sequence Type"
                     },
-                    "question": {
-                        "type": "object",
-                        "properties": {
-                            "questionType": {
-                                "type": "string",
-                                "example": "nucleotideOrProtein"
-                            },
-                            "questionWording": {
-                                "type": "string",
-                                "description": "Human-readable question aimed at a wizard user.",
-                                "example": "Does this file contain nucleotides or proteins?"
-                            },
-                            "possibleAnswers": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/DataFilePropertiesAnswerOption"
-                                }
-                            }
+                    "questionWording": {
+                        "type": "string",
+                        "description": "The text of the question",
+                        "example": "Does this file contain nucleotides or proteins?"
+                    },
+                    "possibleAnswers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DataFilePropertiesAnswerOption"
                         }
                     }
                 },
@@ -1666,49 +1903,29 @@
             "DataFilePropertiesAnswerOption": {
                 "type": "object",
                 "required": [
-                    "fileId",
-                    "mineId"
+                    "answerId",
+                    "answerLabel"
                 ],
                 "properties": {
-                    "fileId": {
+                    "answerId": {
                         "type": "string",
-                        "format": "uuid",
-                        "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
+                        "description": "Machine-readable value for this answer",
+                        "example": "primaryIdentifier"
                     },
-                    "mineId": {
+                    "answerLabel": {
                         "type": "string",
-                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                        "description": "Human readable answer to be displayed",
+                        "example": "Primary Identifier"
                     },
-                    "options": {
-                        "type": "array",
-                        "description": "Array of possible answers the user can choose from.",
-                        "example": [
-                            {
-                                "answerID": "nucleotides",
-                                "answerWording": "Nucleotides"
-                            },
-                            {
-                                "answerID": "proteins",
-                                "answerWording": "Proteins"
-                            }
-                        ],
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "answerID": {
-                                    "type": "string",
-                                    "example": "nucleotide"
-                                },
-                                "answerWording": {
-                                    "type": "string",
-                                    "example": "Nucleotide"
-                                }
-                            }
-                        }
+                    "isDefault": {
+                        "type": "boolean",
+                        "description": "TRUE if this is the default value",
+                        "example": "true"
                     },
-                    "defaultAnswer": {
-                        "type": "string",
-                        "example": "answerID of one of the questions above"
+                    "isSelected": {
+                        "type": "boolean",
+                        "description": "TRUE if the user selected this value in the wizard",
+                        "example": "false"
                     }
                 },
                 "xml": {
@@ -1716,44 +1933,31 @@
                 }
             },
             "DataFilePropertiesResponse": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "required": [
-                        "fileId",
-                        "mineId"
-                    ],
-                    "properties": {
-                        "answers": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "answerID": {
-                                        "type": "string",
-                                        "example": "GeneID"
-                                    },
-                                    "answerChosen": {
-                                        "type": "string",
-                                        "nullable": true,
-                                        "example": "primaryIdentifier"
-                                    }
+                "type": "object",
+                "required": [
+                    "answers"
+                ],
+                "properties": {
+                    "answers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "questionId": {
+                                    "type": "string",
+                                    "example": "nucleotideOrProtein"
+                                },
+                                "answerId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "example": "nucleotide"
                                 }
                             }
-                        },
-                        "fileId": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
-                        },
-                        "mineId": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
                         }
-                    },
-                    "xml": {
-                        "name": "DataFilePropertiesResponse"
                     }
+                },
+                "xml": {
+                    "name": "DataFilePropertiesResponse"
                 }
             },
             "SupplementaryDataSource": {
@@ -1852,6 +2056,128 @@
                         "items": {
                             "$ref": "#/components/schemas/DataFile"
                         }
+                    },
+                    "projectXML": {
+                        "type": "string"
+                    },
+                    "globalAdditions": {
+                        "type": "string"
+                    }
+                }
+            },
+            "DataFilePreview": {
+                "type": "object",
+                "properties": {
+                    "headerLabel": {
+                        "type": "string",
+                        "description": "Bold header to label the header row in the file preview",
+                        "example": "Header row"
+                    },
+                    "headerRow": {
+                        "type": "array",
+                        "description": "The header row of the data file",
+                        "items": {
+                            "type": "string",
+                            "example": [
+                                "seqID",
+                                "source",
+                                "type",
+                                "start",
+                                "end",
+                                "score",
+                                "strand",
+                                "phase"
+                            ]
+                        }
+                    },
+                    "snippetLabel": {
+                        "type": "string",
+                        "description": "Bold header to label the file snippet in the file preview",
+                        "example": "Sequence"
+                    },
+                    "fileSnippet": {
+                        "type": "array",
+                        "description": "The first interesting line of the file",
+                        "items": {
+                            "type": "string",
+                            "example": [
+                                "NC_000001.11",
+                                "RefSeq",
+                                "region  1",
+                                "248956422",
+                                ".",
+                                "+",
+                                ".",
+                                "ID=id0;Dbxref=taxon:9606;Name=1;chromosome=1;gbkey=Src;genome=chromosome;mol_type=genomic DNA"
+                            ]
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "DataFilePreview"
+                }
+            },
+            "DataFileDescriptor": {
+                "type": "object",
+                "description": "Array of items describing the file, e.g. row count or sequence type",
+                "properties": {
+                    "attributeName": {
+                        "type": "string",
+                        "example": "Number of entities in the file"
+                    },
+                    "attributeValue": {
+                        "type": "string",
+                        "example": "37"
+                    }
+                }
+            },
+            "MineUserConfig": {
+                "type": "object",
+                "properties": {
+                    "mineDescriptor": {
+                        "$ref": "#/components/schemas/MineDescriptor"
+                    },
+                    "dataTools": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DataTool"
+                        }
+                    },
+                    "supplementaryDataSources": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SupplementaryDataSource"
+                        }
+                    },
+                    "dataFiles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DataFileProperties"
+                        }
+                    }
+                }
+            },
+            "MineBuildConfig": {
+                "type": "object",
+                "required": [
+                    "mineDescriptor",
+                    "dataTools",
+                    "projectXML",
+                    "globalAdditions"
+                ],
+                "properties": {
+                    "mineDescriptor": {
+                        "$ref": "#/components/schemas/MineDescriptor"
+                    },
+                    "dataTools": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "@intermine/bluegenes-protvista@1.1.1",
+                            "@intermine/bluegenes-cytoscape-interaction-network-viewer@1.1.0"
+                        ]
                     },
                     "projectXML": {
                         "type": "string"
