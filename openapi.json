@@ -644,47 +644,6 @@
                 }
             }
         },
-        "/mine/config/new/": {
-            "get": {
-                "summary": "Get mine ID",
-                "description": "return a new mine ID to use in all subsequent requests",
-                "operationId": "getNewMine",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uuid",
-                                    "example": "123e4567-e89b-12d3-a456-556642440000"
-                                }
-                            },
-                            "application/xml": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uuid",
-                                    "example": "123e4567-e89b-12d3-a456-556642440000"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/file/properties/detect": {
             "post": {
                 "summary": "Return information about this file",
@@ -746,87 +705,6 @@
                     },
                     "description": "File that needs to be identified.",
                     "required": true
-                }
-            }
-        },
-        "/mine/config": {
-            "get": {
-                "summary": "Get mine config",
-                "description": "return configured details (if any) for a given mine id.",
-                "operationId": "getMineConfig",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "query",
-                        "description": "ID of mine config to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/MineConfig"
-                                }
-                            },
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/MineConfig"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete config associated with mine instance",
-                "operationId": "deleteConfig",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "query",
-                        "description": "ID of mine config to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "4187cd22-7709-45f0-af33-94b36b6bf561"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Mine config successfully deleted"
-                    }
                 }
             }
         },
