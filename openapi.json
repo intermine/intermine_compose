@@ -1813,9 +1813,17 @@
             "DataFilePropertiesResponse": {
                 "type": "object",
                 "required": [
+                    "dataFile",
                     "answers"
                 ],
                 "properties": {
+                    "dataFile": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/DataFile"
+                            }
+                        ]
+                    },
                     "answers": {
                         "type": "array",
                         "items": {
