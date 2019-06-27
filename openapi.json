@@ -1491,11 +1491,7 @@
                         "example": "fasta"
                     },
                     "organism": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Organism"
-                            }
-                        ]
+                        "$ref": "#/components/schemas/Organism"
                     }
                 },
                 "xml": {
@@ -1818,11 +1814,7 @@
                 ],
                 "properties": {
                     "dataFile": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/DataFile"
-                            }
-                        ]
+                        "$ref": "#/components/schemas/DataFile"
                     },
                     "answers": {
                         "type": "array",
