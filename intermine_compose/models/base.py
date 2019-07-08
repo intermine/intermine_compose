@@ -1,6 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from sqlalchemy import DateTime, Column
 
 db = SQLAlchemy()
 
-class Base(db.Model):
-    pass
+class TimestampMixin(object):
+    created = Column(
+        DateTime, nullable=False, default=datetime.utcnow)
+    updated = Column(DateTime(timezone=True), onupdate=datetime.utcnow)
