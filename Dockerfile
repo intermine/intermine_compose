@@ -8,10 +8,11 @@ RUN cd /app && pip install -r requirements.txt
 
 FROM python:3.6-alpine
 LABEL maintainer="Ank"
+RUN apk update && apk add ca-certificates && apk add libpq postgresql-client
 WORKDIR /app
 ADD . /app
 COPY --from=python-build-env /root/.cache /root/.cache
 RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
 RUN chmod +x launch.sh
 EXPOSE 9991
-ENTRYPOINT ["./launch.sh"]
+CMD ["/bin/sh", "/app/launch.sh"]
