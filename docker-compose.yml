@@ -5,7 +5,7 @@ services:
     container_name: compose_postgres
     image: postgres:alpine
     environment:
-      - POSTGRES_DB=${DB_NAME:-composedb}
+      - POSTGRES_DB=${DB_NAME:-composedb_dev}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
     volumes:
@@ -16,6 +16,16 @@ services:
     image: redis:alpine
     volumes:
       - ${REDIS_DATA_PATH:-./data/redis}:/data
+  
+  configurator:
+    container_name: configurator
+    image: intermine/configurator:latest
+    environment:
+      - IM_DATA_DIR=${IM_DATA_DIR:-/intermine/sharedfs}
+    volumes:
+      - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
+    depends_on: 
+      - redis
 
   compose:
     container_name: compose
@@ -23,10 +33,23 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
+      - FLASK_CONFIG_MODE=${FLASK_CONFIG_MODE:-docker_local}
       - FLASK_DEBUG=${FLASK_DEBUG:-TRUE}
       - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI:-postgres://postgres:postgres@postgres:5432/composedb}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis}
+      - PGHOST=${PGHOST:-postgres}
+      - PGUSER=${PGUSER:-postgres}
+      - PGPASSWORD=${PGPASSWORD:-postgres}
+    volumes:
+      - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
+    ports:
+      - ${COMPOSE_HOST_PORT:-9991}:${COMPOSE_PORT:-9991}
     depends_on: 
       - postgres
+      - configurator
       - redis
+
+volumes:
+  SharedFS:
+
