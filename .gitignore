@@ -119,7 +119,7 @@ dmypy.json
 .vscode/*
 
 # docker-compose data
-data/*
+data
 
 # gunicorn pid file
 compose.pid
