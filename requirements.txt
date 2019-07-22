@@ -8,6 +8,7 @@ gunicorn
 kubernetes
 flask-login
 bcrypt
+requests
 flask-marshmallow
 marshmallow-sqlalchemy
 psycopg2
