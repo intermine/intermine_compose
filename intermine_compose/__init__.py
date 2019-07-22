@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 def create_app():
-    from . import models, routes, services
+    from . import models, routes, services, auth
     app = Flask(__name__, instance_relative_config=True)
 
     # Loads default config defined in config dir
@@ -21,6 +21,7 @@ def create_app():
     app.config.from_envvar("FLASK_CONFIG_FILE", silent=True)
 
     # Initialize app
+    auth.init_app(app)
     routes.init_app(app)
     services.init_app(app)
     models.init_app(app)
