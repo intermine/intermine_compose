@@ -40,3 +40,8 @@ class SlimUserSchema(ma.Schema):
     firstName = fields.Str(required=True)
     lastName = fields.Str(required=True)
     organisation = fields.Str(required=True)
+
+class UserProfileSchema(ma.Schema):
+    firstName = fields.Str(required=True)
+    lastName = fields.Str(required=True)
+    organisation = fields.Str(required=True)
