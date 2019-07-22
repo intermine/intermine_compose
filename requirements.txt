@@ -7,7 +7,9 @@ celery
 gunicorn
 kubernetes
 flask-login
+bcrypt
 flask-marshmallow
+marshmallow-sqlalchemy
 psycopg2
 Flask-SQLAlchemy
 WTForms
