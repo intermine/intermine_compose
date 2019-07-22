@@ -1882,7 +1882,7 @@
                 "properties": {
                     "toolId": {
                         "type": "string",
-                        "example": "ProtVista"
+                        "example": "@intermine/bluegenes-protvista@1.1.1"
                     },
                     "toolName": {
                         "type": "string",
