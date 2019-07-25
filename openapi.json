@@ -160,7 +160,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/DataFileProperties"
+                                        "$ref": "#/components/schemas/SlimDataFile"
                                     }
                                 }
                             },
@@ -168,7 +168,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/DataFileProperties"
+                                        "$ref": "#/components/schemas/SlimDataFile"
                                     }
                                 }
                             }
@@ -1412,6 +1412,25 @@
                 },
                 "xml": {
                     "name": "MineDescriptor"
+                }
+            },
+            "SlimDataFile": {
+                "type": "object",
+                "required": [
+                    "fileId",
+                    "mineId"
+                ],
+                "properties": {
+                    "fileId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
+                    },
+                    "mineId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "03641b4d-bd7e-402f-803a-7aaf55c17238"
+                    }
                 }
             },
             "DataFile": {
