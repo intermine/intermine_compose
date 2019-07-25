@@ -181,19 +181,17 @@
             "post": {
                 "summary": "Upload a data file",
                 "operationId": "fileUpload",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to fetch",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to fetch",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -235,19 +233,17 @@
             "post": {
                 "summary": "Upload data file using a remote link",
                 "operationId": "fileUploadRemote",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to fetch",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to fetch",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -273,18 +269,16 @@
             "get": {
                 "summary": "Get a data file uploaded by this user",
                 "operationId": "getFile",
-                "parameters": [
-                    {
-                        "name": "fileId",
-                        "in": "path",
-                        "description": "ID of file to get",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "fileId",
+                    "in": "path",
+                    "description": "ID of file to get",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -308,18 +302,16 @@
             "delete": {
                 "summary": "Delete a data file uploaded by this user",
                 "operationId": "deleteFile",
-                "parameters": [
-                    {
-                        "name": "fileId",
-                        "in": "path",
-                        "description": "ID of file to delet",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "fileId",
+                    "in": "path",
+                    "description": "ID of file to delet",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "File succesfully deleted"
@@ -360,18 +352,16 @@
             "delete": {
                 "summary": "Destroy mine",
                 "operationId": "deleteMine",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to destroy",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to destroy",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "Mine successfully deleted"
@@ -420,18 +410,16 @@
             "post": {
                 "summary": "Sets a mine state",
                 "operationId": "setMineState",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to destroy",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to destroy",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -467,18 +455,16 @@
             "get": {
                 "summary": "retrieves a mine state",
                 "operationId": "getMineState",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to destroy",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to destroy",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -501,19 +487,17 @@
         "/build/trigger/{mineId}": {
             "post": {
                 "summary": "Begin build of specified mine",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to fetch",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to fetch",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "build triggered successfully",
@@ -536,19 +520,17 @@
         "/build/status/{mineId}": {
             "get": {
                 "summary": "Retrieve build status of a given mine",
-                "parameters": [
-                    {
-                        "name": "mineId",
-                        "in": "path",
-                        "description": "ID of mine to fetch",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "mineId",
+                    "in": "path",
+                    "description": "ID of mine to fetch",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -578,8 +560,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "allOf": [
-                                    {
+                                "allOf": [{
                                         "$ref": "#/components/schemas/MineDescriptor"
                                     },
                                     {
@@ -603,8 +584,7 @@
                         },
                         "application/xml": {
                             "schema": {
-                                "allOf": [
-                                    {
+                                "allOf": [{
                                         "$ref": "#/components/schemas/MineDescriptor"
                                     },
                                     {
@@ -644,13 +624,12 @@
                 }
             }
         },
-        "/file/properties/detect": {
+        "/configurator/file/properties/detect": {
             "post": {
                 "summary": "Return information about this file",
                 "description": "Reads in data file, validates and returns file attributes, plus questions (if needed) for the user.",
                 "operationId": "detectFileProperties",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "userId",
                         "in": "query",
                         "description": "ID of user who owns this mine",
@@ -708,13 +687,12 @@
                 }
             }
         },
-        "/file/properties/save": {
+        "/configurator/file/properties/save": {
             "post": {
                 "summary": "Save file properties to a given InterMine pre-build config",
                 "description": "Following on from `detectFileProperties`, we need to save a set of metadata associated with a file. This can be run multiple times, as the user may upload an unknown number of files.",
                 "operationId": "saveFileProperties",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine to fetch",
@@ -793,19 +771,17 @@
                 "summary": "Get mine ID",
                 "description": "return a new mine ID to use in all subsequent requests",
                 "operationId": "getNewMine",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "query",
-                        "description": "ID of user who owns this mine",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid",
-                            "example": "123e4567-e89b-12d3-a456-556642440000"
-                        }
+                "parameters": [{
+                    "name": "userId",
+                    "in": "query",
+                    "description": "ID of user who owns this mine",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "success",
@@ -834,8 +810,7 @@
                 "summary": "Get user specified config for this mine",
                 "description": "return configured details (if any) for a given mine id.",
                 "operationId": "getMineUserConfig",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -879,8 +854,7 @@
             "delete": {
                 "summary": "Delete config associated with mine instance",
                 "operationId": "deleteConfig",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to delete",
@@ -915,8 +889,7 @@
                 "summary": "return config needed to build a mine",
                 "description": "return config needed to build a mine",
                 "operationId": "getMineBuildConfig",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -963,8 +936,7 @@
                 "summary": "Get config related to this file",
                 "description": "return configured details (if any) for a given file",
                 "operationId": "getMineFileProperties",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1019,8 +991,7 @@
             "delete": {
                 "summary": "Delete config associated with file",
                 "operationId": "deleteMineFileProperties",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine",
@@ -1064,8 +1035,7 @@
         "/configurator/mine/dataTools": {
             "get": {
                 "summary": "Retrieve set tools to be used for the given mine",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1114,8 +1084,7 @@
             },
             "post": {
                 "summary": "Set tools to be used for the given mine",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1169,13 +1138,42 @@
                 }
             }
         },
+        "/configurator/supplementaryDataSources": {
+            "get": {
+                "summary": "Get list of possible supplementary data sources",
+                "description": "Returns a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
+                "operationId": "getSupplementaryDataSources",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SupplementaryDataSource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/configurator/mine/supplementaryDataSources": {
             "get": {
                 "summary": "Get list of supplementary data sources set for this mine config",
                 "description": "Returns a list of external data sources to add to this mine, e.g. GO terms, publications, etc.",
                 "operationId": "getMineSupplementaryDataSources",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1226,8 +1224,7 @@
                 "summary": "set list of desired supplementary data sources",
                 "description": "Saves a list of possible external data sources to add to this mine, e.g. GO terms, publications, etc.",
                 "operationId": "setSupplementaryDataSources",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1286,8 +1283,7 @@
                 "summary": "Set mine descriptors",
                 "description": "Set the properties associated with this mine, e.g. name",
                 "operationId": "setMineDescriptors",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1336,8 +1332,7 @@
                 "summary": "Get mine descriptors",
                 "description": "return descriptors (if any) for a given mine id.",
                 "operationId": "getMineDescriptors",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "mineId",
                         "in": "query",
                         "description": "ID of mine config to retrieve",
@@ -1380,8 +1375,7 @@
             }
         }
     },
-    "servers": [
-        {
+    "servers": [{
             "url": "https://wizard.intermine.org/v1"
         },
         {
@@ -1450,11 +1444,9 @@
                         "example": "fasta"
                     },
                     "organism": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Organism"
-                            }
-                        ]
+                        "allOf": [{
+                            "$ref": "#/components/schemas/Organism"
+                        }]
                     }
                 },
                 "xml": {
@@ -1636,11 +1628,9 @@
                 ],
                 "properties": {
                     "dataFile": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/DataFile"
-                            }
-                        ]
+                        "allOf": [{
+                            "$ref": "#/components/schemas/DataFile"
+                        }]
                     },
                     "descriptors": {
                         "type": "array",
@@ -1650,11 +1640,9 @@
                         }
                     },
                     "filePreview": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/DataFilePreview"
-                            }
-                        ]
+                        "allOf": [{
+                            "$ref": "#/components/schemas/DataFilePreview"
+                        }]
                     },
                     "questions": {
                         "type": "array",
@@ -1777,11 +1765,9 @@
                 ],
                 "properties": {
                     "dataFile": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/DataFile"
-                            }
-                        ]
+                        "allOf": [{
+                            "$ref": "#/components/schemas/DataFile"
+                        }]
                     },
                     "answers": {
                         "type": "array",
