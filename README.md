@@ -10,6 +10,7 @@ Create a .env file in the root of repo and add these:
 FLASK_CONFIG_MODE=development
 CONFIGURATOR_URL=http://localhost:9999/
 KUBE_ENABLE=False
+IM_DATA_DIR=/tmp/sharedfs
 ```
 ### Step 1 (optional but recommended)
 Create a python virtual environment
