@@ -15,6 +15,8 @@ class User(TimestampMixin, UserMixin, db.Model):
     email = Column(String(120), unique=True, nullable=False)
     password = Column(String(1000), nullable=False)
     mines = relationship("Mine", back_populates="user", lazy="joined")
+    data_files = relationship("DataFile", back_populates="user", lazy="joined")
+    builds = relationship("Build", back_populates="user", lazy="joined")
     active_mine_quota = Column(Integer, default=1)
     inactive_mine_quota = Column(Integer, default=5)
     daily_mine_build_quota = Column(Integer, default=5)
