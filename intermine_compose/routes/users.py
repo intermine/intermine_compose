@@ -109,6 +109,6 @@ def profile():
         user.update(user_profile_schema_instance.data)
         try:
             db.session.commit()
-            return jsonify({"message":"Profile uccessfully updated"}) 
+            return jsonify({"message":"Profile successfully updated"}) 
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE USER"))
