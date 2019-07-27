@@ -1,7 +1,9 @@
 from .base import db, ma
 from .users import User
+from .data import DataFile
 from .mine import Mine
 from .templates import Template
+from .build import Build
 
 def init_app(app):
     db.init_app(app)
