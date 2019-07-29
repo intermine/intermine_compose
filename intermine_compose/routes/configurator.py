@@ -10,12 +10,13 @@ configurator_bp = Blueprint("configurator", __name__, url_prefix='/api/v1/config
 @configurator_bp.route('/<path:path>')
 @login_required
 def proxy(path):
-    request.args["userId"] = current_user.get_id()
+    args = request.args.to_dict(flat=False)
+    args["userId"] = current_user.get_id()
     resp = rq(
         method=request.method,
         # url=request.url.replace(request.host_url, 'new-domain.com'),
         url=f'{os.environ.get("CONFIGURATOR_URL")}{path}',
-        params=request.args,
+        params=args,
         headers={key: value for (key, value) in request.headers if key != 'Host'},
         data=request.get_data(),
         # cookies=request.cookies,
