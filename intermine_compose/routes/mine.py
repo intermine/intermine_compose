@@ -83,7 +83,7 @@ def checkMineName():
     mine_check_name_schema_instance.data["isAvailable"] = "false"
     return jsonify(mine_check_name_schema_instance.data)
 
-@mine_bp.route("/state", methods=["GET","POST"])
+@mine_bp.route("/state/", methods=["GET","POST"])
 @login_required
 def getOrSetMineState():
     mine_id = request.args.get('mineId', default=None)
