@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 import os
@@ -6,6 +7,8 @@ import os
 def create_app():
     from . import models, routes, services, auth
     app = Flask(__name__, instance_relative_config=True)
+
+    CORS(app, supports_credentials=True)
 
     # Loads default config defined in config dir
     app.config.from_object("config.default")

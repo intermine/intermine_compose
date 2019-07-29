@@ -18,3 +18,4 @@ Flask-WTF
 Flask-Mail
 Flask-Caching
 Flask-Limiter
+flask-cors
