@@ -34,7 +34,7 @@ def getMine():
     if request.method == "DELETE":
         try:
             db.session.delete(mine)
-            db.commit()
+            db.session.commit()
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO DELETE MINE"))
         return "Mine successfully deleted"
@@ -120,7 +120,7 @@ def getOrSetMineState():
         mine_schema_instance.data["mineStatus"] = mine_state_schema_instance.data["mineStatus"]
         try:
             mine.update(mine_schema_instance.data)
-            db.commit()
+            db.session.commit()
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE MINE STATUS"))
         return jsonify(mine_state_schema_instance.data)
