@@ -41,6 +41,7 @@ services:
       - PGHOST=${PGHOST:-postgres}
       - PGUSER=${PGUSER:-postgres}
       - PGPASSWORD=${PGPASSWORD:-postgres}
+      - IM_DATA_DIR=${IM_DATA_DIR:-/intermine/sharedfs}
     volumes:
       - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
     ports:
