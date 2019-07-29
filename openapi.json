@@ -319,7 +319,7 @@
                 }
             }
         },
-        "/mines": {
+        "/mine/all": {
             "get": {
                 "summary": "Get a list of mines (if any) for this authorised user",
                 "operationId": "getMines",
@@ -1549,10 +1549,10 @@
             "MineState": {
                 "type": "object",
                 "required": [
-                    "state"
+                    "mineStatus"
                 ],
                 "properties": {
-                    "state": {
+                    "mineStatus": {
                         "type": "string",
                         "example": "running"
                     }
