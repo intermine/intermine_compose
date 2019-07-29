@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from http import HTTPStatus
 from uuid import UUID, uuid4
+from werkzeug.utils import secure_filename
+import pathlib
 import os
 
 # did relative imports here (Make sure to change this during refactoring )
@@ -70,7 +72,7 @@ def getOrDelDataFile():
         try:
             os.remove(data_file_path)
             db.session.delete(data_file_info)
-            db.commit()
+            db.session.commit()
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO DELETE DATA_FILE"))
         return jsonify({"message":"File successfully deleted"})
@@ -110,29 +112,33 @@ def uploadDataFile():
     # construct path to save file
     data_file_path = os.path.join(
         os.environ.get('IM_DATA_DIR'),
-        current_user.get_id(),
-        "data",
-        data_file_uuid
+        str(current_user.get_id()),
+        "data"
     )
 
+    # create dir structure if not already present
+    pathlib.Path(data_file_path).mkdir(parents=True, exist_ok=True) 
+
     # save file
-    data_file.save(data_file_path)
+    data_file.save(
+        os.path.join(data_file_path, str(data_file_uuid))
+    )
 
     # create file info instance for database
     data_file_db_instance = DataFile(
         fileId=data_file_uuid,
-        name=data_file.filename,
+        name=secure_filename(data_file.filename),
         user_id=current_user.get_id(),
     )
 
     # add file info to database
     try:
-        db.add(data_file_db_instance)
-        db.commit()
+        db.session.add(data_file_db_instance)
+        db.session.commit()
     except:
         abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO ADD DATA_FILE INFO"))
     
-    return data_file_uuid
+    return str(data_file_uuid)
 
 
 
