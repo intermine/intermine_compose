@@ -84,19 +84,19 @@ def remoteUploadDataFile():
 @login_required
 def uploadDataFile():
     
-    mine_id = request.args.get('mineId', default=None)
-    # check if mineId query parameter is given
-    if mine_id is None:
-        # return early if fileId is not available
-        abort(HTTPStatus.BAD_REQUEST, str("NO MINE_ID GIVEN"))
+    # mine_id = request.args.get('mineId', default=None)
+    # # check if mineId query parameter is given
+    # if mine_id is None:
+    #     # return early if fileId is not available
+    #     abort(HTTPStatus.BAD_REQUEST, str("NO MINE_ID GIVEN"))
     
     # check if mine exist and belongs to user
-    try:
-        mine_info = Mine.query.filter_by(id=mine_id, user_id=current_user.get_id()).one()
-    except NoResultFound:
-        abort(HTTPStatus.BAD_REQUEST, str("UNKNOWN MINEID"))
-    except:
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO QUERY MINE"))
+    # try:
+    #     mine_info = Mine.query.filter_by(id=mine_id, user_id=current_user.get_id()).one()
+    # except NoResultFound:
+    #     abort(HTTPStatus.BAD_REQUEST, str("UNKNOWN MINEID"))
+    # except:
+    #     abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO QUERY MINE"))
     
     # check if data file is uploaded
     if not request.files:
@@ -111,7 +111,6 @@ def uploadDataFile():
     data_file_path = os.path.join(
         os.environ.get('IM_DATA_DIR'),
         current_user.get_id(),
-        mine_info.id,
         "data",
         data_file_uuid
     )
@@ -124,7 +123,6 @@ def uploadDataFile():
         fileId=data_file_uuid,
         name=data_file.filename,
         user_id=current_user.get_id(),
-        mine_id=mine_info.id
     )
 
     # add file info to database

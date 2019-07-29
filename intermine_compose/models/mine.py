@@ -15,7 +15,7 @@ class Mine(TimestampMixin, db.Model):
     templates = Column(String(), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
     user = relationship("User", back_populates="mines", lazy="joined", single_parent=True)
-    data_files = relationship("DataFile", back_populates="mine", lazy="joined")
+    # data_files = relationship("DataFile", back_populates="mine", lazy="joined")
     builds = relationship("Build", back_populates="mine", lazy="joined")
 
 class MineSchema(ma.Schema):

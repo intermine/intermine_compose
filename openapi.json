@@ -177,21 +177,10 @@
                 }
             }
         },
-        "/data/file/upload/{mineId}": {
+        "/data/file/upload/": {
             "post": {
                 "summary": "Upload a data file",
                 "operationId": "fileUpload",
-                "parameters": [{
-                    "name": "mineId",
-                    "in": "path",
-                    "description": "ID of mine to fetch",
-                    "required": true,
-                    "schema": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "123e4567-e89b-12d3-a456-556642440000"
-                    }
-                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -229,21 +218,10 @@
                 }
             }
         },
-        "/data/file/upload/remote/{mineId}": {
+        "/data/file/upload/remote/": {
             "post": {
                 "summary": "Upload data file using a remote link",
                 "operationId": "fileUploadRemote",
-                "parameters": [{
-                    "name": "mineId",
-                    "in": "path",
-                    "description": "ID of mine to fetch",
-                    "required": true,
-                    "schema": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "123e4567-e89b-12d3-a456-556642440000"
-                    }
-                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
