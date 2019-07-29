@@ -69,6 +69,8 @@ def getOrDelDataFile():
         # delete data file
         try:
             os.remove(data_file_path)
+            db.session.delete(data_file_info)
+            db.commit()
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO DELETE DATA_FILE"))
         return jsonify({"message":"File successfully deleted"})
