@@ -479,7 +479,7 @@
                     {
                         "name": "mineId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of mine to build",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -507,14 +507,14 @@
                 }
             }
         },
-        "/build/status/{mineId}": {
+        "/build/status/{buildId}": {
             "get": {
                 "summary": "Retrieve build status of a given mine",
                 "parameters": [
                     {
-                        "name": "mineId",
+                        "name": "buildId",
                         "in": "path",
-                        "description": "ID of mine to fetch",
+                        "description": "ID of build to fetch",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1693,10 +1693,10 @@
             "DataBuild": {
                 "type": "object",
                 "required": [
-                    "mineId"
+                    "buildId"
                 ],
                 "properties": {
-                    "mineId": {
+                    "buildId": {
                         "type": "string",
                         "example": "123e4567-e89b-12d3-a456-556642440000"
                     }
@@ -1706,10 +1706,15 @@
                 "type": "object",
                 "required": [
                     "mineId",
+                    "buildId",
                     "buildStatus"
                 ],
                 "properties": {
                     "mineId": {
+                        "type": "string",
+                        "example": "123e4567-e89b-12d3-a456-556642440000"
+                    },
+                    "buildId": {
                         "type": "string",
                         "example": "123e4567-e89b-12d3-a456-556642440000"
                     },
