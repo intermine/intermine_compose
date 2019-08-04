@@ -7,6 +7,7 @@ from uuid import uuid4
 
 class Build(TimestampMixin, db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    kubernetes_task_id = Column(String(100), unique=True, nullable=False)
     buildStatus = Column(String(100), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
     user = relationship("User", back_populates="builds", lazy="joined", single_parent=True)
