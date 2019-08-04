@@ -19,3 +19,4 @@ Flask-Mail
 Flask-Caching
 Flask-Limiter
 flask-cors
+redis
