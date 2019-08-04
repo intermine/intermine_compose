@@ -1,4 +1,4 @@
-from .users import user_bp
+from .user import user_bp
 from .configurator import configurator_bp
 from .status import status_bp
 from .data import data_bp
