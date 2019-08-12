@@ -18,6 +18,7 @@ def proxy(path):
     args["userId"] = current_user.get_id()
 
     try:
+        custom_logger.handle.error("I AM CALLED... AND NOW I AM CALLING CONFIGURATOR")
         resp = rq(
         method=request.method,
         # url=request.url.replace(request.host_url, 'new-domain.com'),
@@ -34,6 +35,7 @@ def proxy(path):
     
     excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
     headers = [(name, value) for (name, value) in resp.raw.headers.items()
-               if name.lower() not in excluded_headers] 
+               if name.lower() not in excluded_headers]
+    custom_logger.handle.error(f"CONFIGURATOR_STATUS_CODE: {resp.status_code}")
     response = Response(resp.content, resp.status_code, headers)
     return response
