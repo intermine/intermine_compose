@@ -1455,7 +1455,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "example": "humanfile.gff"
+                        "example": "humanfile.fa"
                     },
                     "fileId": {
                         "type": "string",
