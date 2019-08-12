@@ -10,13 +10,13 @@ from ..utils import custom_logger
 configurator_bp = Blueprint("configurator", __name__, url_prefix='/api/v1/configurator')
 
 
-@configurator_bp.route('/', defaults={'path': ''})
-@configurator_bp.route('/<path:path>')
+@configurator_bp.route('/', defaults={'path': ''}, methods=["GET", "POST"])
+@configurator_bp.route('/<path:path>', methods=["GET", "POST"])
 @login_required
 def proxy(path):
     args = request.args.to_dict(flat=False)
     args["userId"] = current_user.get_id()
-    
+
     try:
         resp = rq(
         method=request.method,
