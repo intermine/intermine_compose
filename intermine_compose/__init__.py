@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 
 def create_app():
-    from . import models, routes, services, auth
+    from . import models, services, auth, utils
     app = Flask(__name__, instance_relative_config=True)
 
     CORS(app, supports_credentials=True)
@@ -24,10 +24,14 @@ def create_app():
     app.config.from_envvar("FLASK_CONFIG_FILE", silent=True)
 
     # Initialize app
-    auth.init_app(app)
-    routes.init_app(app)
+    utils.init_app(app)
     services.init_app(app)
     models.init_app(app)
+    auth.init_app(app)
+
+    # need to import routes after initializing celery
+    from . import routes
+    routes.init_app(app)
 
     # pushing app context is important for db to work
     app.app_context().push()
@@ -37,4 +41,7 @@ def create_app():
         models.drop_all_tables()
 
     models.create_all_tables()
+
+    # from .services.celery import make_celery
+    # celery = make_celery(app)
     return app
