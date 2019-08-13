@@ -26,6 +26,8 @@ services:
       - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
     depends_on: 
       - redis
+    ports:
+      - ${CONFIGURATOR_HOST_PORT:-9999}:${CONFIGURATOR_PORT:-8080}
 
   compose:
     container_name: compose
@@ -42,6 +44,7 @@ services:
       - PGUSER=${PGUSER:-postgres}
       - PGPASSWORD=${PGPASSWORD:-postgres}
       - IM_DATA_DIR=${IM_DATA_DIR:-/intermine/sharedfs}
+      - CONFIGURATOR_URL=${CONFIGURATOR_URL:-http://configurator:8080/}
     volumes:
       - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
     ports:
