@@ -22,7 +22,7 @@ def proxy(path):
         resp = rq(
         method=request.method,
         # url=request.url.replace(request.host_url, 'new-domain.com'),
-        url=f'{os.environ.get("CONFIGURATOR_URL")}{path}',
+        url=f'{os.environ.get("CONFIGURATOR_URL")}configurator/{path}',
         params=args,
         headers={key: value for (key, value) in request.headers if key != 'Host'},
         data=request.get_data(),
