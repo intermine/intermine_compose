@@ -22,6 +22,8 @@ services:
     image: intermine/configurator:latest
     environment:
       - IM_DATA_DIR=${IM_DATA_DIR:-/intermine/sharedfs}
+      - REDIS_HOST_ENV=${REDIS_HOST_ENV:-redis}
+      - REDIS_PORT_ENV=${REDIS_PORT_ENV:-6379}
     volumes:
       - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
     depends_on: 
