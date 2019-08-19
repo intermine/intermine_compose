@@ -9,6 +9,7 @@ kubernetes
 flask-login
 bcrypt
 requests
+marshmallow==2.19.3
 flask-marshmallow
 marshmallow-sqlalchemy
 psycopg2
