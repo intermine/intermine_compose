@@ -11,6 +11,6 @@ def client():
     """
     os.environ.putenv("FLASK_CONFIG_MODE", "testing")
     app = intermine_compose.create_app()
+    app.app_context().push()
     client = app.test_client()
     yield client
-    intermine_compose.models.drop_all_tables()
