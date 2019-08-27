@@ -30,7 +30,14 @@ services:
       - redis
     ports:
       - ${CONFIGURATOR_HOST_PORT:-9999}:${CONFIGURATOR_PORT:-8080}
-
+  wizard:
+    container_name: wizard
+    image: intermine/wizard:latest
+    depends_on:
+      - compose
+      - configurator
+    ports:
+      - ${WIZARD_HOST_PORT:-9992}:${WIZARD_PORT:-8080}
   compose:
     container_name: compose
     build:
