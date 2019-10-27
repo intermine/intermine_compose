@@ -6,7 +6,7 @@ import os
 
 def create_app():
     from . import models, services, auth, utils
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, template_folder="./templates")
 
     CORS(app, supports_credentials=True)
 

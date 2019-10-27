@@ -5,6 +5,9 @@ from sqlalchemy.orm import relationship
 from marshmallow import fields, validate, post_load
 from uuid import uuid4
 from flask_login import UserMixin
+from time import time
+import jwt
+import os
 
 # User class for storing user data in database
 class User(TimestampMixin, UserMixin, db.Model):
@@ -22,10 +25,33 @@ class User(TimestampMixin, UserMixin, db.Model):
     daily_mine_build_quota = Column(Integer, default=5)
     storage_quota = Column(Integer, default=500)
 
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode(
+            {'reset_password': str(self.id), 'exp': time() + expires_in},
+            os.environ.get('SECRET_KEY'), algorithm='HS256').decode('utf-8')
+    
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, os.environ.get('SECRET_KEY'),
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return User.query.filter_by(id=id)
+
 # User login schema for validating login data
 class UserCredentialsSchema(ma.Schema):
     email = fields.Email(required=True)
     password = fields.Str(required=True)
+
+# User forgot password schema to validate email input
+class UserForgotPasswordSchema(ma.Schema):
+    email = fields.Email(required=True, validate=validate.Length(max=120))
+
+# User reset password schema to validate reset token and password input
+class UserResetPasswordSchema(ma.Schema):
+    reset_token = fields.Str(required=True, validate=validate.Length(max=1000))
+    password = fields.Str(required=True, validate=validate.Length(max=1000))
 
 
 # User registration schema for validating User registration

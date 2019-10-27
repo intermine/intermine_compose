@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, abort, make_response
+from flask import Blueprint, request, jsonify, abort, make_response, current_app
 from flask_login import login_required, login_user, logout_user, current_user
 from http import HTTPStatus
 import sys
@@ -6,8 +6,10 @@ import bcrypt
 
 # did relative imports here (Make sure to change this during refactoring )
 from ..models.users import UserRegisterSchema, UserCredentialsSchema, SlimUserSchema, UserProfileSchema, User
+from ..models.users import UserForgotPasswordSchema, UserResetPasswordSchema
 from ..models import db
 from ..auth import login_manager
+from ..services.mail import sendPasswordResetMail
 
 user_bp = Blueprint("users", __name__, url_prefix="/api/v1/user")
 
@@ -112,3 +114,68 @@ def profile():
             return jsonify({"message":"Profile successfully updated"}) 
         except:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE USER"))
+
+@user_bp.route("/forgotpassword", methods=["POST"])
+def forgotPassword():
+    # return early if user is already logged in
+    if current_user.is_authenticated:
+        return jsonify({"message": "User is already authenticated"})
+    
+    # validate user input
+    user_forgot_password_schema_instance = UserForgotPasswordSchema()
+    errors = user_forgot_password_schema_instance.validate(request.json)
+    if errors:
+        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+        return response
+
+    user_forgot_password_schema_instance = user_forgot_password_schema_instance.load(request.json)
+    # query user
+    user = User.query.filter_by(email=user_forgot_password_schema_instance.data["email"]).first()
+    
+    # return early if no user found
+    if user is None:
+        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+        return response
+
+    # generate password reset token
+    reset_token = user.get_reset_password_token()
+    
+    # create object to pass ca profile to send mail service
+    slim_user_schema_instance = SlimUserSchema()
+    user_profile = slim_user_schema_instance.dump(user)
+
+    # send password reset mail
+    sendPasswordResetMail(current_app._get_current_object(), user_profile, reset_token)
+    return jsonify({"message": "Password reset link sent successfully sent"})
+
+@user_bp.route("/resetpassword", methods=["POST"])
+def resetPassword():
+    # validate user input
+    user_reset_password_schema_instance = UserResetPasswordSchema()
+    errors = user_reset_password_schema_instance.validate(request.json)
+    if errors:
+        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+        return response
+    
+    # validate reset token
+    user_reset_password_schema_instance = user_reset_password_schema_instance.load(request.json)
+    user = User.verify_reset_password_token(
+        user_reset_password_schema_instance.data["reset_token"]
+    )
+
+    # return early if token verification fails
+    if user is None:
+        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+        return response
+    else:
+        # hash password before saving to database
+        password = bcrypt.hashpw(
+        user_reset_password_schema_instance.data["password"].encode('utf-8'), bcrypt.gensalt()).hex()
+        user.update({"password": password})
+        try:
+            db.session.commit()
+            db.session.remove() # Always close sessions!!
+            return jsonify({"message":"Successfully updated password"}) 
+        except:
+            db.session.remove() # Always close sessions!!
+            abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE PASSWORD"))
