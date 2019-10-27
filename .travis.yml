@@ -10,7 +10,8 @@ cache:
   - $HOME/google-cloud-sdk
 
 services:
-- docker
+  - docker
+  - postgresql
 
 env:
   global:
@@ -22,9 +23,12 @@ jobs:
     - stage: test
       dist: bionic
       python: "3.6.7"
-      env: PYENV_VERSION=3.6.7
+      env:
+        - PYENV_VERSION=3.6.7
+        - FLASK_CONFIG_MODE=testing_ci
       install: "pip3 install -r requirements.txt"
+      before_script:
+        - psql -c 'create database composedb_test;' -U postgres
       script: pytest
     - stage: buildDocker
       script: 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]&& [ "$TRAVIS_BRANCH" == "master" ]; then ./build_docker.sh ; fi'
-      
