@@ -1,0 +1,30 @@
+stages:
+  - name: test
+  - name: buildDocker
+    if: branch == master
+  - name: deploy
+    if: branch == production
+cache:
+  directories:
+  # We cache the SDK so we don't have to download it again on subsequent builds.
+  - $HOME/google-cloud-sdk
+
+services:
+- docker
+
+env:
+  global:
+  # Do not prompt for user input when using any SDK methods.
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
+jobs:
+  include:
+    - stage: test
+      dist: bionic
+      python: "3.6.7"
+      env: PYENV_VERSION=3.6.7
+      install: "pip3 install -r requirements.txt"
+      script: pytest
+    - stage: buildDocker
+      script: 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]&& [ "$TRAVIS_BRANCH" == "master" ]; then ./build_docker.sh ; fi'
+      
