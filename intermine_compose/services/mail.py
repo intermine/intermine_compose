@@ -10,9 +10,9 @@ def async_send_mail(app, msg):
 
 def sendPasswordResetMail(app, user, reset_token):
     msg = Message(
-        subject="[INSTRUO] Password Reset",
+        subject="[INTERMINE CLOUD] Password Reset",
         recipients=[user.data["email"]],
-        sender=("Instruo","admin@instruo.in"),
+        sender=("Intermine","admin@cloud.intermine.eu"),
     )
     msg.html = render_template(
         "emails/reset_password_mail.html",
