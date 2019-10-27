@@ -36,4 +36,4 @@ jobs:
         - psql -c 'create database composedb_test;' -U postgres
       script: pytest
     - stage: buildDocker
-      script: 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]&& [ "$TRAVIS_BRANCH" == "master" ]; then ./build_docker.sh ; fi'
+      script: 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then ./build_docker.sh ; fi'
