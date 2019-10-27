@@ -28,9 +28,9 @@ def test_get_profile(client):
     )
     assert resp.status_code == 200
     assert resp.get_json() == {
-        "email": "test@user.me",
-	    "firstName": "Bruce",
-	    "lastName": "Stark",
+        "email": "john@doe.me",
+	    "firstName": "John",
+	    "lastName": "Doe",
 	    "organisation": "InterMine"
     }
 
@@ -49,7 +49,7 @@ def test_update_profile(client):
     )
     assert resp.status_code == 200
     assert resp.get_json() == {
-        "email": "test@user.me",
+        "email": "john@doe.me",
 	    "firstName": "JohnNew",
 	    "lastName": "DoeNew",
 	    "organisation": "InterMineNew"
