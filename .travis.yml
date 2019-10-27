@@ -8,10 +8,14 @@ cache:
   directories:
   # We cache the SDK so we don't have to download it again on subsequent builds.
   - $HOME/google-cloud-sdk
+  - $HOME/.cache/pip
 
 services:
   - docker
   - postgresql
+
+addons:
+  postgresql: "10"
 
 env:
   global:
@@ -25,6 +29,7 @@ jobs:
       python: "3.6.7"
       env:
         - PYENV_VERSION=3.6.7
+        - PIP_CACHE_DIR="$HOME/.cache/pip"
         - FLASK_CONFIG_MODE=testing_ci
       install: "pip3 install -r requirements.txt"
       before_script:
