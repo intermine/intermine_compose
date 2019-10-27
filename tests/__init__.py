@@ -14,3 +14,31 @@ def client():
     app.app_context().push()
     client = app.test_client()
     yield client
+
+@pytest.fixture(scope="module")
+def cookies(client):
+    """
+    This fixture will be used to generate cookies for using in requests where authentication is required.
+    """
+
+    resp = client.post(
+        "/api/v1/user/register",
+        json={
+            "email": "test@user.me",
+	        "password": "superpass",
+	        "firstName": "Bruce",
+	        "lastName": "Stark",
+	        "organisation": "InterMine"
+        }
+    )
+    assert resp.status_code == 200
+    resp = client.post(
+        "/api/v1/user/login",
+        json={
+            "email": "test@user.me",
+            "password": "superpass"
+        }
+    )
+    assert resp.status_code == 200
+    cookies = resp.headers['Set-Cookie']
+    return cookies
