@@ -34,5 +34,10 @@ Launch flask app
 ```bash
 python run.py
 ```
-> Note : These instructions assumes that you have a local instance of postgres and redis running. Also your postgres user is `postgres` and password is `postgres`. You can change the defaults in `config/development.py`
+> Note : These instructions assume that:
+- you have a local instance of postgres and redis running
+- your postgres user is `postgres` with password `postgres`
+- your postgres user has access to a table named composedb
+
+You can change the defaults in `config/development.py`
 
