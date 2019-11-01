@@ -50,4 +50,4 @@ Launch flask app
 python run.py
 ```
 
-
+The default path for this app is http://localhost:9991/ 
