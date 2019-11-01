@@ -3,6 +3,20 @@ Repo to handle docker orchestration in the cloud
 
 ## Getting started
 
+#### Prerequisites
+
+Download and install
+
+- [PostgreSQL](https://www.postgresql.org/download/)
+- [Redis](https://redis.io/download)
+
+> Note : These instructions assume that:
+>- you have a local instance of postgres and redis running
+>- your postgres user is `postgres` with password `postgres`
+>- your postgres user has access to a table named composedb
+>
+> You can change the defaults in `config/development.py`
+
 ### Step 0
 Create a .env file in the root of repo and add these:
 ```bash
@@ -34,10 +48,5 @@ Launch flask app
 ```bash
 python run.py
 ```
-> Note : These instructions assume that:
->- you have a local instance of postgres and redis running
->- your postgres user is `postgres` with password `postgres`
->- your postgres user has access to a table named composedb
->
-> You can change the defaults in `config/development.py`
+
 
