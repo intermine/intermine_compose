@@ -13,7 +13,7 @@ Download and install:
 2. [Redis](https://redis.io/download)
 
 > Note : These instructions assume that:
->- you have a local instance of postgres and redis running
+>- you have a local instance of **postgres** and **redis** running
 >- your postgres user is `postgres` with password `postgres`
 >- your postgres user has access to a table named composedb (in your terminal, once you have postgres installed run `createdb composedb`)
 > You can change the defaults in `config/development.py`
