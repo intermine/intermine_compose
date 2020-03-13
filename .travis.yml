@@ -26,7 +26,7 @@ jobs:
   include:
     - stage: test
       dist: bionic
-      python: "3.6.7"
+      python: "3.7.6"
       env:
         - PIP_CACHE_DIR="$HOME/.cache/pip"
         - FLASK_CONFIG_MODE=testing_ci
