@@ -14,9 +14,14 @@ Download and install:
 
 > Note : These instructions assume that:
 >- you have a local instance of **postgres** and **redis** running
->- your postgres user is `postgres` with password `postgres`
 >- your postgres user has access to a table named composedb (in your terminal, once you have postgres installed run `createdb composedb`)
-> You can change the defaults in `config/development.py`
+>
+> and that you will be using the *development* configuration:
+>- your postgres user is `postgres` with password `postgres`
+>
+> You can change the defaults in `config/development.py` or the variable FLASK_CONFIG_MODE to select another configuration (see `config` directory).
+>
+> In particular to configure all parameters please use the *production* configuration and define the parameters (PGUSER, PGPASSWORD and PGHOST) in the .env file
 
 ### Step 0
 Create a .env file in the root of repo and add these:
