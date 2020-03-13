@@ -30,6 +30,7 @@ jobs:
       env:
         - PIP_CACHE_DIR="$HOME/.cache/pip"
         - FLASK_CONFIG_MODE=testing_ci
+        - PYENV_VERSION=3.7.6
       install: "pip3 install -r requirements.txt"
       before_script:
         - psql -c 'create database composedb_test;' -U postgres
