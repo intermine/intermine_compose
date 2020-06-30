@@ -17,17 +17,28 @@ def proxy(path):
     args = request.args.to_dict(flat=False)
     args["userId"] = current_user.get_id()
 
+    data = request.get_data()
+    files = None
+    if data:
+        files = dict()
+        files["name"] = data
+
+    json = None
+    if request.is_json:
+        json = request.get_json()
+
     try:
         custom_logger.handle.error("I AM CALLED... AND NOW I AM CALLING CONFIGURATOR")
         resp = rq(
-        method=request.method,
-        # url=request.url.replace(request.host_url, 'new-domain.com'),
-        url=f'{os.environ.get("CONFIGURATOR_URL")}configurator/{path}',
-        params=args,
-        headers={key: value for (key, value) in request.headers if key != 'Host'},
-        data=request.get_data(),
-        # cookies=request.cookies,
-        allow_redirects=False
+            method=request.method,
+            # url=request.url.replace(request.host_url, 'new-domain.com'),
+            url=f'{os.environ.get("CONFIGURATOR_URL")}configurator/{path}',
+            params=args,
+            headers={key: value for (key, value) in request.headers if key != 'Host'},
+            json=json,
+            files=files,
+            # cookies=request.cookies,
+            allow_redirects=False
         )
     except:
         custom_logger.handle.error("FAILED TO REACH CONFIGURATOR")
