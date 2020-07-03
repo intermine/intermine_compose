@@ -6,7 +6,7 @@ import nox
 from nox.sessions import Session
 
 
-package = "curation_backend"
+package = "intermine_compose"
 nox.options.sessions = "lint", "safety", "mypy", "tests"
 locations = "src", "tests", "noxfile.py", "docs/conf.py"
 
