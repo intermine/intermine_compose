@@ -1,11 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import DateTime, Column
-from flask_marshmallow import Marshmallow
-
+# from flask_marshmallow import Marshmallow
+import marshmallow
 
 db = SQLAlchemy()
-ma = Marshmallow()
+# ma = Marshmallow()
+ma = marshmallow
 
 class TimestampMixin(object):
     created = Column(

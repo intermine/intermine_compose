@@ -7,7 +7,7 @@ from .build import Build
 
 def init_app(app):
     db.init_app(app)
-    ma.init_app(app)
+    # ma.init_app(app)
 
 
 def create_all_tables():
