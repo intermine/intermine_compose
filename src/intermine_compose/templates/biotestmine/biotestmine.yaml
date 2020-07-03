@@ -1,0 +1,691 @@
+---
+# Source: intermine-instance/charts/postgresql/templates/secrets.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+type: Opaque
+data:
+  postgresql-password: "cG9zdGdyZXM="
+---
+# Source: intermine-instance/charts/postgresql/templates/configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-postgresql-configuration
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+data:
+  postgresql.conf: "# -----------------------------\n# PostgreSQL configuration file\n#
+    -----------------------------\n#\n# This file consists of lines of the form:\n#\n#
+    \  name = value\n#\n# (The \"=\" is optional.)  Whitespace may be used.  Comments
+    are introduced with\n# \"#\" anywhere on a line.  The complete list of parameter
+    names and allowed\n# values can be found in the PostgreSQL documentation.\n#\n#
+    The commented-out settings shown in this file represent the default values.\n# Re-commenting
+    a setting is NOT sufficient to revert it to the default value;\n# you need to reload
+    the server.\n#\n# This file is read on server startup and when the server receives
+    a SIGHUP\n# signal.  If you edit the file on a running system, you have to SIGHUP
+    the\n# server for the changes to take effect, or use \"pg_ctl reload\".  Some\n#
+    parameters, which are marked below, require a server shutdown and restart to\n#
+    take effect.\n#\n# Any parameter can also be given as a command-line option to the
+    server, e.g.,\n# \"postgres -c log_connections=on\".  Some parameters can be changed
+    at run time\n# with the \"SET\" SQL command.\n#\n# Memory units:  kB = kilobytes
+    \       Time units:  ms  = milliseconds\n#                MB = megabytes                     s
+    \  = seconds\n#                GB = gigabytes                     min = minutes\n#
+    \               TB = terabytes                     h   = hours\n#                                                   d
+    \  = days\n\n\n#------------------------------------------------------------------------------\n#
+    FILE LOCATIONS\n#------------------------------------------------------------------------------\n\n#
+    The default values of these variables are driven from the -D command-line\n# option
+    or PGDATA environment variable, represented here as ConfigDir.\n\n#data_directory
+    = 'ConfigDir'\t\t# use data in another directory\n\t\t\t\t\t# (change requires restart)\n#hba_file
+    = 'ConfigDir/pg_hba.conf'\t# host-based authentication file\n\t\t\t\t\t# (change
+    requires restart)\n#ident_file = 'ConfigDir/pg_ident.conf'\t# ident configuration
+    file\n\t\t\t\t\t# (change requires restart)\n\n# If external_pid_file is not explicitly
+    set, no extra PID file is written.\n#external_pid_file = ''\t\t\t# write an extra
+    PID file\n\t\t\t\t\t# (change requires restart)\n\n\n#------------------------------------------------------------------------------\n#
+    CONNECTIONS AND AUTHENTICATION\n#------------------------------------------------------------------------------\n\n#
+    - Connection Settings -\n\nlisten_addresses = '*'\n\t\t\t\t\t# comma-separated list
+    of addresses;\n\t\t\t\t\t# defaults to 'localhost'; use '*' for all\n\t\t\t\t\t#
+    (change requires restart)\n#port = 5432\t\t\t\t# (change requires restart)\nmax_connections
+    = 600\t\t\t# (change requires restart)\n#superuser_reserved_connections = 3\t# (change
+    requires restart)\n#unix_socket_directories = '/var/run/postgresql'\t# comma-separated
+    list of directories\n\t\t\t\t\t# (change requires restart)\n#unix_socket_group =
+    ''\t\t\t# (change requires restart)\n#unix_socket_permissions = 0777\t\t# begin
+    with 0 to use octal notation\n\t\t\t\t\t# (change requires restart)\n#bonjour =
+    off\t\t\t\t# advertise server via Bonjour\n\t\t\t\t\t# (change requires restart)\n#bonjour_name
+    = ''\t\t\t# defaults to the computer name\n\t\t\t\t\t# (change requires restart)\n\n#
+    - Security and Authentication -\n\n#authentication_timeout = 1min\t\t# 1s-600s\n#ssl
+    = off\t\t\t\t# (change requires restart)\n#ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL'
+    # allowed SSL ciphers\n\t\t\t\t\t# (change requires restart)\n#ssl_prefer_server_ciphers
+    = on\t\t# (change requires restart)\n#ssl_ecdh_curve = 'prime256v1'\t\t# (change
+    requires restart)\n#ssl_cert_file = 'server.crt'\t\t# (change requires restart)\n#ssl_key_file
+    = 'server.key'\t\t# (change requires restart)\n#ssl_ca_file = ''\t\t\t# (change
+    requires restart)\n#ssl_crl_file = ''\t\t\t# (change requires restart)\n#password_encryption
+    = on\n#db_user_namespace = off\n#row_security = on\n\n# GSSAPI using Kerberos\n#krb_server_keyfile
+    = ''\n#krb_caseins_users = off\n\n# - TCP Keepalives -\n# see \"man 7 tcp\" for
+    details\n\n#tcp_keepalives_idle = 0\t\t# TCP_KEEPIDLE, in seconds;\n\t\t\t\t\t#
+    0 selects the system default\n#tcp_keepalives_interval = 0\t\t# TCP_KEEPINTVL, in
+    seconds;\n\t\t\t\t\t# 0 selects the system default\n#tcp_keepalives_count = 0\t\t#
+    TCP_KEEPCNT;\n\t\t\t\t\t# 0 selects the system default\n\n\n#------------------------------------------------------------------------------\n#
+    RESOURCE USAGE (except WAL)\n#------------------------------------------------------------------------------\n\n#
+    - Memory -\n\nshared_buffers = 200MB\t\t\t# min 128kB\n\t\t\t\t\t# (change requires
+    restart)\n#huge_pages = try\t\t\t# on, off, or try\n\t\t\t\t\t# (change requires
+    restart)\ntemp_buffers = 200MB\t\t\t# min 800kB\n#max_prepared_transactions = 0\t\t#
+    zero disables the feature\n\t\t\t\t\t# (change requires restart)\n# Caution: it
+    is not advisable to set max_prepared_transactions nonzero unless\n# you actively
+    intend to use prepared transactions.\nwork_mem = 600MB\t\t\t\t# min 64kB\nmaintenance_work_mem
+    = 600MB\t\t# min 1MB\n#replacement_sort_tuples = 150000\t# limits use of replacement
+    selection sort\n#autovacuum_work_mem = -1\t\t# min 1MB, or -1 to use maintenance_work_mem\n#max_stack_depth
+    = 2MB\t\t\t# min 100kB\n# dynamic_shared_memory_type = posix\t# the default is the
+    first option\n\t\t\t\t\t# supported by the operating system:\n\t\t\t\t\t#   posix\n\t\t\t\t\t#
+    \  sysv\n\t\t\t\t\t#   windows\n\t\t\t\t\t#   mmap\n\t\t\t\t\t# use none to disable
+    dynamic shared memory\n\n# - Disk -\n\n#temp_file_limit = -1\t\t\t# limits per-process
+    temp file space\n\t\t\t\t\t# in kB, or -1 for no limit\n\n# - Kernel Resource Usage
+    -\n\n#max_files_per_process = 1000\t\t# min 25\n\t\t\t\t\t# (change requires restart)\n#shared_preload_libraries
+    = ''\t\t# (change requires restart)\n\n# - Cost-Based Vacuum Delay -\n\n#vacuum_cost_delay
+    = 0\t\t\t# 0-100 milliseconds\n#vacuum_cost_page_hit = 1\t\t# 0-10000 credits\n#vacuum_cost_page_miss
+    = 10\t\t# 0-10000 credits\n#vacuum_cost_page_dirty = 20\t\t# 0-10000 credits\n#vacuum_cost_limit
+    = 200\t\t# 1-10000 credits\n\n# - Background Writer -\n\n#bgwriter_delay = 200ms\t\t\t#
+    10-10000ms between rounds\n#bgwriter_lru_maxpages = 100\t\t# 0-1000 max buffers
+    written/round\n#bgwriter_lru_multiplier = 2.0\t\t# 0-10.0 multiplier on buffers
+    scanned/round\n#bgwriter_flush_after = 512kB\t\t# measured in pages, 0 disables\n\n#
+    - Asynchronous Behavior -\n\n#effective_io_concurrency = 1\t\t# 1-1000; 0 disables
+    prefetching\n#max_worker_processes = 8\t\t# (change requires restart)\n#max_parallel_workers_per_gather
+    = 0\t# taken from max_worker_processes\n#old_snapshot_threshold = -1\t\t# 1min-60d;
+    -1 disables; 0 is immediate\n\t\t\t\t\t# (change requires restart)\n#backend_flush_after
+    = 0\t\t# measured in pages, 0 disables\n\n\n#------------------------------------------------------------------------------\n#
+    WRITE AHEAD LOG\n#------------------------------------------------------------------------------\n\n#
+    - Settings -\n\n#wal_level = minimal\t\t\t# minimal, replica, or logical\n\t\t\t\t\t#
+    (change requires restart)\n#fsync = on\t\t\t\t# flush data to disk for crash safety\n\t\t\t\t\t\t#
+    (turning this off can cause\n\t\t\t\t\t\t# unrecoverable data corruption)\nsynchronous_commit
+    = off\t\t# synchronization level;\n\t\t\t\t\t# off, local, remote_write, remote_apply,
+    or on\n#wal_sync_method = fsync\t\t# the default is the first option\n\t\t\t\t\t#
+    supported by the operating system:\n\t\t\t\t\t#   open_datasync\n\t\t\t\t\t#   fdatasync
+    (default on Linux)\n\t\t\t\t\t#   fsync\n\t\t\t\t\t#   fsync_writethrough\n\t\t\t\t\t#
+    \  open_sync\n#full_page_writes = on\t\t\t# recover from partial page writes\n#wal_compression
+    = off\t\t\t# enable compression of full-page writes\n#wal_log_hints = off\t\t\t#
+    also do full page writes of non-critical updates\n\t\t\t\t\t# (change requires restart)\n#wal_buffers
+    = -1\t\t\t# min 32kB, -1 sets based on shared_buffers\n\t\t\t\t\t# (change requires
+    restart)\n#wal_writer_delay = 200ms\t\t# 1-10000 milliseconds\n#wal_writer_flush_after
+    = 1MB\t\t# measured in pages, 0 disables\n\n#commit_delay = 0\t\t\t# range 0-100000,
+    in microseconds\n#commit_siblings = 5\t\t\t# range 1-1000\n\n# - Checkpoints -\n\ncheckpoint_timeout
+    = 10min\t\t# range 30s-1d\n#max_wal_size = 1GB\n#min_wal_size = 80MB\ncheckpoint_completion_target
+    = 0.9\t# checkpoint target duration, 0.0 - 1.0\n#checkpoint_flush_after = 256kB\t\t#
+    measured in pages, 0 disables\n#checkpoint_warning = 30s\t\t# 0 disables\n\n# -
+    Archiving -\n\n#archive_mode = off\t\t# enables archiving; off, on, or always\n\t\t\t\t#
+    (change requires restart)\n#archive_command = ''\t\t# command to use to archive
+    a logfile segment\n\t\t\t\t# placeholders: %p = path of file to archive\n\t\t\t\t#
+    \              %f = file name only\n\t\t\t\t# e.g. 'test ! -f /mnt/server/archivedir/%f
+    && cp %p /mnt/server/archivedir/%f'\n#archive_timeout = 0\t\t# force a logfile segment
+    switch after this\n\t\t\t\t# number of seconds; 0 disables\n\n\n#------------------------------------------------------------------------------\n#
+    REPLICATION\n#------------------------------------------------------------------------------\n\n#
+    - Sending Server(s) -\n\n# Set these on the master and on any standby that will
+    send replication data.\n\n#max_wal_senders = 0\t\t# max number of walsender processes\n\t\t\t\t#
+    (change requires restart)\n#wal_keep_segments = 0\t\t# in logfile segments, 16MB
+    each; 0 disables\n#wal_sender_timeout = 60s\t# in milliseconds; 0 disables\n\n#max_replication_slots
+    = 0\t# max number of replication slots\n\t\t\t\t# (change requires restart)\n#track_commit_timestamp
+    = off\t# collect timestamp of transaction commit\n\t\t\t\t# (change requires restart)\n\n#
+    - Master Server -\n\n# These settings are ignored on a standby server.\n\n#synchronous_standby_names
+    = ''\t# standby servers that provide sync rep\n\t\t\t\t# number of sync standbys
+    and comma-separated list of application_name\n\t\t\t\t# from standby(s); '*' = all\n#vacuum_defer_cleanup_age
+    = 0\t# number of xacts by which cleanup is delayed\n\n# - Standby Servers -\n\n#
+    These settings are ignored on a master server.\n\n#hot_standby = off\t\t\t# \"on\"
+    allows queries during recovery\n\t\t\t\t\t# (change requires restart)\n#max_standby_archive_delay
+    = 30s\t# max delay before canceling queries\n\t\t\t\t\t# when reading WAL from archive;\n\t\t\t\t\t#
+    -1 allows indefinite delay\n#max_standby_streaming_delay = 30s\t# max delay before
+    canceling queries\n\t\t\t\t\t# when reading streaming WAL;\n\t\t\t\t\t# -1 allows
+    indefinite delay\n#wal_receiver_status_interval = 10s\t# send replies at least this
+    often\n\t\t\t\t\t# 0 disables\n#hot_standby_feedback = off\t\t# send info from standby
+    to prevent\n\t\t\t\t\t# query conflicts\n#wal_receiver_timeout = 60s\t\t# time that
+    receiver waits for\n\t\t\t\t\t# communication from master\n\t\t\t\t\t# in milliseconds;
+    0 disables\n#wal_retrieve_retry_interval = 5s\t# time to wait before retrying to\n\t\t\t\t\t#
+    retrieve WAL after a failed attempt\n\n\n#------------------------------------------------------------------------------\n#
+    QUERY TUNING\n#------------------------------------------------------------------------------\n\n#
+    - Planner Method Configuration -\n\n#enable_bitmapscan = on\n#enable_hashagg = on\n#enable_hashjoin
+    = on\n#enable_indexscan = on\n#enable_indexonlyscan = on\n#enable_material = on\n#enable_mergejoin
+    = on\n#enable_nestloop = on\n#enable_seqscan = on\n#enable_sort = on\n#enable_tidscan
+    = on\n\n# - Planner Cost Constants -\n\n#seq_page_cost = 1.0\t\t\t# measured on
+    an arbitrary scale\nrandom_page_cost = 2.5\t\t\t# same scale as above\n#cpu_tuple_cost
+    = 0.01\t\t\t# same scale as above\n#cpu_index_tuple_cost = 0.005\t\t# same scale
+    as above\n#cpu_operator_cost = 0.0025\t\t# same scale as above\n#parallel_tuple_cost
+    = 0.1\t\t# same scale as above\n#parallel_setup_cost = 1000.0\t# same scale as above\n#min_parallel_relation_size
+    = 8MB\neffective_cache_size = 1GB\n\n# - Genetic Query Optimizer -\n\ngeqo = on\ngeqo_threshold
+    = 14\n#geqo_effort = 5\t\t\t# range 1-10\n#geqo_pool_size = 0\t\t\t# selects default
+    based on effort\n#geqo_generations = 0\t\t\t# selects default based on effort\n#geqo_selection_bias
+    = 2.0\t\t# range 1.5-2.0\n#geqo_seed = 0.0\t\t\t# range 0.0-1.0\n\n# - Other Planner
+    Options -\n\ndefault_statistics_target = 250\t# range 1-10000\n#constraint_exclusion
+    = partition\t# on, off, or partition\n#cursor_tuple_fraction = 0.1\t\t# range 0.0-1.0\nfrom_collapse_limit
+    = 14\njoin_collapse_limit = 14\t\t# 1 disables collapsing of explicit\n\t\t\t\t\t#
+    JOIN clauses\n#force_parallel_mode = off\n\n\n#------------------------------------------------------------------------------\n#
+    ERROR REPORTING AND LOGGING\n#------------------------------------------------------------------------------\n\n#
+    - Where to Log -\n\n#log_destination = 'stderr'\t\t# Valid values are combinations
+    of\n\t\t\t\t\t# stderr, csvlog, syslog, and eventlog,\n\t\t\t\t\t# depending on
+    platform.  csvlog\n\t\t\t\t\t# requires logging_collector to be on.\n\n# This is
+    used when logging to stderr:\n#logging_collector = off\t\t# Enable capturing of
+    stderr and csvlog\n\t\t\t\t\t# into log files. Required to be on for\n\t\t\t\t\t#
+    csvlogs.\n\t\t\t\t\t# (change requires restart)\n\n# These are only used if logging_collector
+    is on:\n#log_directory = 'pg_log'\t\t# directory where log files are written,\n\t\t\t\t\t#
+    can be absolute or relative to PGDATA\n#log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'\t#
+    log file name pattern,\n\t\t\t\t\t# can include strftime() escapes\n#log_file_mode
+    = 0600\t\t\t# creation mode for log files,\n\t\t\t\t\t# begin with 0 to use octal
+    notation\n#log_truncate_on_rotation = off\t\t# If on, an existing log file with
+    the\n\t\t\t\t\t# same name as the new log file will be\n\t\t\t\t\t# truncated rather
+    than appended to.\n\t\t\t\t\t# But such truncation only occurs on\n\t\t\t\t\t# time-driven
+    rotation, not on restarts\n\t\t\t\t\t# or size-driven rotation.  Default is\n\t\t\t\t\t#
+    off, meaning append to existing files\n\t\t\t\t\t# in all cases.\n#log_rotation_age
+    = 1d\t\t\t# Automatic rotation of logfiles will\n\t\t\t\t\t# happen after that time.
+    \ 0 disables.\n#log_rotation_size = 10MB\t\t# Automatic rotation of logfiles will\n\t\t\t\t\t#
+    happen after that much log output.\n\t\t\t\t\t# 0 disables.\n\n# These are relevant
+    when logging to syslog:\n#syslog_facility = 'LOCAL0'\n#syslog_ident = 'postgres'\n#syslog_sequence_numbers
+    = on\n#syslog_split_messages = on\n\n# This is only relevant when logging to eventlog
+    (win32):\n#event_source = 'PostgreSQL'\n\n# - When to Log -\n\n#client_min_messages
+    = notice\t\t# values in order of decreasing detail:\n\t\t\t\t\t#   debug5\n\t\t\t\t\t#
+    \  debug4\n\t\t\t\t\t#   debug3\n\t\t\t\t\t#   debug2\n\t\t\t\t\t#   debug1\n\t\t\t\t\t#
+    \  log\n\t\t\t\t\t#   notice\n\t\t\t\t\t#   warning\n\t\t\t\t\t#   error\n\n#log_min_messages
+    = warning\t\t# values in order of decreasing detail:\n\t\t\t\t\t#   debug5\n\t\t\t\t\t#
+    \  debug4\n\t\t\t\t\t#   debug3\n\t\t\t\t\t#   debug2\n\t\t\t\t\t#   debug1\n\t\t\t\t\t#
+    \  info\n\t\t\t\t\t#   notice\n\t\t\t\t\t#   warning\n\t\t\t\t\t#   error\n\t\t\t\t\t#
+    \  log\n\t\t\t\t\t#   fatal\n\t\t\t\t\t#   panic\n\n#log_min_error_statement = error\t#
+    values in order of decreasing detail:\n\t\t\t\t\t#   debug5\n\t\t\t\t\t#   debug4\n\t\t\t\t\t#
+    \  debug3\n\t\t\t\t\t#   debug2\n\t\t\t\t\t#   debug1\n\t\t\t\t\t#   info\n\t\t\t\t\t#
+    \  notice\n\t\t\t\t\t#   warning\n\t\t\t\t\t#   error\n\t\t\t\t\t#   log\n\t\t\t\t\t#
+    \  fatal\n\t\t\t\t\t#   panic (effectively off)\n\n#log_min_duration_statement =
+    -1\t# -1 is disabled, 0 logs all statements\n\t\t\t\t\t# and their durations, >
+    0 logs only\n\t\t\t\t\t# statements running at least this number\n\t\t\t\t\t# of
+    milliseconds\n\n\n# - What to Log -\n\n#debug_print_parse = off\n#debug_print_rewritten
+    = off\n#debug_print_plan = off\n#debug_pretty_print = on\n#log_checkpoints = off\n#log_connections
+    = off\n#log_disconnections = off\n#log_duration = off\n#log_error_verbosity = default\t\t#
+    terse, default, or verbose messages\n#log_hostname = off\n#log_line_prefix = ''\t\t\t#
+    special values:\n\t\t\t\t\t#   %a = application name\n\t\t\t\t\t#   %u = user name\n\t\t\t\t\t#
+    \  %d = database name\n\t\t\t\t\t#   %r = remote host and port\n\t\t\t\t\t#   %h
+    = remote host\n\t\t\t\t\t#   %p = process ID\n\t\t\t\t\t#   %t = timestamp without
+    milliseconds\n\t\t\t\t\t#   %m = timestamp with milliseconds\n\t\t\t\t\t#   %n =
+    timestamp with milliseconds (as a Unix epoch)\n\t\t\t\t\t#   %i = command tag\n\t\t\t\t\t#
+    \  %e = SQL state\n\t\t\t\t\t#   %c = session ID\n\t\t\t\t\t#   %l = session line
+    number\n\t\t\t\t\t#   %s = session start timestamp\n\t\t\t\t\t#   %v = virtual transaction
+    ID\n\t\t\t\t\t#   %x = transaction ID (0 if none)\n\t\t\t\t\t#   %q = stop here
+    in non-session\n\t\t\t\t\t#        processes\n\t\t\t\t\t#   %% = '%'\n\t\t\t\t\t#
+    e.g. '<%u%%%d> '\n#log_lock_waits = off\t\t\t# log lock waits >= deadlock_timeout\n#log_statement
+    = 'none'\t\t\t# none, ddl, mod, all\n#log_replication_commands = off\n#log_temp_files
+    = -1\t\t\t# log temporary files equal or larger\n\t\t\t\t\t# than the specified
+    size in kilobytes;\n\t\t\t\t\t# -1 disables, 0 logs all temp files\nlog_timezone
+    = 'UTC'\n\n\n# - Process Title -\n\n#cluster_name = ''\t\t\t# added to process titles
+    if nonempty\n\t\t\t\t\t# (change requires restart)\n#update_process_title = on\n\n\n#------------------------------------------------------------------------------\n#
+    RUNTIME STATISTICS\n#------------------------------------------------------------------------------\n\n#
+    - Query/Index Statistics Collector -\n\n#track_activities = on\n#track_counts =
+    on\n#track_io_timing = off\n#track_functions = none\t\t\t# none, pl, all\n#track_activity_query_size
+    = 1024\t# (change requires restart)\n#stats_temp_directory = 'pg_stat_tmp'\n\n\n#
+    - Statistics Monitoring -\n\n#log_parser_stats = off\n#log_planner_stats = off\n#log_executor_stats
+    = off\n#log_statement_stats = off\n\n\n#------------------------------------------------------------------------------\n#
+    AUTOVACUUM PARAMETERS\n#------------------------------------------------------------------------------\n\n#autovacuum
+    = on\t\t\t# Enable autovacuum subprocess?  'on'\n\t\t\t\t\t# requires track_counts
+    to also be on.\n#log_autovacuum_min_duration = -1\t# -1 disables, 0 logs all actions
+    and\n\t\t\t\t\t# their durations, > 0 logs only\n\t\t\t\t\t# actions running at
+    least this number\n\t\t\t\t\t# of milliseconds.\n#autovacuum_max_workers = 3\t\t#
+    max number of autovacuum subprocesses\n\t\t\t\t\t# (change requires restart)\n#autovacuum_naptime
+    = 1min\t\t# time between autovacuum runs\n#autovacuum_vacuum_threshold = 50\t# min
+    number of row updates before\n\t\t\t\t\t# vacuum\n#autovacuum_analyze_threshold
+    = 50\t# min number of row updates before\n\t\t\t\t\t# analyze\n#autovacuum_vacuum_scale_factor
+    = 0.2\t# fraction of table size before vacuum\n#autovacuum_analyze_scale_factor
+    = 0.1\t# fraction of table size before analyze\n#autovacuum_freeze_max_age = 200000000\t#
+    maximum XID age before forced vacuum\n\t\t\t\t\t# (change requires restart)\n#autovacuum_multixact_freeze_max_age
+    = 400000000\t# maximum multixact age\n\t\t\t\t\t# before forced vacuum\n\t\t\t\t\t#
+    (change requires restart)\n#autovacuum_vacuum_cost_delay = 20ms\t# default vacuum
+    cost delay for\n\t\t\t\t\t# autovacuum, in milliseconds;\n\t\t\t\t\t# -1 means use
+    vacuum_cost_delay\n#autovacuum_vacuum_cost_limit = -1\t# default vacuum cost limit
+    for\n\t\t\t\t\t# autovacuum, -1 means use\n\t\t\t\t\t# vacuum_cost_limit\n\n\n#------------------------------------------------------------------------------\n#
+    CLIENT CONNECTION DEFAULTS\n#------------------------------------------------------------------------------\n\n#
+    - Statement Behavior -\n\n#search_path = '\"$user\", public'\t# schema names\n#default_tablespace
+    = ''\t\t# a tablespace name, '' uses the default\n#temp_tablespaces = ''\t\t\t#
+    a list of tablespace names, '' uses\n\t\t\t\t\t# only default tablespace\n#check_function_bodies
+    = on\n#default_transaction_isolation = 'read committed'\n#default_transaction_read_only
+    = off\n#default_transaction_deferrable = off\n#session_replication_role = 'origin'\n#statement_timeout
+    = 0\t\t\t# in milliseconds, 0 is disabled\n#lock_timeout = 0\t\t\t# in milliseconds,
+    0 is disabled\n#idle_in_transaction_session_timeout = 0\t\t# in milliseconds, 0
+    is disabled\n#vacuum_freeze_min_age = 50000000\n#vacuum_freeze_table_age = 150000000\n#vacuum_multixact_freeze_min_age
+    = 5000000\n#vacuum_multixact_freeze_table_age = 150000000\n#bytea_output = 'hex'\t\t\t#
+    hex, escape\n#xmlbinary = 'base64'\n#xmloption = 'content'\n#gin_fuzzy_search_limit
+    = 0\n#gin_pending_list_limit = 4MB\n\n# - Locale and Formatting -\n\ndatestyle =
+    'iso, mdy'\n#intervalstyle = 'postgres'\ntimezone = 'UTC'\n#timezone_abbreviations
+    = 'Default'     # Select the set of available time zone\n\t\t\t\t\t# abbreviations.
+    \ Currently, there are\n\t\t\t\t\t#   Default\n\t\t\t\t\t#   Australia (historical
+    usage)\n\t\t\t\t\t#   India\n\t\t\t\t\t# You can create your own file in\n\t\t\t\t\t#
+    share/timezonesets/.\n#extra_float_digits = 0\t\t\t# min -15, max 3\n#client_encoding
+    = sql_ascii\t\t# actually, defaults to database\n\t\t\t\t\t# encoding\n\n# These
+    settings are initialized by initdb, but they can be changed.\nlc_messages = 'en_US.utf8'\t\t\t#
+    locale for system error message\n\t\t\t\t\t# strings\nlc_monetary = 'en_US.utf8'\t\t\t#
+    locale for monetary formatting\nlc_numeric = 'en_US.utf8'\t\t\t# locale for number
+    formatting\nlc_time = 'en_US.utf8'\t\t\t\t# locale for time formatting\n\n# default
+    configuration for text search\ndefault_text_search_config = 'pg_catalog.english'\n\n#
+    - Other Defaults -\n\n#dynamic_library_path = '$libdir'\n#local_preload_libraries
+    = ''\n#session_preload_libraries = ''\n\n\n#------------------------------------------------------------------------------\n#
+    LOCK MANAGEMENT\n#------------------------------------------------------------------------------\n\n#deadlock_timeout
+    = 1s\nmax_locks_per_transaction = 640\t\t# min 10\n\t\t\t\t\t# (change requires
+    restart)\nmax_pred_locks_per_transaction = 640\t# min 10\n\t\t\t\t\t# (change requires
+    restart)\n\n\n#------------------------------------------------------------------------------\n#
+    VERSION/PLATFORM COMPATIBILITY\n#------------------------------------------------------------------------------\n\n#
+    - Previous PostgreSQL Versions -\n\n#array_nulls = on\n#backslash_quote = safe_encoding\t#
+    on, off, or safe_encoding\n#default_with_oids = off\n#escape_string_warning = on\n#lo_compat_privileges
+    = off\n#operator_precedence_warning = off\n#quote_all_identifiers = off\n#sql_inheritance
+    = on\n#standard_conforming_strings = on\n#synchronize_seqscans = on\n\n# - Other
+    Platforms and Clients -\n\n#transform_null_equals = off\n\n\n#------------------------------------------------------------------------------\n#
+    ERROR HANDLING\n#------------------------------------------------------------------------------\n\n#exit_on_error
+    = off\t\t\t# terminate session on any error?\n#restart_after_crash = on\t\t# reinitialize
+    after backend crash?\n\n\n#------------------------------------------------------------------------------\n#
+    CONFIG FILE INCLUDES\n#------------------------------------------------------------------------------\n\n#
+    These options allow settings to be loaded from files other than the\n# default postgresql.conf.\n\n#include_dir
+    = 'conf.d'\t\t\t# include files ending in '.conf' from\n\t\t\t\t\t# directory 'conf.d'\n#include_if_exists
+    = 'exists.conf'\t# include file only if it exists\n#include = 'special.conf'\t\t#
+    include file\n\n\n#------------------------------------------------------------------------------\n#
+    CUSTOMIZED OPTIONS\n#------------------------------------------------------------------------------\n\n#
+    Add settings for extensions here\n"
+  
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/initialization-configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-postgresql-init-scripts
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+data:
+  init_postgresql.sh: |
+    #!/bin/bash
+    set -e
+    psql -v ON_ERROR_STOP=1 --username postgres <<-EOSQL
+        update pg_database set datallowconn = TRUE where datname = 'template0';
+        \c template0
+        update pg_database set datistemplate = FALSE where datname = 'template1';
+        drop database template1;
+        create database template1 with template = template0 encoding = 'SQL_ASCII' LC_COLLATE='C' LC_CTYPE='C';
+        update pg_database set datistemplate = TRUE where datname = 'template1';
+        \c template1
+        update pg_database set datallowconn = FALSE where datname = 'template0';
+    EOSQL
+  
+
+---
+# Source: intermine-instance/charts/postgresql/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-postgresql-headless
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: postgresql
+  selector:
+    app: postgresql
+    release: "release-name"
+
+---
+# Source: intermine-instance/charts/postgresql/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: postgresql
+  selector:
+    app: postgresql
+    release: "release-name"
+    role: master
+
+---
+# Source: intermine-instance/templates/tomcat_svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-intermine-instance
+  labels:
+    app.kubernetes.io/name: intermine-instance
+    helm.sh/chart: intermine-instance-0.1.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: intermine-instance
+    app.kubernetes.io/instance: release-name
+
+---
+# Source: intermine-instance/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-intermine-instance-test-connection"
+  labels:
+    app.kubernetes.io/name: intermine-instance
+    helm.sh/chart: intermine-instance-0.1.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['release-name-intermine-instance:8080']
+  restartPolicy: Never
+
+---
+# Source: intermine-instance/templates/tomcat_deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-intermine-instance
+  labels:
+    app.kubernetes.io/name: intermine-instance
+    helm.sh/chart: intermine-instance-0.1.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: intermine-instance
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: intermine-instance
+        app.kubernetes.io/instance: release-name
+    spec:
+      containers:
+        - name: intermine-instance
+          image: "intermine/tomcat:latest"
+          imagePullPolicy: Always
+          env:
+          - name: "MEM_OPTS"
+            value: "-Xmx256m -Xms128m"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 6
+          resources:
+            limits:
+              cpu: 100m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            
+
+---
+# Source: intermine-instance/charts/postgresql/templates/statefulset.yaml
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-5.3.9
+    release: "release-name"
+    heritage: "Tiller"
+spec:
+  serviceName: release-name-postgresql-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: postgresql
+      release: "release-name"
+      role: master
+  template:
+    metadata:
+      name: release-name-postgresql
+      labels:
+        app: postgresql
+        chart: postgresql-5.3.9
+        release: "release-name"
+        heritage: "Tiller"
+        role: master
+    spec:      
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      - name: init-chmod-data
+        image: docker.io/bitnami/minideb:latest
+        imagePullPolicy: "Always"
+        resources:
+          limits:
+            cpu: 250m
+            memory: 600Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          
+        command:
+          - sh
+          - -c
+          - |
+            mkdir -p /bitnami/postgresql/data
+            chmod 700 /bitnami/postgresql/data
+            find /bitnami/postgresql -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              xargs chown -R 1001:1001
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/postgresql
+          subPath: 
+      containers:
+      - name: release-name-postgresql
+        image: docker.io/bitnami/postgresql:11.4.0-debian-9-r0
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          limits:
+            cpu: 250m
+            memory: 600Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          
+        securityContext:
+          runAsUser: 1001
+        env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: PGDATA
+          value: "/bitnami/postgresql/data"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: release-name-postgresql
+              key: postgresql-password
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - |
+              pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+              [ -f /opt/bitnami/postgresql/tmp/.initialized ]
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        volumeMounts:
+        - name: custom-init-scripts
+          mountPath: /docker-entrypoint-initdb.d/
+        - name: data
+          mountPath: /bitnami/postgresql
+          subPath: 
+        - name: postgresql-config
+          mountPath: /bitnami/postgresql/conf
+      volumes:
+      - name: postgresql-config
+        configMap:
+          name: release-name-postgresql-configuration
+      - name: custom-init-scripts
+        configMap:
+          name: release-name-postgresql-init-scripts
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "2Gi"
+
+---
+# Source: intermine-instance/templates/intermine_builder_job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "release-name-builder"
+  labels:
+    app.kubernetes.io/managed-by: "Tiller"
+    app.kubernetes.io/instance: "release-name"
+    helm.sh/chart: "intermine-instance-0.1.0"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "release-name-builder"
+      labels:
+        app.kubernetes.io/managed-by: "Tiller"
+        app.kubernetes.io/instance: "release-name"
+        helm.sh/chart: "intermine-instance-0.1.0"
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 100
+      restartPolicy: Never
+      containers:
+      - name: release-name-builder-job
+        image: "intermine/builder:latest"
+        command: ["/bin/sh","/home/intermine/intermine/scripts/build.sh"]
+        env:
+        - name: PGHOST
+          value: "release-name-postgresql"
+        - name: PGPORT
+          value: "5432"
+        - name: PGPASSWORD
+          value: postgres
+        - name: SOLR_HOST
+          value: solr
+        - name: TOMCAT_HOST
+          value: release-name-intermine-instance
+        - name: "MEM_OPTS"
+          value: "-Xmx1g -Xms500m"
+
+---
+# Source: intermine-instance/templates/tomcat_ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "release-name-intermine-instance-ingress"
+  labels:
+    app.kubernetes.io/name: intermine-instance
+    helm.sh/chart: intermine-instance-0.1.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  rules:
+
+---
+# Source: intermine-instance/charts/postgresql/templates/extended-config-configmap.yaml
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/metrics-svc.yaml
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/networkpolicy.yaml
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/serviceaccount.yaml
+
+---
+# Source: intermine-instance/charts/postgresql/templates/servicemonitor.yaml
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/statefulset-slaves.yaml
+
+
+---
+# Source: intermine-instance/charts/postgresql/templates/svc-read.yaml
+
+
