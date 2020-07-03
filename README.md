@@ -1,6 +1,12 @@
 # intermine-compose
 Repo to handle docker orchestration in the cloud
 
+ ## **Note**
+
+ Do **not** use master branch of this repo. Massive refactor going on.
+
+Use **v1** branch instead.
+
 ## Getting started
 
 #### Prerequisites
