@@ -8,4 +8,4 @@ until psql -U ${PGUSER:-postgres} -h ${PGHOST:-postgres} -p ${PGPORT:-5432} -c '
 done
 echo >&2 "$(date +%Y%m%dt%H%M%S) Postgres is up - executing command"
 
-gunicorn run:app -p compose.pid -b ${FLASK_HOST:-0.0.0.0}:${FLASK_PORT:-9991} 
+gunicorn wsgi:app -p compose.pid -b ${FLASK_HOST:-0.0.0.0}:${FLASK_PORT:-9991} 
