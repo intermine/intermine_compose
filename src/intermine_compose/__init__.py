@@ -6,19 +6,19 @@ import os
 
 def create_app():
     from . import models, services, auth, utils
-    app = Flask(__name__, instance_relative_config=True, template_folder="./templates")
+    app = Flask(__name__, template_folder="./templates")
 
     CORS(app, supports_credentials=True)
 
     # Loads default config defined in config dir
-    app.config.from_object("config.default")
+    app.config.from_object("intermine_compose.config.default")
 
     # set env vars from .env file located at the root of the project
     load_dotenv()
 
     # Loads specific config defined in config dir
     if os.environ.get("FLASK_CONFIG_MODE", default=False):
-        app.config.from_object(f"config.{os.environ.get('FLASK_CONFIG_MODE')}")
+        app.config.from_object(f"intermine_compose.config.{os.environ.get('FLASK_CONFIG_MODE')}")
     
     # Loads config from a pyfile with location in FLASK_CONFIG_FILE var
     app.config.from_envvar("FLASK_CONFIG_FILE", silent=True)
