@@ -3,7 +3,7 @@ name = "intermine_compose"
 version = "0.1.0"
 description = "Intermine Compose"
 authors = ["Ankur Kumar <ank@leoank.me>"]
-license = "MIT"
+license = "GNU LGPLv2.1"
 
 [tool.poetry.dependencies]
 python = "^3.8"
