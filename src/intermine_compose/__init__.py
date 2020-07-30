@@ -12,5 +12,4 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
 from . import app  # noqa
-from .app import create_app # noqa
 from . import extentions  # noqa

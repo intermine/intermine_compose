@@ -2,7 +2,7 @@ from flask import Flask
 from logzero import logger
 
 from intermine_compose.config import Config
-from intermine_compose.extensions import bcrypt, cors, db, login_manager, migrate
+from intermine_compose.extentions import bcrypt, cors, db, login_manager, migrate
 from intermine_compose.routes import (
     build_bp,
     configurator_bp,
@@ -24,7 +24,7 @@ def create_app(config: Config) -> Flask:
     app.config.from_object("intermine_compose.config.default")
     
     # Loads specific config defined in config dir
-    app.config.from_object(f"curation_backend.configs.{config.value}")
+    app.config.from_object(f"intermine_compose.config.{config.value}")
     logger.debug(f"Config loaded: {config.value}")
     
     # Register app extentions

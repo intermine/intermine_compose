@@ -1,7 +1,9 @@
 import os
-from intermine_compose import create_app
+from intermine_compose import app
+from intermine_compose.config import Config
 
-app = create_app()
+
+app = app.create_app(Config.DEFAULT)
 
 if __name__ == "__main__":
     app.run(
