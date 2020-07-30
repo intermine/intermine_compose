@@ -17,7 +17,7 @@ def init() -> None:
     if env.bool("CI", default=False):
         app = create_app(Config.CI)
     else:
-        app = create_app(Config.BASE)
+        app = create_app(Config.DEFAULT)
     _db.init_app(app)
     with app.app_context():
         _db.create_all()
@@ -27,7 +27,7 @@ def init() -> None:
 def destroy() -> None:
     """Destroy database."""
     click.secho("Destroying database!", fg="red")
-    app = create_app(Config.BASE)
+    app = create_app(Config.DEFAULT)
     _db.init_app(app)
     with app.app_context():
         _db.session.close()
@@ -38,7 +38,7 @@ def destroy() -> None:
 def reset() -> None:
     """Reset database."""
     click.secho("Resetting database!", fg="yellow")
-    app = create_app(Config.BASE)
+    app = create_app(Config.DEFAULT)
     _db.init_app(app)
     with app.app_context():
         _db.session.close()
