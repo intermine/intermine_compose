@@ -1,47 +1,16 @@
-from flask import Flask
-from flask_cors import CORS
-from dotenv import load_dotenv
+"""Intermine Compose."""
 
-import os
+try:
+    from importlib.metadata import version, PackageNotFoundError  # type: ignore
+except ImportError:  # pragma: no cover
+    from importlib_metadata import version, PackageNotFoundError  # type: ignore
 
-def create_app():
-    from . import models, services, auth, utils
-    app = Flask(__name__, template_folder="./templates")
 
-    CORS(app, supports_credentials=True)
+try:
+    __version__ = version(__name__)
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "unknown"
 
-    # Loads default config defined in config dir
-    app.config.from_object("intermine_compose.config.default")
-
-    # set env vars from .env file located at the root of the project
-    load_dotenv()
-
-    # Loads specific config defined in config dir
-    if os.environ.get("FLASK_CONFIG_MODE", default=False):
-        app.config.from_object(f"intermine_compose.config.{os.environ.get('FLASK_CONFIG_MODE')}")
-    
-    # Loads config from a pyfile with location in FLASK_CONFIG_FILE var
-    app.config.from_envvar("FLASK_CONFIG_FILE", silent=True)
-
-    # Initialize app
-    utils.init_app(app)
-    services.init_app(app)
-    models.init_app(app)
-    auth.init_app(app)
-
-    # need to import routes after initializing celery
-    from . import routes
-    routes.init_app(app)
-
-    # pushing app context is important for db to work
-    app.app_context().push()
-
-    # drop tables in dev mode. This let us bypass running migration (very handy!!)
-    if app.config.get("DEV_DB") is True:
-        models.drop_all_tables()
-
-    models.create_all_tables()
-
-    # from .services.celery import make_celery
-    # celery = make_celery(app)
-    return app
+from . import app  # noqa
+from .app import create_app # noqa
+from . import extentions  # noqa
