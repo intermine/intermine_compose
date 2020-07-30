@@ -10,7 +10,7 @@ import os
 # did relative imports here (Make sure to change this during refactoring )
 from ..models.data import DataFile, DataFileRemoteUploadSchema, DataFileSchema, DataFileUploadSchema
 from ..models.mine import Mine
-from ..models import db
+from intermine_compose.extentions import db
 
 data_bp = Blueprint("data", __name__, url_prefix='/api/v1/data')
 

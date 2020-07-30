@@ -7,7 +7,7 @@ import bcrypt
 # did relative imports here (Make sure to change this during refactoring )
 from ..models.users import UserRegisterSchema, UserCredentialsSchema, SlimUserSchema, UserProfileSchema, User
 from ..models.users import UserForgotPasswordSchema, UserResetPasswordSchema
-from ..models import db
+from intermine_compose.extentions import db
 from ..auth import login_manager
 from ..services.mail import sendPasswordResetMail
 
