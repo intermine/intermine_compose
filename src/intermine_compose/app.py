@@ -14,19 +14,18 @@ from intermine_compose.routes import (
 
 import os
 
+
 def create_app(config: Config) -> Flask:
-    from . import models, services, auth, utils
     app = Flask(__name__, template_folder="./templates")
     logger.info("App instance created")
 
-
     # Loads default config defined in config dir
     app.config.from_object("intermine_compose.config.default")
-    
+
     # Loads specific config defined in config dir
     app.config.from_object(f"intermine_compose.config.{config.value}")
     logger.debug(f"Config loaded: {config.value}")
-    
+
     # Register app extentions
     register_extensions(app)
     logger.debug("Extensions loaded")
@@ -36,6 +35,7 @@ def create_app(config: Config) -> Flask:
     logger.debug("Blueprints registered")
 
     return app
+
 
 def register_extensions(app: Flask) -> None:
     """Register Flask extensions."""
