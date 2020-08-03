@@ -5,7 +5,7 @@ from typing import Any, List, Union
 
 from sqlalchemy import Column, DateTime
 
-from curation_backend.extentions import db
+from intermine_compose.extentions import db
 
 
 class TimestampMixin(object):
