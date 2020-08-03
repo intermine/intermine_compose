@@ -47,7 +47,7 @@ def black(session: Session) -> None:
     session.run("black", *args)
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8"])
 def lint(session: Session) -> None:
     """Lint using flake8."""
     args = session.posargs or locations
@@ -82,7 +82,7 @@ def safety(session: Session) -> None:
         session.run("safety", "check", f"--file={requirements.name}", "--full-report")
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8"])
 def mypy(session: Session) -> None:
     """Type-check using mypy."""
     # args = session.posargs or ["--follow-imports=silent", *locations]
@@ -91,20 +91,12 @@ def mypy(session: Session) -> None:
     session.run("mypy", *args)
 
 
-# @nox.session(python="3.7")
-# def pytype(session: Session) -> None:
-#     """Type-check using pytype."""
-#     args = session.posargs or ["--disable=import-error", *locations]
-#     install_with_constraints(session, "pytype")
-#     session.run("pytype", *args)
-
-
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8"])
 def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
     session.run("poetry", "install", "--no-dev", external=True)
-    session.run("curation_backend", "db", "init")
+    session.run("intermine_compose", "db", "init")
     install_with_constraints(
         session,
         "coverage[toml]",
@@ -117,24 +109,24 @@ def tests(session: Session) -> None:
     session.run("pytest", *args)
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8"])
 def typeguard(session: Session) -> None:
     """Runtime type checking using Typeguard."""
     args = session.posargs or ["-m", "not e2e"]
     session.run("poetry", "install", "--no-dev", external=True)
-    session.run("curation_backend", "db", "init")
+    session.run("intermine_compose", "db", "init")
     install_with_constraints(
         session, "pytest", "pytest-mock", "typeguard", "webtest", "factory-boy"
     )
     session.run("pytest", f"--typeguard-packages={package}", *args)
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8"])
 def xdoctest(session: Session) -> None:
     """Run examples with xdoctest."""
     args = session.posargs or ["all"]
     session.run("poetry", "install", "--no-dev", external=True)
-    session.run("curation_backend", "db", "init")
+    session.run("intermine_compose", "db", "init")
     install_with_constraints(session, "xdoctest")
     session.run("python", "-m", "xdoctest", package, *args)
 
