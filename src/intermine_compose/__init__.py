@@ -3,8 +3,7 @@
 try:
     from importlib.metadata import version, PackageNotFoundError  # type: ignore
 except ImportError:  # pragma: no cover
-    from importlib_metadata import version, PackageNotFoundError  # type: ignore
-
+    pass
 
 try:
     __version__ = version(__name__)

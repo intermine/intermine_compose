@@ -1,16 +1,21 @@
-from .base import db, ma, TimestampMixin
-from sqlalchemy import Column, String, Integer
+"""User model."""
+
+import os
+from time import time
+from uuid import uuid4
+
+from flask_login import UserMixin
+import jwt
+from marshmallow import fields, validate
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from marshmallow import fields, validate, post_load
-from uuid import uuid4
-from flask_login import UserMixin
-from time import time
-import jwt
-import os
+
+from intermine_compose.extentions import db, ma
+from intermine_compose.models.meta.mixins import Model, SurrogatePK, TimestampMixin
 
 # User class for storing user data in database
-class User(TimestampMixin, UserMixin, db.Model):
+class User(TimestampMixin, UserMixin, SurrogatePK, Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     firstName = Column(String(80))
     lastName = Column(String(80))
@@ -27,26 +32,32 @@ class User(TimestampMixin, UserMixin, db.Model):
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
-            {'reset_password': str(self.id), 'exp': time() + expires_in},
-            os.environ.get('SECRET_KEY'), algorithm='HS256').decode('utf-8')
-    
+            {"reset_password": str(self.id), "exp": time() + expires_in},
+            os.environ.get("SECRET_KEY"),
+            algorithm="HS256",
+        ).decode("utf-8")
+
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, os.environ.get('SECRET_KEY'),
-                            algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=["HS256"])[
+                "reset_password"
+            ]
         except:
             return
         return User.query.filter_by(id=id)
+
 
 # User login schema for validating login data
 class UserCredentialsSchema(ma.Schema):
     email = fields.Email(required=True)
     password = fields.Str(required=True)
 
+
 # User forgot password schema to validate email input
 class UserForgotPasswordSchema(ma.Schema):
     email = fields.Email(required=True, validate=validate.Length(max=120))
+
 
 # User reset password schema to validate reset token and password input
 class UserResetPasswordSchema(ma.Schema):
@@ -62,12 +73,14 @@ class UserRegisterSchema(ma.Schema):
     organisation = fields.Str(required=True)
     password = fields.Str(required=True)
 
+
 # Slim User schema for sending user data to clients
 class SlimUserSchema(ma.Schema):
     email = fields.Email(required=True)
     firstName = fields.Str(required=True)
     lastName = fields.Str(required=True)
     organisation = fields.Str(required=True)
+
 
 class UserProfileSchema(ma.Schema):
     firstName = fields.Str(required=True)
