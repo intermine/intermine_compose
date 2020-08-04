@@ -9,8 +9,9 @@ from . import default  # noqa
 class Config(Enum):
     """Config enum."""
 
+    CI = "testing_ci"
     DEFAULT = "default"
     DEV = "development"
-    DOCKER = "docker"
+    DOCKER_DEV = "docker_dev"
+    PROD = "production"
     TEST = "testing"
-    CI = "testing_ci"

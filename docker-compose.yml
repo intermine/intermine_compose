@@ -5,7 +5,7 @@ services:
     container_name: compose_postgres
     image: postgres:alpine
     environment:
-      - POSTGRES_DB=${DB_NAME:-composedb_dev}
+      - POSTGRES_DB=${DB:-compose}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
     volumes:
@@ -47,7 +47,7 @@ services:
       - FLASK_CONFIG_MODE=${FLASK_CONFIG_MODE:-docker_local}
       - FLASK_HOST=${FLASK_HOST:-0.0.0.0}
       - FLASK_DEBUG=${FLASK_DEBUG:-TRUE}
-      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI:-postgres://postgres:postgres@postgres:5432/composedb}
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI:-postgresql://postgres:postgres@postgres:5432/compose}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis}
       - PGHOST=${PGHOST:-postgres}
@@ -55,6 +55,12 @@ services:
       - PGPASSWORD=${PGPASSWORD:-postgres}
       - IM_DATA_DIR=${IM_DATA_DIR:-/intermine/sharedfs}
       - CONFIGURATOR_URL=${CONFIGURATOR_URL:-http://configurator:8080/}
+      - MAIL_SERVER= $(MAIL_SERVER:-"")
+      - MAIL_PORT= $(MAIL_PORT:-"")
+      - MAIL_USE_TLS = $(MAIL_USE_TLS:-"")
+      - MAIL_USE_SSL= $(MAIL_USE_SSL:-"")
+      - MAIL_USERNAME= $(MAIL_USERNAME:-"")
+      - MAIL_PASSWORD= $(MAIL_PASSWORD:-"")
     volumes:
       - SharedFS:${IM_DATA_DIR:-/intermine/sharedfs}
     ports:

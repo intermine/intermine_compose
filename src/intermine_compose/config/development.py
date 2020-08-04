@@ -1,5 +1,6 @@
 """App Config."""
 
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@localhost:5432/composedb"
-SQLALCHEMY_ECHO = True
-DEV_DB = True
+from intermine_compose.config.default import env
+
+SQLALCHEMY_ECHO = env.bool("SQLALCHEMY_ECHO", default=True)
+FLASK_DEBUG = env.bool("FLASK_DEBUG", default=True)

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from flask import Flask
 from logzero import logger
 
@@ -15,7 +17,7 @@ from intermine_compose.routes import (
 import os
 
 
-def create_app(config: Config) -> Flask:
+def create_app(config: Optional[Config] = None) -> Flask:
     app = Flask(__name__, template_folder="./templates")
     logger.info("App instance created")
 
@@ -23,9 +25,11 @@ def create_app(config: Config) -> Flask:
     app.config.from_object("intermine_compose.config.default")
 
     # Loads specific config defined in config dir
-    app.config.from_object(f"intermine_compose.config.{config.value}")
-    logger.debug(f"Config loaded: {config.value}")
-
+    if config:
+        app.config.from_object(f"intermine_compose.config.{config.value}")
+        logger.debug(f"Config loaded: {config.value}")
+    else:
+        logger.debug(f"Config loaded: default")
     # Register app extentions
     register_extensions(app)
     logger.debug("Extensions loaded")
