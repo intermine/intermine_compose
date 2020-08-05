@@ -1,7 +1,5 @@
 """App Config."""
 
-import os
-
 from environs import Env
 
 # Read env variables from a .env file
@@ -26,3 +24,7 @@ SQLALCHEMY_DATABASE_URI = env.str(
     default="postgresql://postgres:postgres@localhost:5432/compose",
 )
 SECRET_KEY = env.str("SECRET_KEY", default="ADD_A_RANDOM_KEY_HERE")
+SENDGRID_API_KEY = env.str("SENDGRID_API_KEY", default="GIVE_ME_SENDGRID_KEY")
+MAIL_SUPPRESS_SEND = env.bool("MAIL_SUPPRESS_SEND", default=True)
+FRONTEND_DOMAIN_NAME = env.str("FRONTEND_DOMAIN_NAME", default="example.com")
+DEFAULT_EMAIL_ORIGIN = env.str("DEFAULT_EMAIL_ORIGIN", default="admin@exampmle.com")
