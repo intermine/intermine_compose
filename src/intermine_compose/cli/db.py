@@ -9,25 +9,44 @@ from intermine_compose.extentions import db as _db
 
 
 @click.command()
-def init() -> None:
+@click.option("-c", "--config", help="Set config to load")
+def init(config: str) -> None:
     """Init database."""
     click.secho("Creating database!", fg="green")
     env = Env()
     env.read_env()
-    if env.bool("CI", default=False):
-        app = create_app(Config.CI)
+    if config:
+        try:
+            app = create_app(Config[config])
+        except BaseException:
+            app = create_app()
     else:
-        app = create_app(Config.DEFAULT)
+        if env.bool("CI", default=False):
+            app = create_app(Config.CI)
+        else:
+            app = create_app()
     _db.init_app(app)
     with app.app_context():
         _db.create_all()
 
 
 @click.command()
-def destroy() -> None:
+@click.option("-c", "--config", help="Set config to load")
+def destroy(config: str) -> None:
     """Destroy database."""
     click.secho("Destroying database!", fg="red")
-    app = create_app(Config.DEFAULT)
+    env = Env()
+    env.read_env()
+    if config:
+        try:
+            app = create_app(Config[config])
+        except BaseException:
+            app = create_app()
+    else:
+        if env.bool("CI", default=False):
+            app = create_app(Config.CI)
+        else:
+            app = create_app()
     _db.init_app(app)
     with app.app_context():
         _db.session.close()
@@ -35,10 +54,22 @@ def destroy() -> None:
 
 
 @click.command()
-def reset() -> None:
+@click.option("-c", "--config", help="Set config to load")
+def reset(config: str) -> None:
     """Reset database."""
     click.secho("Resetting database!", fg="yellow")
-    app = create_app(Config.DEFAULT)
+    env = Env()
+    env.read_env()
+    if config:
+        try:
+            app = create_app(Config[config])
+        except BaseException:
+            app = create_app()
+    else:
+        if env.bool("CI", default=False):
+            app = create_app(Config.CI)
+        else:
+            app = create_app()
     _db.init_app(app)
     with app.app_context():
         _db.session.close()
