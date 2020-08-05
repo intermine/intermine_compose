@@ -1,52 +1,52 @@
-from flask import Blueprint, request, Response, abort
-from requests import request as rq
-from flask_login import login_required, current_user
-import os
-from http import HTTPStatus
+# from flask import Blueprint, request, Response, abort
+# from requests import request as rq
+# from flask_login import login_required, current_user
+# import os
+# from http import HTTPStatus
 
-# did relative imports here (Make sure to change this during refactoring )
-from ..utils import custom_logger
+# # did relative imports here (Make sure to change this during refactoring )
+# from ..utils import custom_logger
 
-configurator_bp = Blueprint("configurator", __name__, url_prefix='/api/v1/configurator')
+# configurator_bp = Blueprint("configurator", __name__, url_prefix='/api/v1/configurator')
 
 
-@configurator_bp.route('/', defaults={'path': ''}, methods=["GET", "POST", "DELETE"])
-@configurator_bp.route('/<path:path>', methods=["GET", "POST", "DELETE"])
-@login_required
-def proxy(path):
-    args = request.args.to_dict(flat=False)
-    args["userId"] = current_user.get_id()
+# @configurator_bp.route('/', defaults={'path': ''}, methods=["GET", "POST", "DELETE"])
+# @configurator_bp.route('/<path:path>', methods=["GET", "POST", "DELETE"])
+# @login_required
+# def proxy(path):
+#     args = request.args.to_dict(flat=False)
+#     args["userId"] = current_user.get_id()
 
-    data = request.get_data()
-    files = None
-    if data:
-        files = dict()
-        files["name"] = data
+#     data = request.get_data()
+#     files = None
+#     if data:
+#         files = dict()
+#         files["name"] = data
 
-    json = None
-    if request.is_json:
-        json = request.get_json()
+#     json = None
+#     if request.is_json:
+#         json = request.get_json()
 
-    try:
-        custom_logger.handle.error("I AM CALLED... AND NOW I AM CALLING CONFIGURATOR")
-        resp = rq(
-            method=request.method,
-            # url=request.url.replace(request.host_url, 'new-domain.com'),
-            url=f'{os.environ.get("CONFIGURATOR_URL")}configurator/{path}',
-            params=args,
-            headers={key: value for (key, value) in request.headers if key != 'Host'},
-            json=json,
-            files=files,
-            # cookies=request.cookies,
-            allow_redirects=False
-        )
-    except:
-        custom_logger.handle.error("FAILED TO REACH CONFIGURATOR")
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO REACH CONFIGURATOR"))
-    
-    excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-    headers = [(name, value) for (name, value) in resp.raw.headers.items()
-               if name.lower() not in excluded_headers]
-    custom_logger.handle.error(f"CONFIGURATOR_STATUS_CODE: {resp.status_code}")
-    response = Response(resp.content, resp.status_code, headers)
-    return response
+#     try:
+#         custom_logger.handle.error("I AM CALLED... AND NOW I AM CALLING CONFIGURATOR")
+#         resp = rq(
+#             method=request.method,
+#             # url=request.url.replace(request.host_url, 'new-domain.com'),
+#             url=f'{os.environ.get("CONFIGURATOR_URL")}configurator/{path}',
+#             params=args,
+#             headers={key: value for (key, value) in request.headers if key != 'Host'},
+#             json=json,
+#             files=files,
+#             # cookies=request.cookies,
+#             allow_redirects=False
+#         )
+#     except:
+#         custom_logger.handle.error("FAILED TO REACH CONFIGURATOR")
+#         abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO REACH CONFIGURATOR"))
+
+#     excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+#     headers = [(name, value) for (name, value) in resp.raw.headers.items()
+#                if name.lower() not in excluded_headers]
+#     custom_logger.handle.error(f"CONFIGURATOR_STATUS_CODE: {resp.status_code}")
+#     response = Response(resp.content, resp.status_code, headers)
+#     return response

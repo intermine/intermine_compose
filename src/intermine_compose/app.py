@@ -1,3 +1,5 @@
+"""Intermine Compose App."""
+
 from typing import Optional
 
 from flask import Flask
@@ -6,18 +8,17 @@ from logzero import logger
 from intermine_compose.config import Config
 from intermine_compose.extentions import bcrypt, cors, db, login_manager, migrate
 from intermine_compose.routes import (
-    build_bp,
-    configurator_bp,
-    data_bp,
+    # build_bp,
+    # configurator_bp,
+    # data_bp,
     status_bp,
-    mine_bp,
+    # mine_bp,
     user_bp,
 )
 
-import os
-
 
 def create_app(config: Optional[Config] = None) -> Flask:
+    """App factory."""
     app = Flask(__name__, template_folder="./templates")
     logger.info("App instance created")
 
@@ -29,7 +30,7 @@ def create_app(config: Optional[Config] = None) -> Flask:
         app.config.from_object(f"intermine_compose.config.{config.value}")
         logger.debug(f"Config loaded: {config.value}")
     else:
-        logger.debug(f"Config loaded: default")
+        logger.debug("Config loaded: default")
     # Register app extentions
     register_extensions(app)
     logger.debug("Extensions loaded")
@@ -55,8 +56,8 @@ def register_blueprints(app: Flask) -> None:
     """Register Flask blueprints."""
     app.register_blueprint(user_bp)
     app.register_blueprint(status_bp)
-    app.register_blueprint(configurator_bp)
-    app.register_blueprint(data_bp)
-    app.register_blueprint(mine_bp)
-    app.register_blueprint(build_bp)
+    # app.register_blueprint(configurator_bp)
+    # app.register_blueprint(data_bp)
+    # app.register_blueprint(mine_bp)
+    # app.register_blueprint(build_bp)
     return None
