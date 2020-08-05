@@ -18,3 +18,7 @@ ma = marshmallow
 
 env = Env()
 env.read_env()
+
+sendGrid: SendGridAPIClient = SendGridAPIClient(
+    api_key=env.str("SENDGRID_API_KEY", default="GIVE_ME_SENDGRID_KEY")
+)
