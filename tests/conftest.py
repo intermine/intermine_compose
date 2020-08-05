@@ -1,21 +1,19 @@
 """Package-wide test fixtures."""
 
 from typing import Any, Dict, Generator
-import os
 
-
+from _pytest.config import Config
 from environs import Env
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import pytest
-from _pytest.config import Config
 from webtest import TestApp
 
 from intermine_compose.app import create_app
 from intermine_compose.config import Config as AppConfig
 from intermine_compose.extentions import db as _db
-
-collect_ignore_classes = [TestApp]
+from intermine_compose.models.actor import Actor
+from .factories import ActorFactory
 
 
 def pytest_configure(config: Config) -> None:
@@ -42,9 +40,15 @@ def app() -> Generator[Flask, None, None]:
 
 
 @pytest.fixture(scope="class")
+def testapp(app: Flask, db: SQLAlchemy) -> TestApp:
+    """Create Webtest app."""
+    return TestApp(app)
+
+
+@pytest.fixture(scope="class")
 def db(app: Flask) -> SQLAlchemy:
     """Create database for the tests."""
-    _db.init_app(app)
+    _db.app = app
     with app.app_context():
         _db.drop_all()
         _db.create_all()
@@ -57,35 +61,22 @@ def db(app: Flask) -> SQLAlchemy:
 
 
 @pytest.fixture(scope="class")
-def testapp(app: Flask, db: SQLAlchemy) -> TestApp:
-    """Create Webtest app."""
-    return TestApp(app)
+def user(db: SQLAlchemy) -> Actor:
+    """Create user for the tests."""
+    password = "myprecious"  # noqa
+    user = ActorFactory(name="bruce", email="bruce@wayne.com", password=password)
+    db.session.commit()
+    return user
 
 
-# @pytest.fixture(scope="module")
-# def cookies(client):
-#     """
-#     This fixture will be used to generate cookies for using in requests where authentication is required.
-#     """
-
-#     resp = client.post(
-#         "/api/v1/user/register",
-#         json={
-#             "email": "test@user.me",
-# 	        "password": "superpass",
-# 	        "firstName": "Bruce",
-# 	        "lastName": "Stark",
-# 	        "organisation": "InterMine"
-#         }
-#     )
-#     assert resp.status_code == 200
-#     resp = client.post(
-#         "/api/v1/user/login",
-#         json={
-#             "email": "test@user.me",
-#             "password": "superpass"
-#         }
-#     )
-#     assert resp.status_code == 200
-#     cookies = resp.headers['Set-Cookie']
-#     return cookies
+@pytest.fixture(scope="class")
+def cookies(user: Actor, testapp: TestApp) -> Dict[Any, Any]:
+    """Creates a login cookie."""
+    password = "myprecious"  # noqa
+    testapp.post_json(
+        url="/v1/auth/login/",
+        params={"email": user.email, "password": password},
+        extra_environ={"wsgi.url_scheme": "https"},
+        status="*",
+    )
+    return testapp.cookies
