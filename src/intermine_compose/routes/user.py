@@ -1,219 +1,190 @@
-from flask import Blueprint, request, jsonify, abort, make_response, current_app
-from flask_login import login_required, login_user, logout_user, current_user
-from http import HTTPStatus
-import sys
-import bcrypt
+"""User API."""
 
-# did relative imports here (Make sure to change this during refactoring )
-from ..models.users import (
-    UserRegisterSchema,
-    UserCredentialsSchema,
-    SlimUserSchema,
-    UserProfileSchema,
-    User,
-)
-from ..models.users import UserForgotPasswordSchema, UserResetPasswordSchema
+from http import HTTPStatus
+from typing import Optional, Union
+
+from flask import Blueprint, current_app, jsonify, make_response, request, Response
+from flask_login import login_required, login_user, logout_user
+from flask_login.utils import current_user
+from marshmallow import ValidationError
+
 from intermine_compose.extentions import db, login_manager
-from ..services.mail import sendPasswordResetMail
+from intermine_compose.models.actor import Actor
+from intermine_compose.routes.user_schema import (
+    ResetPassword,
+    ResetPasswordRequest,
+    UserLogin,
+    UserRegister,
+)
 
 user_bp = Blueprint("users", __name__, url_prefix="/api/v1/user")
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    if user_id is not None:
-        return User.query.filter_by(id=user_id).first()
-    return None
+def load_user(user_id: Union[int, str]) -> Optional[Actor]:
+    """Load user by ID."""
+    return Actor.get_by_id(int(user_id))
 
 
 @user_bp.route("/register", methods=["POST"])
-def register():
+def register() -> Response:
+    """Register user."""
+    # return early if user is already logged in
+    if current_user.is_authenticated:
+        return make_response(
+            jsonify({"message": "User is already authenticated"}), HTTPStatus.OK
+        )
 
     # validate user input
-    user_register_schema_instance = UserRegisterSchema()
-    errors = user_register_schema_instance.validate(request.json)
-    if errors:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-        return response
-
-    # load user registration data into user_register_schema_instance
-    # Note: we are re using the variable here!!
-    user_register_schema_instance = user_register_schema_instance.load(request.json)
-
-    # query db to verify if email is not already registered
-    email_exists = User.query.filter_by(
-        email=user_register_schema_instance["email"]
-    ).first()
-
-    # return error if email already exist
-    if email_exists:
-        response = make_response(
-            jsonify({"message": "EMAIL ALREADY EXIST"}), HTTPStatus.BAD_REQUEST
-        )
-        return response
-
-    # hash user password
-    user_register_schema_instance["password"] = bcrypt.hashpw(
-        user_register_schema_instance["password"].encode("utf-8"), bcrypt.gensalt()
-    ).hex()
-
-    # create user object for inserting it into db
-    user = User(**user_register_schema_instance)
-
-    # insert user to db if all checks are ok
     try:
-        db.session.add(user)
-        db.session.commit()
-        return jsonify({"message": "Successfully registered a new user"})
-    except:
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO REGISTER USER"))
+        form = UserRegister().load(request.json)
+    except ValidationError as errors:
+        response = make_response(jsonify(str(errors)), HTTPStatus.BAD_REQUEST)
+        return response
+
+    # Create user if checks are passed
+    try:
+        _ = Actor.create(**form)
+        db.session.remove()
+    except BaseException:
+        return make_response(
+            jsonify({"message": "DATABASE ERROR"}), HTTPStatus.INTERNAL_SERVER_ERROR
+        )
+    return make_response(jsonify({"message": "User is created"}), HTTPStatus.OK)
 
 
 @user_bp.route("/login", methods=["POST"])
-def login():
-
+def login() -> Response:
+    """Auth api to login user."""
     # return early if user is already logged in
     if current_user.is_authenticated:
-        return jsonify({"message": "User is already authenticated"})
+        return make_response(
+            jsonify({"message": "User is already authenticated"}), HTTPStatus.OK
+        )
 
     # validate user input
-    user_credentials_schema_instance = UserCredentialsSchema()
-    errors = user_credentials_schema_instance.validate(request.json)
-    if errors:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+    try:
+        form = UserLogin().load(request.json)
+    except ValidationError as errors:
+        response = make_response(jsonify(str(errors)), HTTPStatus.BAD_REQUEST)
         return response
 
-    # load user credential data into user_credentials_schema_instance
-    # Note: we are re using the variable here!!
-    user_credentials_schema_instance = user_credentials_schema_instance.load(
-        request.json
-    )
-
     # query db to verify if user with given email exists
-    user = User.query.filter_by(
-        email=user_credentials_schema_instance.data["email"]
-    ).first()
+    try:
+        user: Actor = Actor.query.filter_by(email=form["email"]).first()
+    except BaseException:
+        return make_response(
+            jsonify({"message": "DATABASE ERROR"}), HTTPStatus.INTERNAL_SERVER_ERROR
+        )
 
     # return error if user not exist
     if not user:
-        abort(HTTPStatus.BAD_REQUEST)
+        db.session.remove()
+        return make_response(
+            jsonify({"message": "unknown user or invalid password"}),
+            HTTPStatus.BAD_REQUEST,
+        )
 
-    pass_match = bcrypt.checkpw(
-        user_credentials_schema_instance.data["password"].encode("utf8"),
-        bytes.fromhex(user.password),
-    )
+    pass_match = user.check_password(form["password"])
+
     # return error if password match failed
     if not pass_match:
-        abort(HTTPStatus.BAD_REQUEST)
+        return make_response(
+            jsonify({"message": "unknown user or invalid password"}),
+            HTTPStatus.BAD_REQUEST,
+        )
 
     # login user after checks
     login_user(user)
-
-    return jsonify({"message": "Successfully logged in"})
+    return make_response(jsonify({"message": "Successfully logged in"}), HTTPStatus.OK)
 
 
 @user_bp.route("/logout", methods=["GET"])
 @login_required
-def logout():
+def logout() -> Response:
+    """Logout."""
     logout_user()
-    return jsonify({"message": "Successfully logged out user"})
+    return make_response(jsonify({"message": "Successfully logged out"}), HTTPStatus.OK)
 
 
-@user_bp.route("/profile", methods=["GET", "POST"])
-@login_required
-def profile():
-    slim_user_schema_instance = SlimUserSchema()
-    user_profile_schema_instance = UserProfileSchema()
-    if request.method == "GET":
-        profile = slim_user_schema_instance.dump(
-            User.query.filter_by(id=current_user.get_id()).first()
-        )
-        return jsonify(profile.data)
-    else:
-        errors = user_profile_schema_instance.validate(request.json)
-        if errors:
-            response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-            return response
-        user_profile_schema_instance = user_profile_schema_instance.load(request.json)
-        user = User.query.filter_by(id=current_user.get_id())
-        user.update(user_profile_schema_instance.data)
-        try:
-            db.session.commit()
-            return jsonify({"message": "Profile successfully updated"})
-        except:
-            abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE USER"))
+# @user_bp.route("/profile", methods=["GET"])
+# @login_required
+# def profile():
+#     slim_user_schema_instance = SlimUserSchema()
+#     user_profile_schema_instance = UserProfileSchema()
+#     if request.method == "GET":
+#         profile = slim_user_schema_instance.dump(
+#             User.query.filter_by(id=current_user.get_id()).first()
+#         )
+#         return jsonify(profile.data)
+#     else:
+#         errors = user_profile_schema_instance.validate(request.json)
+#         if errors:
+#             response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
+#             return response
+#         user_profile_schema_instance = user_profile_schema_instance.load(request.json)
+#         user = User.query.filter_by(id=current_user.get_id())
+#         user.update(user_profile_schema_instance.data)
+#         try:
+#             db.session.commit()
+#             return jsonify({"message": "Profile successfully updated"})
+#         except:
+#             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE USER"))
 
 
-@user_bp.route("/forgotpassword", methods=["POST"])
-def forgotPassword():
-    # return early if user is already logged in
-    if current_user.is_authenticated:
-        return jsonify({"message": "User is already authenticated"})
+# @user_bp.route("/forgotpassword", methods=["POST"])
+# def get_reset_password() -> Response:
+#     """Request password reset."""
+#     # validate user input
+#     try:
+#         form = ResetPasswordRequest().load(request.json)
+#     except ValidationError as errors:
+#         response = make_response(jsonify(str(errors)), HTTPStatus.BAD_REQUEST)
+#         return response
 
-    # validate user input
-    user_forgot_password_schema_instance = UserForgotPasswordSchema()
-    errors = user_forgot_password_schema_instance.validate(request.json)
-    if errors:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-        return response
+#     # query db to verify if user with given email exists
+#     try:
+#         user: Actor = Actor.query.filter_by(email=form["email"]).first()
+#     except BaseException:
+#         return make_response(
+#             jsonify({"message": "DATABASE ERROR"}), HTTPStatus.INTERNAL_SERVER_ERROR
+#         )
 
-    user_forgot_password_schema_instance = user_forgot_password_schema_instance.load(
-        request.json
-    )
-    # query user
-    user = User.query.filter_by(
-        email=user_forgot_password_schema_instance.data["email"]
-    ).first()
-
-    # return early if no user found
-    if user is None:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-        return response
-
-    # generate password reset token
-    reset_token = user.get_reset_password_token()
-
-    # create object to pass ca profile to send mail service
-    slim_user_schema_instance = SlimUserSchema()
-    user_profile = slim_user_schema_instance.dump(user)
-
-    # send password reset mail
-    sendPasswordResetMail(current_app._get_current_object(), user_profile, reset_token)
-    return jsonify({"message": "Password reset link sent successfully sent"})
+#     # return error if user not exist
+#     if user:
+#         try:
+#             sendResetPasswordMail(current_app, user)
+#         except BaseException:
+#             # ignore email send errors
+#             pass
+#     return make_response(
+#         jsonify({"message": "Password reset request accepted"}), HTTPStatus.OK
+#     )
 
 
-@user_bp.route("/resetpassword", methods=["POST"])
-def resetPassword():
-    # validate user input
-    user_reset_password_schema_instance = UserResetPasswordSchema()
-    errors = user_reset_password_schema_instance.validate(request.json)
-    if errors:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-        return response
+# @user_bp.route("/resetpassword", methods=["POST"])
+# def post_reset_password() -> Response:
+#     """Password reset."""
+#     # validate user input
+#     try:
+#         form = ResetPassword().load(request.json)
+#     except ValidationError as errors:
+#         response = make_response(jsonify(str(errors)), HTTPStatus.BAD_REQUEST)
+#         return response
 
-    # validate reset token
-    user_reset_password_schema_instance = user_reset_password_schema_instance.load(
-        request.json
-    )
-    user = User.verify_reset_password_token(
-        user_reset_password_schema_instance.data["reset_token"]
-    )
+#     # validate token
+#     try:
+#         user = Actor.verify_reset_password_token(form["token"])
+#     except DecodeError:
+#         return make_response(jsonify({"message": "Bad token"}), HTTPStatus.BAD_REQUEST)
+#     except BaseException:
+#         return make_response(
+#             jsonify({"message": "DATABASE ERROR"}), HTTPStatus.INTERNAL_SERVER_ERROR
+#         )
 
-    # return early if token verification fails
-    if user is None:
-        response = make_response(jsonify(errors), HTTPStatus.BAD_REQUEST)
-        return response
-    else:
-        # hash password before saving to database
-        password = bcrypt.hashpw(
-            user_reset_password_schema_instance.data["password"].encode("utf-8"),
-            bcrypt.gensalt(),
-        ).hex()
-        user.update({"password": password})
-        try:
-            db.session.commit()
-            db.session.remove()  # Always close sessions!!
-            return jsonify({"message": "Successfully updated password"})
-        except:
-            db.session.remove()  # Always close sessions!!
-            abort(HTTPStatus.INTERNAL_SERVER_ERROR, str("FAILED TO UPDATE PASSWORD"))
+#     if user:
+#         return make_response(
+#             jsonify({"message": "Password reset successfull"}), HTTPStatus.OK
+#         )
+
+#     return make_response(jsonify({"message": "Bad token"}), HTTPStatus.BAD_REQUEST)
