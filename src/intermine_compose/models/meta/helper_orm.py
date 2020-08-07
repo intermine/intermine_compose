@@ -2,7 +2,7 @@
 
 from typing import Dict
 
-from sqlalchemy import Column, ForeignKey
+from playhouse.postgres_ext import ForeignKeyField
 
 
 def reference_col(
@@ -11,7 +11,7 @@ def reference_col(
     pk_name: str = "id",
     foreign_key_kwargs: Dict = None,
     column_kwargs: Dict = None,
-) -> Column:
+) -> ForeignKeyField:
     """Column that adds primary key foreign key reference.
 
     Args:
@@ -31,8 +31,6 @@ def reference_col(
     foreign_key_kwargs = foreign_key_kwargs or {}
     column_kwargs = column_kwargs or {}
 
-    return Column(
-        ForeignKey(f"{tablename}.{pk_name}", **foreign_key_kwargs),
-        nullable=nullable,
-        **column_kwargs,
+    return ForeignKeyField(
+        f"{tablename}.{pk_name}", null=nullable, **foreign_key_kwargs
     )
