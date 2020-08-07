@@ -1,6 +1,10 @@
 """App Config."""
 
-from intermine_compose.config.default import env
+from intermine_compose.config.default import DefaultConfig
 
-SQLALCHEMY_ECHO = env.bool("SQLALCHEMY_ECHO", default=True)
-FLASK_DEBUG = env.bool("FLASK_DEBUG", default=True)
+
+class DevConfig(DefaultConfig):
+    """Dev config."""
+
+    APP_DEBUG: bool = True
+    APP_LOG: str = "debug"

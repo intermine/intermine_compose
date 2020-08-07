@@ -1,8 +1,13 @@
-from intermine_compose.config.default import env
+"""DockerDev Config."""
 
-SQLALCHEMY_DATABASE_URI = env.str(
-    "SQLALCHEMY_DATABASE_URI",
-    default="postgresql://postgres:postgres@postgres:5432/compose",
-)
-CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://redis:6379")
-FLASK_DEBUG = env.bool("FLASK_DEBUG", default=True)
+from intermine_compose.config.default import DefaultConfig
+
+
+class DockerDevConfig(DefaultConfig):
+    """DockerDev config."""
+
+    DB_URI: str = "postgresql://postgres:postgres@postgres:5432/compose"
+    DB_HOST: str = "postgres"
+    CELERY_BROKER_URL: str = "redis://redis:6379"
+    APP_DEBUG: bool = True
+    APP_LOG: str = "debug"

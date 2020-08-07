@@ -1,12 +1,14 @@
-"""App Config."""
+"""Test Config."""
 
-from intermine_compose.config.default import env
+from intermine_compose.config.default import DefaultConfig
 
-SQLALCHEMY_DATABASE_URI = env.str(
-    "SQLALCHEMY_DATABASE_URI",
-    default="postgresql://postgres:postgres@localhost:5432/compose_test",
-)
-SQLALCHEMY_ECHO = env.bool("SQLALCHEMY_ECHO", default=True)
-MAIL_SUPPRESS_SEND = env.bool("MAIL_SUPPRESS_SEND", default=True)
-ENV = env.str("FLASK_ENV", default="testing")
-FLASK_DEBUG = env.bool("FLASK_DEBUG", default=True)
+
+class TestConfig(DefaultConfig):
+    """Test config."""
+
+    DATABASE_URI: str = "postgresql://postgres:postgres@localhost:5432/compose_test"
+    DB_NAME: str = "compose_test"
+    APP_DEBUG: bool = True
+    APP_LOG: str = "debug"
+    ENV: str = "testing"
+    MAIL_SUPPRESS_SEND: bool = True
