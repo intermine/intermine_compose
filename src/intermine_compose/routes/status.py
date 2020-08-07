@@ -1,7 +1,12 @@
-from flask import Blueprint
+"""Status API."""
 
-status_bp = Blueprint("status", __name__, url_prefix='/api/v1/status')
+from fastapi import APIRouter
+from fastapi import Response
 
-@status_bp.route("/", methods=["GET"])
-def status():
-    return "OK"
+status_route = APIRouter()  # Blueprint("status", __name__, url_prefix='/api/v1/status')
+
+
+@status_route.get("/", tags=["status"])
+async def status() -> Response:
+    """Get app status."""
+    return {"message": "OK"}

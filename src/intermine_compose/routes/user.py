@@ -8,7 +8,8 @@ from flask_login import login_required, login_user, logout_user
 from flask_login.utils import current_user
 from marshmallow import ValidationError
 
-from intermine_compose.extentions import db, login_manager
+from intermine_compose.database import db
+from intermine_compose.extentions import login_manager
 from intermine_compose.models.actor import Actor
 from intermine_compose.routes.user_schema import (
     ResetPassword,
