@@ -28,6 +28,7 @@ uvicorn = "^0.11.5"
 flask-mail = "^0.9.1"
 celery = "^4.4.6"
 kubernetes = "^11.0.0"
+peewee = "^3.13.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1 "
