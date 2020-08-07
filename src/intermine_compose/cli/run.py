@@ -1,9 +1,10 @@
 """Run command."""
 
 import click
+import uvicorn
 
 from intermine_compose.app import create_app
-from intermine_compose.config import Config
+from intermine_compose.extentions import settings
 
 
 @click.command()
@@ -12,15 +13,10 @@ def run(config: str) -> None:
     """Run command."""
     click.secho("Staring App!", fg="green")
     if config:
-        try:
-            app = create_app(Config[config])
-        except:
-            app = create_app()
+        app = create_app()
     else:
         app = create_app()
 
-    app.run(
-        host=app.config.get("FLASK_HOST"),
-        port=app.config.get("FLASK_PORT"),
-        debug=app.config.get("FLASK_DEBUG"),
+    uvicorn.run(
+        app, host=settings.APP_HOST, port=settings.APP_PORT, log_level=settings.APP_LOG,
     )

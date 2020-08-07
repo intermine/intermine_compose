@@ -1,11 +1,8 @@
 """db command."""
 
 import click
-from environs import Env
 
-from intermine_compose.app import create_app
-from intermine_compose.config import Config
-from intermine_compose.extentions import db as _db
+from intermine_compose.database import db as _db, destroy_db, init_db, reset_db
 
 
 @click.command()
@@ -13,21 +10,7 @@ from intermine_compose.extentions import db as _db
 def init(config: str) -> None:
     """Init database."""
     click.secho("Creating database!", fg="green")
-    env = Env()
-    env.read_env()
-    if config:
-        try:
-            app = create_app(Config[config])
-        except BaseException:
-            app = create_app()
-    else:
-        if env.bool("CI", default=False):
-            app = create_app(Config.CI)
-        else:
-            app = create_app()
-    _db.init_app(app)
-    with app.app_context():
-        _db.create_all()
+    init_db(_db)
 
 
 @click.command()
@@ -35,22 +18,7 @@ def init(config: str) -> None:
 def destroy(config: str) -> None:
     """Destroy database."""
     click.secho("Destroying database!", fg="red")
-    env = Env()
-    env.read_env()
-    if config:
-        try:
-            app = create_app(Config[config])
-        except BaseException:
-            app = create_app()
-    else:
-        if env.bool("CI", default=False):
-            app = create_app(Config.CI)
-        else:
-            app = create_app()
-    _db.init_app(app)
-    with app.app_context():
-        _db.session.close()
-        _db.drop_all()
+    destroy_db(_db)
 
 
 @click.command()
@@ -58,24 +26,7 @@ def destroy(config: str) -> None:
 def reset(config: str) -> None:
     """Reset database."""
     click.secho("Resetting database!", fg="yellow")
-    env = Env()
-    env.read_env()
-    if config:
-        try:
-            app = create_app(Config[config])
-        except BaseException:
-            app = create_app()
-    else:
-        if env.bool("CI", default=False):
-            app = create_app(Config.CI)
-        else:
-            app = create_app()
-    _db.init_app(app)
-    with app.app_context():
-        _db.session.close()
-        _db.drop_all()
-        _db.create_all()
-        _db.session.close()
+    reset_db(_db)
 
 
 @click.group()
