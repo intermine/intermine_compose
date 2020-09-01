@@ -1,13 +1,15 @@
 """User model."""
 
+from datetime import datetime, timedelta
 from time import time
-from typing import Union
+from typing import Any, Dict, Union
 
 from flask import current_app
-import jwt
+from jose import jwt
+# import jwt
 from playhouse.postgres_ext import BigBitField, BooleanField, CharField
 
-from intermine_compose.extentions import bcrypt
+from intermine_compose.extentions import pwd_context, settings
 from intermine_compose.models.meta.mixins import BaseModel
 
 
@@ -34,26 +36,26 @@ class Actor(BaseModel):
     # daily_mine_build_quota = Column(Integer, default=5)
     # storage_quota = Column(Integer, default=500)
 
-    # def __init__(
-    #     self: "Actor", name: str, email: str, password: str = None, **kwargs: Dict
-    # ) -> None:
-    #     """Create instance."""
-    #     BaseModel.__init__(self, name=name, email=email, **kwargs)
-    #     if password:
-    #         self.set_password(password)
-    #     else:
-    #         self.password = None
+    def __init__(
+        self: "Actor", name: str, email: str, password: str = None, **kwargs: Dict
+    ) -> None:
+        """Create instance."""
+        BaseModel.__init__(self, name=name, email=email, **kwargs)
+        if password:
+            self.set_password(password)
+        else:
+            self.password = None
 
-    #     if email:
-    #         self.email = email.lower()
+        if email:
+            self.email = email.lower()
 
     def set_password(self: "Actor", password: str) -> None:
         """Set password."""
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = pwd_context.hash(password)
 
     def check_password(self: "Actor", value: str) -> bool:
         """Check password."""
-        return bcrypt.check_password_hash(self.password, value)
+        return pwd_context.verify(value, self.password)
 
     def get_reset_password_token(
         self: "Actor", expires_in: int = 600
@@ -75,6 +77,20 @@ class Actor(BaseModel):
         except BaseException:
             return None
         return Actor.query.filter_by(id=id).first()
+
+    @staticmethod
+    def create_access_token(
+        subject: Union[str, Any], expires_delta: timedelta = None
+    ) -> str:
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(
+                minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            )
+        to_encode = {"exp": expire, "sub": str(subject)}
+        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        return encoded_jwt
 
     def __repr__(self: "Actor") -> str:
         """Represent instance as a unique string."""
