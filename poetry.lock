@@ -1277,6 +1277,17 @@ version = "*"
 optional = true
 
 [[package]]
+name = "python-multipart"
+version = "0.0.5"
+description = "A streaming multipart parser for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.4.0"
+
+[[package]]
 name = "pytz"
 version = "2020.1"
 description = "World timezone definitions, modern and historical"
@@ -1797,7 +1808,7 @@ six = "*"
 [metadata]
 lock-version = "1.0"
 python-versions = "^3.8"
-content-hash = "541ba2c24c6b89e72688706346058ed5d183bcdea75a340310f5802f9679127e"
+content-hash = "0467dd3b590be0150399909892de98f791b4a69ebabb9cef055a0f479619f4cc"
 
 [metadata.files]
 alabaster = [
@@ -2413,6 +2424,9 @@ python-http-client = [
 python-jose = [
     {file = "python-jose-3.2.0.tar.gz", hash = "sha256:4e4192402e100b5fb09de5a8ea6bcc39c36ad4526341c123d401e2561720335b"},
     {file = "python_jose-3.2.0-py2.py3-none-any.whl", hash = "sha256:67d7dfff599df676b04a996520d9be90d6cdb7e6dd10b4c7cacc0c3e2e92f2be"},
+]
+python-multipart = [
+    {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 pytz = [
     {file = "pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed"},
