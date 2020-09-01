@@ -1,13 +1,14 @@
-import os
-from intermine_compose import app
-from intermine_compose.config import Config
+"""WSGI interface."""
+
+import uvicorn
+
+from intermine_compose.app import create_app
+from intermine_compose.extentions import settings
 
 
-app = app.create_app(Config.PROD)
+app = create_app()
 
 if __name__ == "__main__":
-    app.run(
-        host=app.config.get("FLASK_HOST"),
-        port=app.config.get("FLASK_PORT"),
-        debug=app.config.get("FLASK_DEBUG"),
+    uvicorn.run(
+        app, host=settings.APP_HOST, port=settings.APP_PORT, log_level=settings.APP_LOG,
     )
