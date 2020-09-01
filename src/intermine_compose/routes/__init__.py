@@ -1,7 +1,8 @@
 """App routes."""
 
-from .status import status_route  # noqa
-from .user import user_bp  # noqa
+from .auth import auth_router  # noqa
+from .status import status_router  # noqa
+from .user import user_router  # noqa
 
 # from .configurator import configurator_bp
 

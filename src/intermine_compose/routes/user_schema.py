@@ -1,72 +1,68 @@
 # User login schema for validating login data
 """Schemas for user API."""
 
-from marshmallow import fields, Schema, validate, validates, ValidationError
+from typing import Any, Optional
 
+from pydantic import BaseModel, validator, ValidationError
+
+from intermine_compose.database import PeeweeGetterDict
 from intermine_compose.models.actor import Actor
 
 
-class UserLogin(Schema):
-    """Login form."""
+class UserLoginSchema(BaseModel):
+    """Login Schema."""
 
-    email = fields.String(required=True, validate=validate.Length(max=80))
-    password = fields.Str(required=True, validate=validate.Length(max=80))
-
-
-class ResetPassword(Schema):
-    """Reset password form."""
-
-    reset_token = fields.String(required=True, validate=validate.Length(max=500))
-    password = fields.String(required=True, validate=validate.Length(max=80))
+    email: str
+    password: str
 
 
-class ResetPasswordRequest(Schema):
-    """Reset password request form."""
+class ResetPasswordSchema(BaseModel):
+    """Reset password schema."""
 
-    email = fields.String(required=True, validate=validate.Length(max=80))
+    reset_token: str  # fields.String(required=True, validate=validate.Length(max=500))
+    password: str  # fields.String(required=True, validate=validate.Length(max=80))
+
+
+class ResetPasswordRequest(BaseModel):
+    """Reset password schema."""
+
+    email: str  # fields.String(required=True, validate=validate.Length(max=80))
 
 
 # User registration schema for validating User registration
-class UserRegister(Schema):
-    """Register form schema."""
+class UserSlimSchema(BaseModel):
+    """User base."""
 
-    firstName = fields.Str(required=False)
-    lastName = fields.Str(required=False)
-    name = fields.Str(required=False, validate=validate.Length(max=80))
-    email = fields.Str(required=True, validate=validate.Length(max=80))
-    organisation = fields.Str(required=False, validate=validate.Length(max=80))
-    password = fields.Str(required=True, validate=validate.Length(max=80))
+    firstName: Optional[str]
+    lastName: Optional[str]
+    name: str
+    email: str
+    organisation: str
 
-    @validates("email")
-    def check_email(self: "UserRegister", value: str) -> None:
+
+class UserRegisterSchema(UserSlimSchema):
+    """User register schema."""
+
+    password: str
+
+    @validator("email")
+    def check_email(cls: "UserRegisterSchema", value: str) -> None:
         """Checks if email is already present."""
-        user = Actor.query.filter_by(email=value).first()
-        if user is not None:
+        user_list = Actor.select().where(Actor.email == value)
+        if len(user_list) != 0:
             raise ValidationError("email is already present")
+        return value
 
 
-class UserProfile(Schema):
-    """User profile schema."""
+class UserProfileSchema(UserSlimSchema):
+    """user profile schema."""
 
-    firstName = fields.Str(required=True)
-    lastName = fields.Str(required=True)
-    name = fields.Str(required=True, validate=validate.Length(max=80))
-    email = fields.Str(required=True, validate=validate.Length(max=80))
-    organisation = fields.Str(required=False, validate=validate.Length(max=80))
-    created_at = fields.String(required=True, validate=validate.Length(max=80))
-    updated_at = fields.String(
-        required=False, validate=validate.Length(max=80), allow_none=True
-    )
+    created_at: Any
+    updated_at: Optional[Any]
+    active: bool
 
+    class Config:
+        """Config."""
 
-class SlimUserProfile(Schema):
-    """User profile schema."""
-
-    firstName = fields.Str(required=True)
-    lastName = fields.Str(required=True)
-    name = fields.Str(required=True, validate=validate.Length(max=80))
-    organisation = fields.Str(required=False, validate=validate.Length(max=80))
-    created_at = fields.String(required=True, validate=validate.Length(max=80))
-    updated_at = fields.String(
-        required=False, validate=validate.Length(max=80), allow_none=True
-    )
+        orm_mode = True
+        getter_dict = PeeweeGetterDict
