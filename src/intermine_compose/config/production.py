@@ -7,4 +7,4 @@ class ProdConfig(DefaultConfig):
     """Production config."""
 
     APP_HOST: str = "0.0.0.0"
-    ENV: str = "production"
+    APP_ENV: str = "production"

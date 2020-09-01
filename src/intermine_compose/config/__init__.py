@@ -3,6 +3,9 @@
 from enum import Enum, unique
 from functools import lru_cache
 
+from environs import Env
+from logzero import logger
+
 from .default import DefaultConfig  # noqa
 from .development import DevConfig
 from .docker_dev import DockerDevConfig
@@ -24,6 +27,10 @@ class Config(Enum):
 
 
 @lru_cache()
-def get_config(config: Config) -> DefaultConfig:
+def get_config() -> DefaultConfig:
     """Cache and return config object."""
-    return config.value()
+    env = Env()
+    env.read_env()
+    app_config = env.str("APP_CONFIG", "DEFAULT")
+    logger.info(f"Config loaded: {app_config}")
+    return Config[app_config].value()

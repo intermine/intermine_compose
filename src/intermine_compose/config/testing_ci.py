@@ -10,5 +10,5 @@ class TestCIConfig(DefaultConfig):
     DB_NAME: str = "compose"
     APP_DEBUG: bool = True
     APP_LOG: str = "debug"
-    ENV: str = "testing"
+    APP_ENV: str = "testing"
     MAIL_SUPPRESS_SEND: bool = True

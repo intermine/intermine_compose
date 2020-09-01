@@ -3,7 +3,6 @@
 import click
 
 from intermine_compose.cli.db import db
-# from intermine_compose.cli.hello import hello
 from intermine_compose.cli.run import run
 from .. import __version__
 

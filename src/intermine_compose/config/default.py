@@ -38,9 +38,14 @@ class DefaultConfig(BaseSettings):
     APP_NAME: str = "compose"
     APP_HOST: str = "localhost"
     APP_PORT: int = 9991
+    APP_ENV: str = "development"
     APP_DEBUG: bool = False
     APP_LOG: str = "info"
-    ENV: str = "development"
+    ALGORITHM = "HS256"
+    API_KEY = "SECRET_KEY"
+    API_KEY_NAME = "compose"
+    COOKIE_DOMAIN = "localhost"
+    ACCESS_TOKEN_EXPIRE_MINUTES = 1440
     CELERY_RESULT_BACKEND: str = "redis"
     CELERY_BROKER_URL: str = "redis://127.0.0.1:6379"
     KUBERNETES_CONFIG_PATH: str = f"{HOME}/.kube/config"
