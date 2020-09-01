@@ -1,38 +1,28 @@
 """Intermine Compose App."""
 
-from typing import Any
-
-from fastapi import FastAPI, Request, Response
-from flask import Flask
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from logzero import logger
 
-from intermine_compose.database import db
-from intermine_compose.extentions import bcrypt, cors, login_manager, migrate
+from intermine_compose.extentions import origins
 from intermine_compose.routes import (
+    auth_router,
     # build_bp,
     # configurator_bp,
     # data_bp,
-    status_route,
+    status_router,
     # mine_bp,
-    # user_bp,
+    user_router,
 )
 
 
-def create_app() -> Flask:
+def create_app() -> FastAPI:
     """App factory."""
     app = FastAPI()  # Flask(__name__, template_folder="./templates")
     logger.info("App instance created")
 
     # Register app middlewares
-
-    # db session handler
-    @app.middleware("http")
-    async def db_session_handler(request: Request, call_next: Any) -> Response:
-        db.connect()
-        response = await call_next(request)
-        db.close()
-        return response
-
+    register_middlewares(app)
     logger.debug("Middlewares loaded")
 
     # register routers
@@ -42,20 +32,22 @@ def create_app() -> Flask:
     return app
 
 
-def register_extensions(app: FastAPI) -> None:
-    """Register Flask extensions."""
-    bcrypt.init_app(app)
-    cors.init_app(app, supports_credentials=True)
-    db.init_app(app)
-    login_manager.init_app(app)
-    migrate.init_app(app, db)
-    return None
+def register_middlewares(app: FastAPI) -> None:
+    """Register FastAPI middlewares."""
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 def register_routers(app: FastAPI) -> None:
     """Register Flask blueprints."""
-    # app.register_blueprint(user_bp)
-    app.include_router(status_route, prefix="/v1/status", tags=["status"])
+    app.include_router(auth_router, prefix="/v1/auth", tags=["auth"])
+    app.include_router(user_router, prefix="/v1/auth", tags=["user"])
+    app.include_router(status_router, prefix="/v1/status", tags=["status"])
     # app.register_blueprint(configurator_bp)
     # app.register_blueprint(data_bp)
     # app.register_blueprint(mine_bp)
