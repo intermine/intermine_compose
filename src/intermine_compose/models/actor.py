@@ -1,13 +1,10 @@
 """User model."""
 
 from datetime import datetime, timedelta
-from time import time
-from typing import Any, Dict, Union
+from typing import Union
 
-from flask import current_app
-from jose import jwt
-# import jwt
-from playhouse.postgres_ext import BigBitField, BooleanField, CharField
+from jose import jwt, JWTError
+from playhouse.postgres_ext import BooleanField, CharField
 
 from intermine_compose.extentions import pwd_context, settings
 from intermine_compose.models.meta.mixins import BaseModel
@@ -26,7 +23,7 @@ class Actor(BaseModel):
         max_length=200, null=False
     )  # Column(String(120), unique=True, nullable=False)
     # Hashed password
-    password = BigBitField(null=True)  # Column(db.LargeBinary(128), nullable=True)
+    password = CharField(null=True)  # Column(db.LargeBinary(128), nullable=True)
     active = BooleanField(default=False)  # Column(db.Boolean(), default=False)
     # mines = relationship("Mine", back_populates="user", lazy="joined")
     # data_files = relationship("DataFile", back_populates="user", lazy="joined")
@@ -36,61 +33,81 @@ class Actor(BaseModel):
     # daily_mine_build_quota = Column(Integer, default=5)
     # storage_quota = Column(Integer, default=500)
 
-    def __init__(
-        self: "Actor", name: str, email: str, password: str = None, **kwargs: Dict
-    ) -> None:
-        """Create instance."""
-        BaseModel.__init__(self, name=name, email=email, **kwargs)
-        if password:
-            self.set_password(password)
-        else:
-            self.password = None
-
-        if email:
-            self.email = email.lower()
-
     def set_password(self: "Actor", password: str) -> None:
         """Set password."""
         self.password = pwd_context.hash(password)
 
-    def check_password(self: "Actor", value: str) -> bool:
+    def check_password(self: "Actor", plain_password: str) -> bool:
         """Check password."""
-        return pwd_context.verify(value, self.password)
+        return pwd_context.verify(plain_password, self.password)
 
-    def get_reset_password_token(
-        self: "Actor", expires_in: int = 600
-    ) -> Union[str, bytes]:
-        """Get reset password token."""
-        return jwt.encode(
-            {"reset_password": str(self.id), "exp": time() + expires_in},
-            str(current_app.config.get("SECRET_KEY")),
-            algorithm="HS256",
-        ).decode("utf-8")
-
-    @staticmethod
-    def verify_reset_password_token(token: Union[str, bytes]) -> Union[None, "Actor"]:
-        """Verify reset token."""
-        try:
-            id = jwt.decode(
-                token, str(current_app.config.get("SECRET_KEY")), algorithms=["HS256"]
-            )["reset_password"]
-        except BaseException:
-            return None
-        return Actor.query.filter_by(id=id).first()
-
-    @staticmethod
-    def create_access_token(
-        subject: Union[str, Any], expires_delta: timedelta = None
+    def create_reset_password_token(
+        self: "Actor", expires_delta: timedelta = None
     ) -> str:
+        """Create password reset token for user."""
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
             expire = datetime.utcnow() + timedelta(
                 minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
             )
-        to_encode = {"exp": expire, "sub": str(subject)}
-        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        to_encode = {"exp": expire, "sub": f"email:{self.email}", "reset_token": "1"}
+        encoded_jwt = jwt.encode(
+            to_encode, settings.APP_SECRET, algorithm=settings.ALGORITHM
+        )
         return encoded_jwt
+
+    @staticmethod
+    def verify_reset_password_token(token: Union[str, bytes]) -> Union[None, "Actor"]:
+        """Verify reset tokens."""
+        try:
+            payload = jwt.decode(
+                token, settings.APP_SECRET, algorithms=[settings.ALGORITHM]
+            )
+            if int(payload.get("reset_token")) != 1:
+                return None
+            email: str = payload.get("sub")
+            if email is None:
+                return None
+        except JWTError:
+            raise JWTError
+
+        user_list = Actor.select().where(Actor.email == email)
+        if len(user_list) != 1:
+            return None
+        return user_list[0]
+
+    def create_access_token(self: "Actor", expires_delta: timedelta = None) -> str:
+        """Create access token for user."""
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(
+                minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            )
+        to_encode = {"exp": expire, "sub": f"email:{self.email}"}
+        encoded_jwt = jwt.encode(
+            to_encode, settings.APP_SECRET, algorithm=settings.ALGORITHM
+        )
+        return encoded_jwt
+
+    @staticmethod
+    def verify_access_token(token: Union[str, bytes]) -> Union[None, "Actor"]:
+        """Verify access tokens."""
+        try:
+            payload = jwt.decode(
+                token, settings.APP_SECRET, algorithms=[settings.ALGORITHM]
+            )
+            email: str = payload.get("sub").split(":")[1]
+            if email is None:
+                return None
+        except JWTError:
+            raise JWTError
+
+        user_list = Actor.select().where(Actor.email == email)
+        if len(user_list) != 1:
+            return None
+        return user_list[0]
 
     def __repr__(self: "Actor") -> str:
         """Represent instance as a unique string."""

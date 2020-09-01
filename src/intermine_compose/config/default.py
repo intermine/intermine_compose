@@ -42,6 +42,7 @@ class DefaultConfig(BaseSettings):
     APP_DEBUG: bool = False
     APP_LOG: str = "info"
     ALGORITHM = "HS256"
+    APP_SECRET = "SECERT_KEY"
     API_KEY = "SECRET_KEY"
     API_KEY_NAME = "compose"
     COOKIE_DOMAIN = "localhost"

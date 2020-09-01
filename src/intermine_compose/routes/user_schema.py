@@ -3,7 +3,7 @@
 
 from typing import Any, Optional
 
-from pydantic import BaseModel, validator, ValidationError
+from pydantic import BaseModel, ValidationError, validator
 
 from intermine_compose.database import PeeweeGetterDict
 from intermine_compose.models.actor import Actor
