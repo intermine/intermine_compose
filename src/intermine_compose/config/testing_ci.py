@@ -7,7 +7,7 @@ class TestCIConfig(DefaultConfig):
     """Test config."""
 
     DATABASE_URI: str = "postgresql://postgres:postgres@localhost:5432/compose_test"
-    DB_NAME: str = "compose"
+    DB_NAME: str = "compose_test"
     APP_DEBUG: bool = True
     APP_LOG: str = "debug"
     APP_ENV: str = "testing"
