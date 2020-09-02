@@ -61,7 +61,7 @@ async def get_user(
         raise credentials_exception
 
     try:
-        user = Actor.verify_access_token(token.split(" ")[1])
+        user = Actor.verify_access_token(token)
     except JWTError:
         raise credentials_exception
     if user is None:
