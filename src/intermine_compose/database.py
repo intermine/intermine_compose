@@ -21,9 +21,7 @@ def create_db(config: DefaultConfig) -> PostgresqlExtDatabase:
         password=config.DB_PASS,
         host=config.DB_HOST,
         port=config.DB_PORT,
-        autorollback=False,
-        autocommit=False,
-        # check_same_thread=False,
+        autorollback=True,
     )
 
 
@@ -138,6 +136,36 @@ def reset_db(db: PostgresqlExtDatabase) -> None:
     try:
         db.drop_tables(tables_list)
         db.create_tables(tables_list)
+        db.commit()
     except BaseException as e:
         logger.error(f"Failed to reset tables\n\n Error Message: {e} \n\n")
+    db.close()
+
+
+def reset_test_db(db: PostgresqlExtDatabase) -> None:
+    """Initialize database."""
+    # Open a database connection
+    try:
+        db.connect()
+    except BaseException as e:
+        logger.error(
+            f"Failed to create connection to database!!!\n\n Error Message: {e} \n\n"
+        )
+
+    # First Drop tables and then Create tables
+    try:
+        db.drop_tables(tables_list)
+        db.create_tables(tables_list)
+        db.commit()
+    except BaseException as e:
+        logger.error(f"Failed to reset tables\n\n Error Message: {e} \n\n")
+
+
+def destroy_test_db(db: PostgresqlExtDatabase) -> None:
+    """Destroy database."""
+    # Drop tables
+    try:
+        db.drop_tables(tables_list)
+    except BaseException as e:
+        logger.error(f"Failed to drop tables\n\n Error Message: {e} \n\n")
     db.close()
