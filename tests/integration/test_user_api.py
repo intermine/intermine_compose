@@ -2,51 +2,50 @@
 
 # from flask_sqlalchemy import SQLAlchemy
 import pytest
-from webtest import TestApp, TestResponse
 
 from intermine_compose.models.actor import Actor
-from ..factories import ActorFactory, RegisterSchemaObjFactory
+from ..factories import ActorFactory, UserRegisterSchemaObjFactory
 
 
-@pytest.mark.usefixtures("db")
-class TestUserApi:
-    """User API tests."""
+# @pytest.mark.usefixtures("db")
+# class TestUserApi:
+#     """User API tests."""
 
-    def test_can_register(self: "TestUserApi", testapp: TestApp) -> None:
-        """Register a new user."""
-        old_count = len(Actor.query.all())
+#     def test_can_register(self: "TestUserApi", testapp: TestApp) -> None:
+#         """Register a new user."""
+#         old_count = len(Actor.query.all())
 
-        # Post User details to user endpoint
-        for _ in range(0, 10):
-            params = RegisterSchemaObjFactory()
-            res: TestResponse = testapp.post_json(
-                url="/api/v1/user/register", params=params, status="*",
-            )
+#         # Post User details to user endpoint
+#         for _ in range(0, 10):
+#             params = RegisterSchemaObjFactory()
+#             res: TestResponse = testapp.post_json(
+#                 url="/api/v1/user/register", params=params, status="*",
+#             )
 
-            assert res.status_code == 200
-        # new users created
-        assert len(Actor.query.all()) == old_count + 10
+#             assert res.status_code == 200
+#         # new users created
+#         assert len(Actor.query.all()) == old_count + 10
 
-    def test_sees_error_message_if_user_already_registered(
-        self: "TestUserApi", user: Actor, testapp: TestApp
-    ) -> None:
-        """Show error if user already registered."""
-        user = ActorFactory(active=True)  # A registered user
-        user.save()
+#     def test_sees_error_message_if_user_already_registered(
+#         self: "TestUserApi", user: Actor, testapp: TestApp
+#     ) -> None:
+#         """Show error if user already registered."""
+#         user = ActorFactory(active=True)  # A registered user
+#         user.save()
 
-        # Post User details to user endpoint
-        res: TestResponse = testapp.post_json(
-            url="/api/v1/user/register",
-            params={
-                "name": "Bruce Wayne",
-                "email": user.email,
-                "organisation": "Wayne Enterprises",
-                "password": "iAMBetterThanStark",
-            },
-            status="*",
-        )
-        # sees error
-        assert "email is already present" in str(res.json)
+#         # Post User details to user endpoint
+#         res: TestResponse = testapp.post_json(
+#             url="/api/v1/user/register",
+#             params={
+#                 "name": "Bruce Wayne",
+#                 "email": user.email,
+#                 "organisation": "Wayne Enterprises",
+#                 "password": "iAMBetterThanStark",
+#             },
+#             status="*",
+#         )
+#         # sees error
+#         assert "email is already present" in str(res.json)
 
 
 # def test_register(client):
