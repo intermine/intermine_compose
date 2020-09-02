@@ -66,7 +66,7 @@ class Actor(BaseModel):
             )
             if int(payload.get("reset_token")) != 1:
                 return None
-            email: str = payload.get("sub")
+            email: str = payload.get("sub").split(":")[1]
             if email is None:
                 return None
         except JWTError:
@@ -94,6 +94,7 @@ class Actor(BaseModel):
     @staticmethod
     def verify_access_token(token: Union[str, bytes]) -> Union[None, "Actor"]:
         """Verify access tokens."""
+        token = token.split(" ")[1]
         try:
             payload = jwt.decode(
                 token, settings.APP_SECRET, algorithms=[settings.ALGORITHM]
