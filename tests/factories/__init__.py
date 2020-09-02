@@ -1,3 +1,3 @@
 """Factories to help in tests."""
 
-from .actor import ActorFactory, RegisterSchemaObjFactory
+from .actor import ActorFactory, UserRegisterSchemaObjFactory  # noqa
