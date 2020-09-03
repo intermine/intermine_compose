@@ -5,7 +5,7 @@ from http import HTTPStatus
 from typing import Any, Optional
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel, validator
 
 from intermine_compose.database import PeeweeGetterDict
 from intermine_compose.models.actor import Actor
@@ -21,14 +21,14 @@ class UserLoginSchema(BaseModel):
 class ResetPasswordSchema(BaseModel):
     """Reset password schema."""
 
-    reset_token: str  # fields.String(required=True, validate=validate.Length(max=500))
-    password: str  # fields.String(required=True, validate=validate.Length(max=80))
+    reset_token: str
+    password: str
 
 
 class ResetPasswordRequest(BaseModel):
     """Reset password schema."""
 
-    email: str  # fields.String(required=True, validate=validate.Length(max=80))
+    email: str
 
 
 # User registration schema for validating User registration
