@@ -46,7 +46,7 @@ def register_middlewares(app: FastAPI) -> None:
 def register_routers(app: FastAPI) -> None:
     """Register Flask blueprints."""
     app.include_router(auth_router, prefix="/v1/auth", tags=["auth"])
-    app.include_router(user_router, prefix="/v1/auth", tags=["user"])
+    app.include_router(user_router, prefix="/v1/user", tags=["user"])
     app.include_router(status_router, prefix="/v1/status", tags=["status"])
     # app.register_blueprint(configurator_bp)
     # app.register_blueprint(data_bp)
