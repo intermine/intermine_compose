@@ -44,25 +44,27 @@ class JSONFactoryMixin(factory.Factory):
     """Overwrites Factory._create() to produce JSON serialized models."""
 
     @classmethod
-    def _create(
-        cls: Any, model_class: Any, *args: List[Any], **kwargs: List[Dict[Any, Any]]
-    ) -> Any:
-        """Override the default ``_create`` with our custom call."""
-        schema = model_class()
-        results = schema.dumps(kwargs)
-
-        return results
-
-
-class ObjFactoryMixin(factory.Factory):
-    """Overwrites Factory._create() to produce deserialized models."""
+    def _build(cls: Any, model_class: Any, *args: Any, **kwargs: Any) -> Any:
+        return model_class.construct(*args, **kwargs).json()
 
     @classmethod
     def _create(
         cls: Any, model_class: Any, *args: List[Any], **kwargs: List[Dict[Any, Any]]
     ) -> Any:
         """Override the default ``_create`` with our custom call."""
-        schema = model_class()
-        results = schema.dump(kwargs)
+        return model_class(*args, **kwargs).json()
 
-        return results
+
+class ObjFactoryMixin(factory.Factory):
+    """Overwrites Factory._create() to produce deserialized models."""
+
+    @classmethod
+    def _build(cls: Any, model_class: Any, *args: Any, **kwargs: Any) -> Any:
+        return model_class.construct(*args, **kwargs).dict()
+
+    @classmethod
+    def _create(
+        cls: Any, model_class: Any, *args: List[Any], **kwargs: List[Dict[Any, Any]]
+    ) -> Any:
+        """Override the default ``_create`` with our custom call."""
+        return model_class(*args, **kwargs).dict()
