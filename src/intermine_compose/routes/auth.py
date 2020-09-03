@@ -50,6 +50,8 @@ async def login(auth_login_form: AuthLoginSchema, response: Response) -> Respons
         domain=settings.COOKIE_DOMAIN,
         httponly=True,
         max_age=(settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60),
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
     )
 
     return user_list[0]
