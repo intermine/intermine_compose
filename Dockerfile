@@ -27,5 +27,5 @@ WORKDIR /intermine_compose
 ENV PATH="/intermine_compose/venv/bin:$PATH"
 COPY --from=python-build-env /intermine_compose/venv venv
 RUN ls venv/bin/
-EXPOSE 9995
+EXPOSE 9991
 CMD intermine_compose db init && intermine_compose run
