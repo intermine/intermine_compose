@@ -51,7 +51,6 @@ def user(db: PostgresqlExtDatabase) -> Actor:
     """Create user for the tests."""
     password = "myprecious"  # noqa
     user = ActorFactory(name="bruce", email="bruce@wayne.com", password=password)
-    db.session.commit()
     return user
 
 
