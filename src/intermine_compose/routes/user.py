@@ -16,7 +16,7 @@ user_router = APIRouter()
 
 
 @user_router.post(
-    "/register/",
+    "/",
     tags=["user", "auth"],
     dependencies=[Depends(get_db)],
     response_model=UserProfileSchema,
@@ -34,7 +34,7 @@ async def register(user_register_form: UserRegisterSchema) -> Response:
 
 
 @user_router.get(
-    "/profile/",
+    "/",
     tags=["user"],
     dependencies=[Depends(get_user)],
     response_model=UserProfileSchema,
