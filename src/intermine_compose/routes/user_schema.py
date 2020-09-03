@@ -1,8 +1,10 @@
 # User login schema for validating login data
 """Schemas for user API."""
 
+from http import HTTPStatus
 from typing import Any, Optional
 
+from fastapi import HTTPException
 from pydantic import BaseModel, ValidationError, validator
 
 from intermine_compose.database import PeeweeGetterDict
@@ -50,7 +52,9 @@ class UserRegisterSchema(UserSlimSchema):
         """Checks if email is already present."""
         user_list = Actor.select().where(Actor.email == value)
         if len(user_list) != 0:
-            raise ValidationError("email is already present")
+            raise HTTPException(
+                HTTPStatus.BAD_REQUEST, detail="email is already present"
+            )
         return value
 
 
