@@ -17,7 +17,12 @@ settings = get_config()
 
 sendGrid: SendGridAPIClient = SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
 
-origins = ["http://localhost", "http://localhost:9991", "https://cloud.intermine.org"]
+origins = [
+    "http://localhost",
+    "http://localhost:9991",
+    "http://testserver",
+    "https://cloud.intermine.org",
+]
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
