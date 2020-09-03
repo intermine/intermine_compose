@@ -12,3 +12,5 @@ class TestCIConfig(DefaultConfig):
     APP_LOG: str = "debug"
     APP_ENV: str = "testing"
     MAIL_SUPPRESS_SEND: bool = True
+    COOKIE_SECURE = False
+    COOKIES_DOMAIN = "testserver"
