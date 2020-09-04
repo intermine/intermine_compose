@@ -10,6 +10,7 @@ from intermine_compose.models.actor import Actor
 from intermine_compose.routes.user_schema import (
     UserProfileSchema,
     UserRegisterSchema,
+    UserUpdateSchema,
 )
 
 user_router = APIRouter()
@@ -42,4 +43,21 @@ async def register(user_register_form: UserRegisterSchema) -> Response:
 # @login_required
 async def get_profile(user: Actor = Depends(get_user)) -> Response:
     """Get user profile."""
+    return user
+
+
+@user_router.patch(
+    "/",
+    tags=["user"],
+    dependencies=[Depends(get_user)],
+    response_model=UserProfileSchema,
+)
+# @login_required
+async def update_profile(
+    user_update_form: UserUpdateSchema, user: Actor = Depends(get_user)
+) -> Response:
+    """Get user profile."""
+    user_update_form_dict = user_update_form.dict(exclude_unset=True)
+    user.update(**user_update_form_dict).execute()
+    user = Actor.get_by_id(user.get_id())
     return user

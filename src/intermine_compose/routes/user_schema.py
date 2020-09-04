@@ -42,6 +42,15 @@ class UserSlimSchema(BaseModel):
     organisation: str
 
 
+class UserUpdateSchema(BaseModel):
+    """User base."""
+
+    firstName: Optional[str]
+    lastName: Optional[str]
+    name: Optional[str]
+    organisation: Optional[str]
+
+
 class UserRegisterSchema(UserSlimSchema):
     """User register schema."""
 
