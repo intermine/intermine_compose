@@ -22,8 +22,6 @@ class UserLoginSchema(BaseModel):
 class UserSlimSchema(BaseModel):
     """User base."""
 
-    firstName: Optional[str]
-    lastName: Optional[str]
     name: str
     email: str
     organisation: str
@@ -32,8 +30,6 @@ class UserSlimSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     """User base."""
 
-    firstName: Optional[str]
-    lastName: Optional[str]
     name: Optional[str]
     organisation: Optional[str]
 

@@ -93,7 +93,7 @@ async def reset_password_request(
 @auth_router.post(
     "/password/reset/",
     tags=["auth"],
-    dependencies=Depends(get_db),
+    dependencies=[Depends(get_db)],
     response_model=SuccessSchema,
 )
 async def reset_password(reset_password_form: AuthResetPasswordSchema) -> Response:
