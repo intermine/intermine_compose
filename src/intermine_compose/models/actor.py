@@ -14,17 +14,12 @@ from intermine_compose.models.meta.mixins import BaseModel
 class Actor(BaseModel):
     """An actor in the app."""
 
-    __tablename__ = "actor"
-    firstName = CharField(max_length=100, null=True)  # Column(String(80))
-    lastName = CharField(max_length=100, null=True)  # Column(String(80))
-    name = CharField(max_length=200, null=True)  # Column(db.String(100), nullable=True)
-    organisation = CharField(max_length=100, null=True)  # Column(String(80))
-    email = CharField(
-        max_length=200, null=False
-    )  # Column(String(120), unique=True, nullable=False)
+    name = CharField(max_length=200, null=True)
+    organisation = CharField(max_length=100, null=True)
+    email = CharField(max_length=200, null=False)
     # Hashed password
-    password = CharField(null=True)  # Column(db.LargeBinary(128), nullable=True)
-    active = BooleanField(default=False)  # Column(db.Boolean(), default=False)
+    password = CharField(null=True)
+    active = BooleanField(default=False)
     # mines = relationship("Mine", back_populates="user", lazy="joined")
     # data_files = relationship("DataFile", back_populates="user", lazy="joined")
     # builds = relationship("Build", back_populates="user", lazy="joined")
