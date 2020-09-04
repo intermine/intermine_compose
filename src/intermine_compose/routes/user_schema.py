@@ -18,19 +18,6 @@ class UserLoginSchema(BaseModel):
     password: str
 
 
-class ResetPasswordSchema(BaseModel):
-    """Reset password schema."""
-
-    reset_token: str
-    password: str
-
-
-class ResetPasswordRequest(BaseModel):
-    """Reset password schema."""
-
-    email: str
-
-
 # User registration schema for validating User registration
 class UserSlimSchema(BaseModel):
     """User base."""

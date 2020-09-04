@@ -10,7 +10,13 @@ from peewee import PeeweeException
 from intermine_compose.database import get_db
 from intermine_compose.extentions import get_user, settings
 from intermine_compose.models import Actor
-from intermine_compose.routes.auth_schemas import AuthLoginSchema
+from intermine_compose.routes.auth_schemas import (
+    AuthLoginSchema,
+    AuthResetPasswordRequest,
+    AuthResetPasswordSchema,
+    AuthPasswordUpdateSchema,
+)
+from intermine_compose.routes.common_schema import SuccessSchema
 from intermine_compose.routes.user_schema import UserProfileSchema
 
 
@@ -65,19 +71,57 @@ async def logout_and_remove_cookie() -> Response:
     return response
 
 
-@auth_router.post("/password/reset_request/", tags=["auth"])
-async def reset_password_request() -> Response:
+@auth_router.post(
+    "/password/reset_request/",
+    tags=["auth"],
+    dependencies=[Depends(get_db)],
+    response_model=SuccessSchema,
+)
+async def reset_password_request(
+    reset_password_request_form: AuthResetPasswordRequest,
+) -> Response:
     """Reset password request."""
-    pass
+    try:
+        user = Actor.get(Actor.email == reset_password_request_form.email)
+    except PeeweeException:
+        raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
+    if user is not None:
+        pass
+    return {"detail": "OK"}
 
 
-@auth_router.post("/password/reset/", tags=["auth"])
-async def reset_password() -> Response:
+@auth_router.post(
+    "/password/reset/",
+    tags=["auth"],
+    dependencies=Depends(get_db),
+    response_model=SuccessSchema,
+)
+async def reset_password(reset_password_form: AuthResetPasswordSchema) -> Response:
     """Reset password."""
-    pass
+    try:
+        user = Actor.verify_reset_password_token(reset_password_form.reset_token)
+    except PeeweeException:
+        raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+    if user is None:
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)
+
+    user.set_password(reset_password_form.password)
+    user.save()
+    return {"detail": "OK"}
 
 
-@auth_router.put("/password/", tags=["auth"])
-async def update_password(user: Actor = Depends(get_user)) -> Response:
+@auth_router.put(
+    "/password/",
+    tags=["auth"],
+    dependencies=[Depends(get_db)],
+    response_model=SuccessSchema,
+)
+async def update_password(
+    auth_password_update_form: AuthPasswordUpdateSchema, user: Actor = Depends(get_user)
+) -> Response:
     """Update password."""
-    pass
+    user.update(**auth_password_update_form).execute()
+    user.set_password(user.password)
+    user.save()
+    return {"detail": "OK"}
